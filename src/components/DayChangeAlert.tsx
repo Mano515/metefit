@@ -47,11 +47,10 @@ export function DayChangeAlert({ slots }: Props) {
   if (alerts.length === 0) return null
 
   return (
-    <section aria-label="Alertes météo de la journée" className="space-y-2">
+    <section aria-label="Alertes météo de la journée" aria-live="polite" aria-atomic="false" className="space-y-2">
       {alerts.map((alert, i) => (
         <div
           key={i}
-          role="alert"
           className="flex gap-2 items-start bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl px-3 py-2.5"
         >
           <span aria-hidden="true" className="text-base flex-shrink-0">{alert.emoji}</span>

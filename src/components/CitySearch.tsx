@@ -31,11 +31,13 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<GeoSuggestion[]>([])
   const [focused, setFocused] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputId = useId()
   const listboxId = useId()
   const errorId = useId()
+  const optionIdBase = useId()
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -49,6 +51,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
   function handleChange(value: string) {
     setQuery(value)
+    setActiveIndex(-1)
     if (debounceRef.current) clearTimeout(debounceRef.current)
     if (value.trim().length < 2) { setSuggestions([]); return }
 
@@ -78,10 +81,32 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
     onSelect(`${city.lat},${city.lon}`, city)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (suggestions.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveIndex((i) => Math.max(i - 1, -1))
+    } else if (e.key === 'Escape') {
+      setSuggestions([])
+      setActiveIndex(-1)
+      setFocused(false)
+    } else if (e.key === 'Enter' && activeIndex >= 0) {
+      e.preventDefault()
+      handleSelectGeo(suggestions[activeIndex])
+    }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!query.trim()) return
-    if (suggestions.length > 0) handleSelectGeo(suggestions[0])
+    if (activeIndex >= 0 && suggestions[activeIndex]) {
+      handleSelectGeo(suggestions[activeIndex])
+    } else if (suggestions.length > 0) {
+      handleSelectGeo(suggestions[0])
+    }
   }
 
   const showSuggestions = focused && query.trim().length >= 2 && suggestions.length > 0
@@ -103,11 +128,13 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             aria-autocomplete="list"
             aria-expanded={isExpanded}
             aria-controls={isExpanded ? listboxId : undefined}
+            aria-activedescendant={activeIndex >= 0 ? `${optionIdBase}-${activeIndex}` : undefined}
             aria-describedby={error ? errorId : undefined}
             placeholder={currentCity ? `${currentCity} — changer de ville...` : 'Entre ta ville (ex: Valence, FR)'}
             value={query}
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => setFocused(true)}
+            onKeyDown={handleKeyDown}
             autoComplete="off"
             className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
           />
@@ -166,8 +193,15 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
               const geo: SavedCity = { name: s.name, region: s.state, country: countryLabel(s.country), lat: s.lat, lon: s.lon }
               const alreadyFav = isFav(geo)
               const label = [s.name, s.state, countryLabel(s.country)].filter(Boolean).join(', ')
+              const isActive = activeIndex === i
               return (
-                <li key={i} role="option" aria-selected={false} className="flex items-center">
+                <li
+                  key={i}
+                  id={`${optionIdBase}-${i}`}
+                  role="option"
+                  aria-selected={isActive}
+                  className={`flex items-center ${isActive ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
+                >
                   <button
                     type="button"
                     aria-label={`Sélectionner ${label}`}

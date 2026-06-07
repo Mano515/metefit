@@ -24,8 +24,8 @@ export function SplashScreen({ onDone }: Props) {
       {/* Icône météo animée */}
       <div className="flex flex-col items-center gap-5">
         <div className="relative flex items-center justify-center">
-          {/* Halo pulsant */}
-          <span className="absolute w-24 h-24 rounded-full bg-white/20 animate-ping" style={{ animationDuration: '1.5s' }} />
+          {/* Halo pulsant — désactivé si prefers-reduced-motion */}
+          <span className="absolute w-24 h-24 rounded-full bg-white/20 animate-ping motion-reduce:animate-none" style={{ animationDuration: '1.5s' }} />
           <span className="relative text-6xl select-none">🌤️</span>
         </div>
 

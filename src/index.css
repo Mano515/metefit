@@ -24,6 +24,19 @@
 .day-slide-in-right  { animation: slideInFromRight 220ms ease forwards; }
 .day-slide-in-left   { animation: slideInFromLeft  220ms ease forwards; }
 
+/* Désactiver toutes les animations pour les utilisateurs sensibles au mouvement */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .day-slide-out-left,
+  .day-slide-out-right,
+  .day-slide-in-right,
+  .day-slide-in-left { animation: none !important; }
+}
+
 /* Lien d'évitement pour la navigation clavier */
 .skip-link {
   position: absolute;

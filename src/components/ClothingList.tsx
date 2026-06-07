@@ -38,7 +38,7 @@ export function ClothingList({ items, onRemove }: Props) {
           <button
             onClick={() => onRemove(item.id)}
             aria-label={`Supprimer ${item.name}`}
-            className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none flex-shrink-0 p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+            className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
           >
             <span aria-hidden="true">×</span>
           </button>

@@ -203,7 +203,8 @@ export default function App() {
                     <button
                       onClick={() => setShowOptions((v) => !v)}
                       aria-expanded={showOptions}
-                      className="w-full flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl"
+                      aria-controls="outfit-options-panel"
+                      className="w-full flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-2 min-h-[44px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl"
                     >
                       <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
                       <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
@@ -211,7 +212,7 @@ export default function App() {
 
                     {/* Options dépliables */}
                     {showOptions && (
-                      <div className="space-y-3">
+                      <div id="outfit-options-panel" className="space-y-3">
                         <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
                         {isToday && (
                           <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />

@@ -68,6 +68,8 @@ export function AddClothingForm({ onAdd }: Props) {
   const [maxTemp, setMaxTemp] = useState(20)
   const [rainproof, setRainproof] = useState(false)
   const nameId = useId()
+  const minOutputId = useId()
+  const maxOutputId = useId()
 
   function pick(preset: Preset) {
     setSelected(preset)
@@ -109,17 +111,27 @@ export function AddClothingForm({ onAdd }: Props) {
         <fieldset className="space-y-2">
           <legend className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Température d'usage</legend>
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2" aria-label={`Température minimale : ${minTemp}°`}>
+            <div className="flex items-center gap-2">
               <TempButton value={minTemp} onChange={setMinTemp} delta={-1} label="Température minimale" />
-              <output htmlFor={nameId} aria-live="polite" className="text-sm font-semibold text-gray-700 dark:text-gray-200 w-12 text-center">
+              <output
+                id={minOutputId}
+                aria-live="polite"
+                aria-label={`Température minimale : ${minTemp}°`}
+                className="text-sm font-semibold text-gray-700 dark:text-gray-200 w-12 text-center"
+              >
                 {minTemp}°
               </output>
               <TempButton value={minTemp} onChange={setMinTemp} delta={1} label="Température minimale" />
             </div>
             <span aria-hidden="true" className="text-gray-300 dark:text-gray-600">→</span>
-            <div className="flex items-center gap-2" aria-label={`Température maximale : ${maxTemp}°`}>
+            <div className="flex items-center gap-2">
               <TempButton value={maxTemp} onChange={setMaxTemp} delta={-1} label="Température maximale" />
-              <output aria-live="polite" className="text-sm font-semibold text-gray-700 dark:text-gray-200 w-12 text-center">
+              <output
+                id={maxOutputId}
+                aria-live="polite"
+                aria-label={`Température maximale : ${maxTemp}°`}
+                className="text-sm font-semibold text-gray-700 dark:text-gray-200 w-12 text-center"
+              >
                 {maxTemp}°
               </output>
               <TempButton value={maxTemp} onChange={setMaxTemp} delta={1} label="Température maximale" />
