@@ -1,73 +1,171 @@
-# React + TypeScript + Vite
+# 🌤️ Météfit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> *Habille-toi intelligemment selon la météo du jour.*
 
-Currently, two official plugins are available:
+Météfit est une **Progressive Web App** qui te suggère une tenue vestimentaire adaptée à la météo de ta ville, en tenant compte de ton confort thermique personnel et de ton historique de retours.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Fonctionnalités
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🌡️ Météo en temps réel
+- Géolocalisation automatique ou recherche manuelle de ville
+- Autocomplete avec disambiguation région / pays (fini Valence ES au lieu de Valence FR)
+- Prévisions sur **5 jours** avec sélecteur de jour
+- Timeline heure par heure avec icônes météo
+- Alertes amplitude thermique et pluie en cours de journée
 
-## Expanding the ESLint configuration
+### 👕 Suggestions de tenues
+- Suggestion personnalisée basée sur ta garde-robe
+- Suggestion générique si aucun vêtement n'est renseigné
+- L'imperméable n'est suggéré **que s'il pleut**
+- Algorithme de meilleur ajustement (score = -|temp - centre_plage|)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🧠 Apprentissage automatique
+- **Profil thermique** : frileux (−5°C), normal, j'ai chaud (+5°C)
+- **Auto-calibration** : analyse tes 10 derniers retours et ajuste ±1°C automatiquement
+- Feedback quotidien : 👌 Parfait · 🥵 Trop chaud · 🥶 Trop froid
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📍 Gestion des villes
+- Villes **favorites** accessibles en un clic sous la barre de recherche
+- **Historique** des 3 dernières villes recherchées
+- Ajout aux favoris depuis les suggestions ou l'historique
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 💾 Tenues sauvegardées
+- Sauvegarde des tenues suggestions sous un nom personnalisé
+- Bibliothèque accessible dans l'onglet Garde-robe
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 🔔 Notifications
+- Notification matinale (6h–11h) avec la tenue du jour à l'ouverture de l'app
+- Une seule notification par jour
+
+### 🌙 Dark mode
+- Toggle dans les paramètres
+- Respecte la préférence système par défaut
+- Persisté en localStorage
+
+### ♿ Accessibilité
+- Structure sémantique complète (`<header>`, `<main>`, `<nav>`, `<article>`)
+- ARIA complet : `role="tablist"`, `role="dialog"`, `role="combobox"`, `role="alert"`, `role="switch"`…
+- Focus trap dans le panel paramètres + fermeture sur `Escape`
+- Lien d'évitement "Aller au contenu principal"
+- Tous les boutons icônes ont un `aria-label` descriptif
+- Emojis décoratifs masqués avec `aria-hidden`
+- Annonces dynamiques via `aria-live`
+
+### 📱 PWA
+- Installable sur mobile et desktop
+- Service worker pour le cache offline
+- Manifest avec icônes et theme color
+
+---
+
+## 🛠️ Stack technique
+
+| Outil | Version | Rôle |
+|---|---|---|
+| [React](https://react.dev) | 19 | UI |
+| [TypeScript](https://www.typescriptlang.org) | 6 | Typage |
+| [Vite](https://vite.dev) | 8 | Bundler / Dev server |
+| [Tailwind CSS](https://tailwindcss.com) | 4 | Styles |
+| [OpenWeatherMap API](https://openweathermap.org/api) | — | Météo + Geocoding |
+
+**Pas de dépendance runtime externe** en dehors de React.  
+Toutes les données sont persistées en `localStorage`.
+
+---
+
+## 🚀 Démarrage rapide
+
+```bash
+# Cloner le repo
+git clone https://github.com/Mano515/metefit.git
+cd metefit
+
+# Installer les dépendances
+npm install
+
+# Lancer en développement
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+L'app sera disponible sur [http://localhost:5173](http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Build de production
+npm run build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Prévisualiser le build
+npm run preview
 ```
+
+---
+
+## 📁 Structure du projet
+
+```
+src/
+├── components/           # Composants React
+│   ├── WeatherCard        # Carte météo principale
+│   ├── DaySelector        # Sélecteur de jour (5 jours)
+│   ├── DayTimeline        # Timeline heure par heure
+│   ├── DayChangeAlert     # Alertes amplitude / pluie
+│   ├── CitySearch         # Recherche + autocomplete + favoris
+│   ├── OutfitSuggestion   # Affichage de la tenue
+│   ├── OutfitValidator    # Feedback (parfait / trop chaud / froid)
+│   ├── ThermalSelector    # Profil thermique
+│   ├── AddClothingForm    # Formulaire ajout vêtement (presets)
+│   ├── ClothingList       # Liste de la garde-robe
+│   ├── SaveOutfitButton   # Sauvegarde d'une tenue
+│   ├── SavedOutfitLibrary # Bibliothèque des tenues sauvegardées
+│   ├── HistoryList        # Historique des tenues portées
+│   ├── SettingsPanel      # Panel paramètres (drawer)
+│   ├── NotificationBanner # Activation notifications
+│   └── ThermalAutoNotice  # Notice auto-calibration thermique
+│
+├── hooks/                # Logique métier
+│   ├── useWeather         # Météo + geocoding + prévisions
+│   ├── useWardrobe        # Garde-robe + algorithme de suggestion
+│   ├── useThermal         # Profil thermique + auto-calibration
+│   ├── useHistory         # Historique des tenues portées
+│   ├── useSavedOutfits    # Tenues sauvegardées
+│   ├── useCityMemory      # Favoris + villes récentes
+│   ├── useNotifications   # Notifications push
+│   └── useDarkMode        # Dark mode + persistance
+│
+├── utils/
+│   ├── defaultSuggestions # Suggestions génériques par météo
+│   └── clothingEmoji      # Emoji associé à chaque vêtement
+│
+├── types.ts              # Types TypeScript centraux
+├── App.tsx               # Composant racine
+└── index.css             # Tailwind + dark mode variant
+
+public/
+├── manifest.json         # PWA manifest
+└── sw.js                 # Service worker
+```
+
+---
+
+## 🔑 Configuration API
+
+L'app utilise l'[API OpenWeatherMap](https://openweathermap.org/api) (gratuite jusqu'à 60 req/min).
+
+La clé API est définie dans `src/hooks/useWeather.ts` et `src/components/CitySearch.tsx`.  
+Pour utiliser ta propre clé, remplace la constante `API_KEY` dans ces deux fichiers.
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Déploiement (Vercel / Netlify)
+- [ ] Partage de tenue (lien ou image)
+- [ ] Thèmes de couleur personnalisables
+- [ ] Support multi-langue
+
+---
+
+## 📄 Licence
+
+Projet personnel — tous droits réservés.
