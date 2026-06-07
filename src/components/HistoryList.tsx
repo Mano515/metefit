@@ -24,7 +24,7 @@ interface Props {
 export function HistoryList({ entries }: Props) {
   if (entries.length === 0) {
     return (
-      <p className="text-sm text-gray-400 text-center py-6">
+      <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-6">
         Aucun historique pour l'instant.<br />Valide ta tenue du jour pour commencer.
       </p>
     )
@@ -33,14 +33,14 @@ export function HistoryList({ entries }: Props) {
   return (
     <ul className="space-y-2">
       {entries.map((entry) => (
-        <li key={entry.id} className="bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-sm">
+        <li key={entry.id} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-3 shadow-sm">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm font-medium text-gray-700 capitalize">{formatDate(entry.date)}</span>
-                <span className="text-xs text-gray-400">{entry.weatherTemp}° {entry.weatherRain ? '🌧️' : '☀️'} {entry.weatherCity}</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-200 capitalize">{formatDate(entry.date)}</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">{entry.weatherTemp}° {entry.weatherRain ? '🌧️' : '☀️'} {entry.weatherCity}</span>
               </div>
-              <p className="text-xs text-gray-400 truncate">
+              <p className="text-xs text-gray-400 dark:text-gray-500 truncate">
                 {entry.items.map((i) => i.name).join(', ')}
               </p>
             </div>

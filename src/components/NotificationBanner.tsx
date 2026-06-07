@@ -7,11 +7,11 @@ export function NotificationBanner({ permission, onRequest }: Props) {
   if (typeof Notification === 'undefined' || permission !== 'default') return null
 
   return (
-    <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
+    <div className="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3">
       <span className="text-xl">🔔</span>
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-medium text-blue-800">Notifications matinales</p>
-        <p className="text-xs text-blue-600">Reçois ta tenue du jour à l'ouverture de l'app le matin.</p>
+        <p className="text-xs font-medium text-blue-800 dark:text-blue-300">Notifications matinales</p>
+        <p className="text-xs text-blue-600 dark:text-blue-400">Reçois ta tenue du jour à l'ouverture de l'app le matin.</p>
       </div>
       <button
         onClick={onRequest}

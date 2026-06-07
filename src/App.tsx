@@ -5,6 +5,7 @@ import { useThermal } from './hooks/useThermal'
 import { useHistory } from './hooks/useHistory'
 import { useSavedOutfits } from './hooks/useSavedOutfits'
 import { useNotifications } from './hooks/useNotifications'
+import { useDarkMode } from './hooks/useDarkMode'
 import { WeatherCard } from './components/WeatherCard'
 import { DaySelector } from './components/DaySelector'
 import { DayTimeline } from './components/DayTimeline'
@@ -33,6 +34,7 @@ export default function App() {
   const { outfits, saveOutfit, removeOutfit } = useSavedOutfits()
   const { permission, requestPermission, sendMorningNotif } = useNotifications()
   const { favs, recent, addToRecent, toggleFav, isFav } = useCityMemory()
+  const { dark, toggle: toggleDark } = useDarkMode()
   const [tab, setTab] = useState<Tab>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -54,7 +56,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <SettingsPanel
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -64,15 +66,17 @@ export default function App() {
         onDismissAutoAdjust={clearAutoAdjustNotice}
         notifPermission={permission}
         onRequestNotif={requestPermission}
+        dark={dark}
+        onToggleDark={toggleDark}
       />
 
       <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Météfit</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">Météfit</h1>
           <button
             onClick={() => setSettingsOpen(true)}
-            className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-500 transition-colors shadow-sm"
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-500 transition-colors shadow-sm"
             aria-label="Paramètres"
           >
             ⚙️
@@ -80,7 +84,7 @@ export default function App() {
         </div>
 
         {/* Météo */}
-        {loading && <div className="bg-sky-100 rounded-2xl p-6 animate-pulse h-36" />}
+        {loading && <div className="bg-sky-100 dark:bg-sky-900/30 rounded-2xl p-6 animate-pulse h-36" />}
         {weather && <WeatherCard weather={weather} />}
 
         {forecast.length > 0 && (
@@ -105,11 +109,13 @@ export default function App() {
         />
 
         {/* Onglets */}
-        <div className="flex bg-gray-200 rounded-xl p-1">
+        <div className="flex bg-gray-200 dark:bg-gray-800 rounded-xl p-1">
           {(['suggestion', 'wardrobe', 'historique'] as Tab[]).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
+                tab === t
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400'
               }`}
             >
               {t === 'suggestion' ? '✨ Tenue' : t === 'wardrobe' ? '👕 Garde-robe' : '📅 Historique'}
@@ -120,7 +126,7 @@ export default function App() {
         {tab === 'suggestion' && (
           <div className="space-y-3">
             {!weather && !loading && (
-              <p className="text-sm text-gray-400 text-center">Entre ta ville pour obtenir une suggestion.</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 text-center">Entre ta ville pour obtenir une suggestion.</p>
             )}
             {weather && <OutfitSuggestion items={suggestion} isDefault={isDefault} />}
             {weather && <SaveOutfitButton items={suggestion} onSave={saveOutfit} />}
@@ -136,7 +142,7 @@ export default function App() {
             <ClothingList items={items} onRemove={removeItem} />
             {outfits.length > 0 && (
               <div>
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">Tenues sauvegardées</p>
+                <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Tenues sauvegardées</p>
                 <SavedOutfitLibrary outfits={outfits} onRemove={removeOutfit} />
               </div>
             )}

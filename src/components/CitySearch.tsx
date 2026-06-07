@@ -93,11 +93,11 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             <button
               key={`${city.lat},${city.lon}`}
               onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
-              className="flex items-center gap-1.5 bg-white border border-yellow-200 text-gray-700 text-xs px-3 py-1.5 rounded-full shadow-sm hover:border-yellow-400 transition-colors"
+              className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-yellow-200 dark:border-yellow-700 text-gray-700 dark:text-gray-200 text-xs px-3 py-1.5 rounded-full shadow-sm hover:border-yellow-400 dark:hover:border-yellow-500 transition-colors"
             >
               <span>⭐</span>
               <span className="font-medium">{city.name}</span>
-              {city.region && <span className="text-gray-400">{city.region}</span>}
+              {city.region && <span className="text-gray-400 dark:text-gray-500">{city.region}</span>}
             </button>
           ))}
         </div>
@@ -112,11 +112,11 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             value={query}
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => setFocused(true)}
-            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
           />
           <button
             type="submit"
-            className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
+            className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           >
             OK
           </button>
@@ -126,7 +126,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
         {/* Dropdown : suggestions de l'API */}
         {showSuggestions && (
-          <ul className="absolute z-10 left-0 right-10 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mt-1">
+          <ul className="absolute z-10 left-0 right-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden mt-1">
             {suggestions.map((s, i) => {
               const geo: SavedCity = { name: s.name, region: s.state, country: countryLabel(s.country), lat: s.lat, lon: s.lon }
               const alreadyFav = isFav(geo)
@@ -135,16 +135,16 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                   <button
                     type="button"
                     onMouseDown={(e) => { e.preventDefault(); handleSelectGeo(s) }}
-                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 transition-colors flex items-center gap-2"
+                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-2"
                   >
                     <span className="text-gray-400 text-xs">📍</span>
-                    <span className="font-medium text-gray-800">{s.name}</span>
-                    <span className="text-gray-400 text-xs">{[s.state, countryLabel(s.country)].filter(Boolean).join(', ')}</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-100">{s.name}</span>
+                    <span className="text-gray-400 dark:text-gray-500 text-xs">{[s.state, countryLabel(s.country)].filter(Boolean).join(', ')}</span>
                   </button>
                   <button
                     type="button"
                     onMouseDown={(e) => { e.preventDefault(); onToggleFav(geo) }}
-                    className="px-3 py-2.5 text-base hover:bg-yellow-50 transition-colors"
+                    className="px-3 py-2.5 text-base hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
                     title={alreadyFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}
                   >
                     {alreadyFav ? '⭐' : '☆'}
@@ -157,25 +157,25 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
         {/* Dropdown : historique récent (quand champ vide et focusé) */}
         {showQuickAccess && recent.length > 0 && (
-          <ul className="absolute z-10 left-0 right-10 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mt-1">
+          <ul className="absolute z-10 left-0 right-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden mt-1">
             <li className="px-4 pt-2 pb-1">
-              <span className="text-xs text-gray-400 uppercase tracking-wide">Recherches récentes</span>
+              <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Recherches récentes</span>
             </li>
             {recent.map((city) => (
               <li key={`${city.lat},${city.lon}`} className="flex items-center">
                 <button
                   type="button"
                   onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
-                  className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 transition-colors flex items-center gap-2"
+                  className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-2"
                 >
                   <span className="text-gray-400 text-xs">🕐</span>
-                  <span className="font-medium text-gray-800">{city.name}</span>
-                  <span className="text-gray-400 text-xs">{[city.region, city.country].filter(Boolean).join(', ')}</span>
+                  <span className="font-medium text-gray-800 dark:text-gray-100">{city.name}</span>
+                  <span className="text-gray-400 dark:text-gray-500 text-xs">{[city.region, city.country].filter(Boolean).join(', ')}</span>
                 </button>
                 <button
                   type="button"
                   onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
-                  className="px-3 py-2.5 text-base hover:bg-yellow-50 transition-colors"
+                  className="px-3 py-2.5 text-base hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
                   title="Ajouter aux favoris"
                 >
                   ☆

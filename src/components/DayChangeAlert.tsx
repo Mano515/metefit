@@ -13,7 +13,7 @@ export function DayChangeAlert({ slots }: Props) {
   const amplitude = max - min
 
   const rainStart = slots.findIndex((s) => s.rain)
-  const rainOnlyPart = rainStart > 0 // Pluie qui arrive en cours de journée
+  const rainOnlyPart = rainStart > 0
 
   const alerts: { emoji: string; text: string }[] = []
 
@@ -49,9 +49,9 @@ export function DayChangeAlert({ slots }: Props) {
   return (
     <div className="space-y-2">
       {alerts.map((alert, i) => (
-        <div key={i} className="flex gap-2 items-start bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
+        <div key={i} className="flex gap-2 items-start bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl px-3 py-2.5">
           <span className="text-base flex-shrink-0">{alert.emoji}</span>
-          <p className="text-xs text-amber-800 leading-snug">{alert.text}</p>
+          <p className="text-xs text-amber-800 dark:text-amber-300 leading-snug">{alert.text}</p>
         </div>
       ))}
     </div>

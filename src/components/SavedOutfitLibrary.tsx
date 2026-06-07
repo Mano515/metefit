@@ -11,7 +11,7 @@ interface Props {
 export function SavedOutfitLibrary({ outfits, onRemove }: Props) {
   if (outfits.length === 0) {
     return (
-      <p className="text-sm text-gray-400 text-center py-4">
+      <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">
         Aucune tenue sauvegardée.<br />Sauvegarde une suggestion depuis l'onglet Tenue.
       </p>
     )
@@ -24,12 +24,12 @@ export function SavedOutfitLibrary({ outfits, onRemove }: Props) {
           (a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category)
         )
         return (
-          <li key={outfit.id} className="bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-sm">
+          <li key={outfit.id} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-3 shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-semibold text-gray-800">{outfit.name}</p>
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{outfit.name}</p>
               <button
                 onClick={() => onRemove(outfit.id)}
-                className="text-gray-300 hover:text-red-400 transition-colors text-lg leading-none"
+                className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none"
                 aria-label="Supprimer"
               >
                 ×
@@ -37,7 +37,7 @@ export function SavedOutfitLibrary({ outfits, onRemove }: Props) {
             </div>
             <div className="flex flex-wrap gap-1.5">
               {sorted.map((item) => (
-                <span key={item.id} className="flex items-center gap-1 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1 text-xs text-gray-600">
+                <span key={item.id} className="flex items-center gap-1 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-lg px-2 py-1 text-xs text-gray-600 dark:text-gray-300">
                   <span>{getClothingEmoji({ ...item, id: item.id, minTemp: 0, maxTemp: 0, rainproof: false })}</span>
                   {item.name}
                 </span>

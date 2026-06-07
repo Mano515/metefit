@@ -26,16 +26,12 @@ export function DaySelector({ forecast, selectedDay, onChange }: Props) {
             className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
               isSelected
                 ? 'bg-blue-500 text-white shadow'
-                : 'bg-white text-gray-500 border border-gray-200 hover:border-blue-300'
+                : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
             }`}
           >
             <span>{label}</span>
             <span className="text-sm font-bold mt-0.5">{day.temp}°</span>
-            <img
-              src={`https://openweathermap.org/img/wn/${day.icon}.png`}
-              alt=""
-              className="w-6 h-6"
-            />
+            <img src={`https://openweathermap.org/img/wn/${day.icon}.png`} alt="" className="w-6 h-6" />
           </button>
         )
       })}

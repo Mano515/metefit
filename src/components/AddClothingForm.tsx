@@ -46,7 +46,7 @@ function TempButton({ value, onChange, delta }: { value: number; onChange: (v: n
     <button
       type="button"
       onClick={() => onChange(value + delta)}
-      className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-bold flex items-center justify-center transition-colors"
+      className="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 text-sm font-bold flex items-center justify-center transition-colors"
     >
       {delta > 0 ? '+' : '−'}
     </button>
@@ -81,7 +81,7 @@ export function AddClothingForm({ onAdd }: Props) {
 
   if (selected) {
     return (
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-4 space-y-4 shadow-sm">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 space-y-4 shadow-sm">
         <div className="flex items-center gap-3">
           <span className="text-3xl">{selected.emoji}</span>
           <input
@@ -89,22 +89,22 @@ export function AddClothingForm({ onAdd }: Props) {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="flex-1 text-base font-medium text-gray-800 border-b border-gray-200 focus:outline-none focus:border-blue-400 pb-1"
+            className="flex-1 text-base font-medium text-gray-800 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600 focus:outline-none focus:border-blue-400 pb-1 bg-transparent"
           />
         </div>
 
         <div className="space-y-2">
-          <p className="text-xs text-gray-400 uppercase tracking-wide">Température d'usage</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Température d'usage</p>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <TempButton value={minTemp} onChange={setMinTemp} delta={-1} />
-              <span className="text-sm font-semibold text-gray-700 w-12 text-center">{minTemp}°</span>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 w-12 text-center">{minTemp}°</span>
               <TempButton value={minTemp} onChange={setMinTemp} delta={1} />
             </div>
-            <span className="text-gray-300">→</span>
+            <span className="text-gray-300 dark:text-gray-600">→</span>
             <div className="flex items-center gap-2">
               <TempButton value={maxTemp} onChange={setMaxTemp} delta={-1} />
-              <span className="text-sm font-semibold text-gray-700 w-12 text-center">{maxTemp}°</span>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 w-12 text-center">{maxTemp}°</span>
               <TempButton value={maxTemp} onChange={setMaxTemp} delta={1} />
             </div>
           </div>
@@ -115,8 +115,8 @@ export function AddClothingForm({ onAdd }: Props) {
           onClick={() => setRainproof(!rainproof)}
           className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors ${
             rainproof
-              ? 'bg-blue-50 text-blue-600 border border-blue-200'
-              : 'bg-gray-50 text-gray-500 border border-gray-100'
+              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-700'
+              : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-600'
           }`}
         >
           <span>{rainproof ? '☂️' : '☀️'}</span>
@@ -133,7 +133,7 @@ export function AddClothingForm({ onAdd }: Props) {
           <button
             type="button"
             onClick={cancel}
-            className="px-4 bg-gray-100 text-gray-500 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-200 transition-colors"
+            className="px-4 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           >
             ←
           </button>
@@ -143,18 +143,18 @@ export function AddClothingForm({ onAdd }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-      <p className="text-xs text-gray-400 uppercase tracking-wide mb-3">Ajouter un vêtement</p>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 shadow-sm">
+      <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">Ajouter un vêtement</p>
       <div className="grid grid-cols-4 gap-2">
         {PRESETS.map((preset) => (
           <button
             key={preset.name}
             type="button"
             onClick={() => pick(preset)}
-            className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-blue-50 hover:border-blue-200 border border-transparent transition-colors"
+            className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent transition-colors"
           >
             <span className="text-2xl">{preset.emoji}</span>
-            <span className="text-xs text-gray-500 text-center leading-tight">{preset.name}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 text-center leading-tight">{preset.name}</span>
           </button>
         ))}
       </div>
