@@ -13,6 +13,13 @@ export interface ClothingItem {
   rainproof: boolean
 }
 
+export interface SavedOutfit {
+  id: string
+  name: string
+  items: { id: string; name: string; category: ClothingCategory }[]
+  createdAt: string
+}
+
 export interface Weather {
   temp: number
   feelsLike: number

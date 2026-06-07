@@ -14,7 +14,7 @@ function save(entries: HistoryEntry[]) {
 export function useHistory() {
   const [entries, setEntries] = useState<HistoryEntry[]>(load)
 
-  function addEntry(weather: Weather, items: ClothingItem[], feedback: OutfitFeedback) {
+  function addEntry(weather: Weather, items: ClothingItem[], feedback: OutfitFeedback): HistoryEntry[] {
     const entry: HistoryEntry = {
       id: crypto.randomUUID(),
       date: weather.date ?? new Date().toISOString().split('T')[0],
@@ -27,6 +27,7 @@ export function useHistory() {
     const updated = [entry, ...entries].slice(0, 30)
     setEntries(updated)
     save(updated)
+    return updated
   }
 
   const todayDate = new Date().toISOString().split('T')[0]
