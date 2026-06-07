@@ -3,6 +3,7 @@ import { useWeather } from './hooks/useWeather'
 import { useWardrobe } from './hooks/useWardrobe'
 import { WeatherCard } from './components/WeatherCard'
 import { DaySelector } from './components/DaySelector'
+import { DayTimeline } from './components/DayTimeline'
 import { AddClothingForm } from './components/AddClothingForm'
 import { ClothingList } from './components/ClothingList'
 import { OutfitSuggestion } from './components/OutfitSuggestion'
@@ -12,7 +13,7 @@ import './index.css'
 type Tab = 'suggestion' | 'wardrobe'
 
 export default function App() {
-  const { weather, forecast, selectedDay, setSelectedDay, loading, error, manualCity, setManualCity, searchCity } = useWeather()
+  const { weather, forecast, slots, selectedDay, setSelectedDay, loading, error, manualCity, setManualCity, searchCity } = useWeather()
   const { items, addItem, removeItem, getSuggestion } = useWardrobe()
   const [tab, setTab] = useState<Tab>('suggestion')
 
@@ -43,10 +44,7 @@ export default function App() {
                 onChange={(e) => setManualCity(e.target.value)}
                 className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              <button
-                type="submit"
-                className="bg-blue-500 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"
-              >
+              <button type="submit" className="bg-blue-500 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors">
                 OK
               </button>
             </form>
@@ -58,6 +56,9 @@ export default function App() {
         {forecast.length > 0 && (
           <DaySelector forecast={forecast} selectedDay={selectedDay} onChange={setSelectedDay} />
         )}
+
+        {/* Timeline du jour */}
+        {tab === 'suggestion' && <DayTimeline slots={slots} />}
 
         {/* Changer de ville */}
         {!error && (
@@ -72,10 +73,7 @@ export default function App() {
               onChange={(e) => setManualCity(e.target.value)}
               className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
             />
-            <button
-              type="submit"
-              className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
-            >
+            <button type="submit" className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors">
               OK
             </button>
           </form>

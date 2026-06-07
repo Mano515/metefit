@@ -19,3 +19,13 @@ export interface Weather {
   icon: string
   date?: string
 }
+
+export interface TimeSlot {
+  hour: string
+  label: string
+  temp: number
+  icon: string
+  description: string
+  rain: boolean
+  snow: boolean
+}

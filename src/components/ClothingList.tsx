@@ -1,4 +1,5 @@
 import type { ClothingItem } from '../types'
+import { getClothingEmoji } from '../utils/clothingEmoji'
 
 const CATEGORY_LABELS: Record<string, string> = {
   haut: 'Haut',
@@ -25,17 +26,18 @@ export function ClothingList({ items, onRemove }: Props) {
   return (
     <ul className="space-y-2">
       {items.map((item) => (
-        <li key={item.id} className="flex items-center justify-between bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-sm">
-          <div>
+        <li key={item.id} className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-sm">
+          <span className="text-xl">{getClothingEmoji(item)}</span>
+          <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-800">{item.name}</p>
             <p className="text-xs text-gray-400">
               {CATEGORY_LABELS[item.category]} · {item.minTemp}° à {item.maxTemp}°
-              {item.rainproof && ' · 🌧 imperméable'}
+              {item.rainproof && ' · ☂️ imperméable'}
             </p>
           </div>
           <button
             onClick={() => onRemove(item.id)}
-            className="text-gray-300 hover:text-red-400 transition-colors text-lg leading-none"
+            className="text-gray-300 hover:text-red-400 transition-colors text-lg leading-none flex-shrink-0"
             aria-label="Supprimer"
           >
             ×

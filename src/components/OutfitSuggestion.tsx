@@ -1,4 +1,5 @@
 import type { ClothingItem } from '../types'
+import { getClothingEmoji } from '../utils/clothingEmoji'
 
 const CATEGORY_LABELS: Record<string, string> = {
   haut: 'Haut',
@@ -39,8 +40,10 @@ export function OutfitSuggestion({ items, isDefault }: Props) {
           </p>
           <ul className="space-y-1">
             {catItems.map((item) => (
-              <li key={item.id} className="text-sm text-gray-700 bg-white rounded-lg px-3 py-2 border border-green-100">
-                {item.name}
+              <li key={item.id} className="flex items-center gap-2 text-sm text-gray-700 bg-white rounded-lg px-3 py-2 border border-green-100">
+                <span className="text-base">{getClothingEmoji(item)}</span>
+                <span>{item.name}</span>
+                {item.rainproof && <span className="ml-auto text-xs text-blue-400">imperméable</span>}
               </li>
             ))}
           </ul>
