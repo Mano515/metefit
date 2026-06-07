@@ -34,13 +34,13 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
         disabled={!canPrev}
         aria-label="Jour précédent"
         className="absolute left-0 top-0 h-full w-12 flex items-center justify-center
-                   bg-gradient-to-r from-black/20 to-transparent
+                   bg-gradient-to-r from-white/50 to-transparent
                    disabled:opacity-0 disabled:pointer-events-none
-                   hover:from-black/30 active:from-black/40
-                   transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-inset
+                   hover:from-white/65 active:from-white/75
+                   transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-inset
                    z-10"
       >
-        <span aria-hidden="true" className="text-4xl font-bold drop-shadow">‹</span>
+        <span aria-hidden="true" className="text-4xl font-bold text-blue-600 drop-shadow-sm">‹</span>
       </button>
 
       {/* Flèche droite — pleine hauteur */}
@@ -49,13 +49,13 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
         disabled={!canNext}
         aria-label="Jour suivant"
         className="absolute right-0 top-0 h-full w-12 flex items-center justify-center
-                   bg-gradient-to-l from-black/20 to-transparent
+                   bg-gradient-to-l from-white/50 to-transparent
                    disabled:opacity-0 disabled:pointer-events-none
-                   hover:from-black/30 active:from-black/40
-                   transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-inset
+                   hover:from-white/65 active:from-white/75
+                   transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-inset
                    z-10"
       >
-        <span aria-hidden="true" className="text-4xl font-bold drop-shadow">›</span>
+        <span aria-hidden="true" className="text-4xl font-bold text-blue-600 drop-shadow-sm">›</span>
       </button>
 
       {/* Contenu — padding latéral pour ne pas chevaucher les flèches */}
