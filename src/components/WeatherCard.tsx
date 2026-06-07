@@ -24,49 +24,44 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
   const canNext = selectedDay < totalDays - 1
 
   return (
-    <article
+    <div
       aria-label={`Météo ${dayLabel} à ${weather.city}${locationParts ? `, ${locationParts}` : ''} : ${weather.temp}°C, ${weather.description}`}
-      className="relative bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-2xl shadow-lg overflow-hidden"
+      className="rounded-2xl shadow-lg overflow-hidden"
     >
-      {/* Flèche gauche — pleine hauteur */}
-      <button
-        onClick={onPrev}
-        disabled={!canPrev}
-        aria-label="Jour précédent"
-        className="absolute left-0 top-0 h-full w-12 flex items-center justify-center
-                   bg-gradient-to-r from-white/50 to-transparent
-                   disabled:opacity-0 disabled:pointer-events-none
-                   hover:from-white/65 active:from-white/75
-                   transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-inset
-                   z-10"
-      >
-        <span aria-hidden="true" className="text-4xl font-bold text-blue-600 drop-shadow-sm">‹</span>
-      </button>
+      {/* Onglet navigation — fond blanc, collé à la carte */}
+      <div className="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-gray-700">
+        <button
+          onClick={onPrev}
+          disabled={!canPrev}
+          aria-label="Jour précédent"
+          className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
+                     hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400
+                     disabled:opacity-25 disabled:pointer-events-none
+                     transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        >
+          <span aria-hidden="true" className="text-2xl font-bold leading-none">‹</span>
+        </button>
 
-      {/* Flèche droite — pleine hauteur */}
-      <button
-        onClick={onNext}
-        disabled={!canNext}
-        aria-label="Jour suivant"
-        className="absolute right-0 top-0 h-full w-12 flex items-center justify-center
-                   bg-gradient-to-l from-white/50 to-transparent
-                   disabled:opacity-0 disabled:pointer-events-none
-                   hover:from-white/65 active:from-white/75
-                   transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-inset
-                   z-10"
-      >
-        <span aria-hidden="true" className="text-4xl font-bold text-blue-600 drop-shadow-sm">›</span>
-      </button>
-
-      {/* Contenu — padding latéral pour ne pas chevaucher les flèches */}
-      <div className="px-14 pt-5 pb-2">
-        {/* Nom du jour */}
-        <p className="text-center text-base font-bold tracking-wide capitalize opacity-95 mb-3">
+        <p className="text-base font-bold text-gray-800 dark:text-gray-100 capitalize">
           {dayLabel}
         </p>
 
-        {/* Météo */}
-        <div className="flex items-center justify-between">
+        <button
+          onClick={onNext}
+          disabled={!canNext}
+          aria-label="Jour suivant"
+          className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
+                     hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400
+                     disabled:opacity-25 disabled:pointer-events-none
+                     transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        >
+          <span aria-hidden="true" className="text-2xl font-bold leading-none">›</span>
+        </button>
+      </div>
+
+      {/* Carte météo — gradient bleu */}
+      <article className="bg-gradient-to-br from-sky-400 to-blue-600 text-white">
+        <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div>
             <p className="text-sm font-medium opacity-90">{weather.city}</p>
             {locationParts && (
@@ -83,43 +78,42 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
             className="w-20 h-20"
           />
         </div>
-      </div>
 
-      {/* Détails */}
-      <dl className="flex gap-4 px-14 pb-4 text-sm opacity-80">
-        <div>
-          <dt className="sr-only">Ressenti</dt>
-          <dd>Ressenti {weather.feelsLike}°</dd>
-        </div>
-        <span aria-hidden="true">·</span>
-        <div>
-          <dt className="sr-only">Vent</dt>
-          <dd>Vent {weather.wind} km/h</dd>
-        </div>
-        {weather.rain && (
-          <>
-            <span aria-hidden="true">·</span>
-            <div>
-              <dt className="sr-only">Précipitations</dt>
-              <dd><span aria-hidden="true">🌧</span> Pluie</dd>
-            </div>
-          </>
+        <dl className="flex gap-4 px-6 pb-4 text-sm opacity-80">
+          <div>
+            <dt className="sr-only">Ressenti</dt>
+            <dd>Ressenti {weather.feelsLike}°</dd>
+          </div>
+          <span aria-hidden="true">·</span>
+          <div>
+            <dt className="sr-only">Vent</dt>
+            <dd>Vent {weather.wind} km/h</dd>
+          </div>
+          {weather.rain && (
+            <>
+              <span aria-hidden="true">·</span>
+              <div>
+                <dt className="sr-only">Précipitations</dt>
+                <dd><span aria-hidden="true">🌧</span> Pluie</dd>
+              </div>
+            </>
+          )}
+        </dl>
+
+        {/* Indicateurs de pagination */}
+        {totalDays > 1 && (
+          <div className="flex justify-center gap-1.5 pb-4" aria-hidden="true">
+            {Array.from({ length: totalDays }).map((_, i) => (
+              <span
+                key={i}
+                className={`rounded-full transition-all duration-300 ${
+                  i === selectedDay ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40'
+                }`}
+              />
+            ))}
+          </div>
         )}
-      </dl>
-
-      {/* Indicateurs de pagination */}
-      {totalDays > 1 && (
-        <div className="flex justify-center gap-1.5 pb-4" aria-hidden="true">
-          {Array.from({ length: totalDays }).map((_, i) => (
-            <span
-              key={i}
-              className={`rounded-full transition-all duration-300 ${
-                i === selectedDay ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40'
-              }`}
-            />
-          ))}
-        </div>
-      )}
-    </article>
+      </article>
+    </div>
   )
 }
