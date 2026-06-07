@@ -40,7 +40,7 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
                    transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-inset
                    z-10"
       >
-        <span aria-hidden="true" className="text-3xl font-light drop-shadow">‹</span>
+        <span aria-hidden="true" className="text-4xl font-bold drop-shadow">‹</span>
       </button>
 
       {/* Flèche droite — pleine hauteur */}
@@ -55,13 +55,13 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
                    transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-inset
                    z-10"
       >
-        <span aria-hidden="true" className="text-3xl font-light drop-shadow">›</span>
+        <span aria-hidden="true" className="text-4xl font-bold drop-shadow">›</span>
       </button>
 
       {/* Contenu — padding latéral pour ne pas chevaucher les flèches */}
       <div className="px-14 pt-5 pb-2">
         {/* Nom du jour */}
-        <p className="text-center text-sm font-semibold tracking-wide capitalize opacity-90 mb-3">
+        <p className="text-center text-base font-bold tracking-wide capitalize opacity-95 mb-3">
           {dayLabel}
         </p>
 

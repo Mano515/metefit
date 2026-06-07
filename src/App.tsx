@@ -114,6 +114,16 @@ export default function App() {
           </button>
         </header>
 
+        <CitySearch
+          currentCity={weather?.city}
+          error={error}
+          favs={favs}
+          recent={recent}
+          onSelect={(coords, city) => { searchCity(coords); addToRecent(city) }}
+          onToggleFav={toggleFav}
+          isFav={isFav}
+        />
+
         <main id="main-content" className="space-y-4">
 
           {/* Vue Tenue */}
@@ -136,16 +146,6 @@ export default function App() {
 
               <DayTimeline slots={slots} />
               <DayChangeAlert slots={slots} />
-
-              <CitySearch
-                currentCity={weather?.city}
-                error={error}
-                favs={favs}
-                recent={recent}
-                onSelect={(coords, city) => { searchCity(coords); addToRecent(city) }}
-                onToggleFav={toggleFav}
-                isFav={isFav}
-              />
 
               <div className="space-y-3">
                 {!weather && !loading && (
