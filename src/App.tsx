@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useWeather } from './hooks/useWeather'
 import { useWardrobe } from './hooks/useWardrobe'
 import { useThermal } from './hooks/useThermal'
@@ -43,6 +43,8 @@ export default function App() {
   const [view, setView] = useState<View>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
+  const [dayAnim, setDayAnim] = useState('')
+  const animating = useRef(false)
 
   const personalSuggestion = weather ? getSuggestion(weather, slots, offset) : []
   const suggestion = personalSuggestion.length > 0
@@ -50,6 +52,21 @@ export default function App() {
     : weather ? getDefaultSuggestion(weather, slots, offset) : []
   const isDefault = personalSuggestion.length === 0
   const isToday = selectedDay === 0
+
+  function goToDay(newDay: number, dir: 'next' | 'prev') {
+    if (animating.current) return
+    animating.current = true
+    setDayAnim(dir === 'next' ? 'day-slide-out-left' : 'day-slide-out-right')
+    setTimeout(() => {
+      setSelectedDay(newDay)
+      setShowOptions(false)
+      setDayAnim(dir === 'next' ? 'day-slide-in-right' : 'day-slide-in-left')
+      setTimeout(() => {
+        setDayAnim('')
+        animating.current = false
+      }, 220)
+    }, 200)
+  }
 
   useEffect(() => {
     if (weather && suggestion.length > 0) sendMorningNotif(weather, suggestion)
@@ -130,23 +147,31 @@ export default function App() {
           {/* Vue Tenue */}
           {view === 'suggestion' && (
             <>
-              <section aria-label="Météo" aria-live="polite" aria-busy={loading}>
-                {loading && (
-                  <div className="bg-sky-100 dark:bg-sky-900/30 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
-                )}
-                {weather && (
-                  <WeatherCard
-                    weather={weather}
-                    selectedDay={selectedDay}
-                    totalDays={forecast.length}
-                    onPrev={() => setSelectedDay(Math.max(0, selectedDay - 1))}
-                    onNext={() => setSelectedDay(Math.min(forecast.length - 1, selectedDay + 1))}
-                  />
-                )}
-              </section>
+              {loading && (
+                <div className="bg-sky-100 dark:bg-sky-900/30 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
+              )}
 
-              <DayTimeline slots={slots} />
-              <DayChangeAlert slots={slots} />
+              {/* Bloc animé au changement de jour */}
+              <div
+                className={dayAnim}
+                style={{ willChange: 'transform, opacity' }}
+                aria-live="polite"
+                aria-busy={!!dayAnim}
+              >
+                {weather && (
+                  <div className="space-y-4">
+                    <WeatherCard
+                      weather={weather}
+                      selectedDay={selectedDay}
+                      totalDays={forecast.length}
+                      onPrev={() => goToDay(selectedDay - 1, 'prev')}
+                      onNext={() => goToDay(selectedDay + 1, 'next')}
+                    />
+                    <DayTimeline slots={slots} />
+                    <DayChangeAlert slots={slots} />
+                  </div>
+                )}
+              </div>
 
               <div className="space-y-3">
                 {!weather && !loading && (

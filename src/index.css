@@ -1,6 +1,29 @@
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
 
+/* Animations de transition entre les jours */
+@keyframes slideOutLeft {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(-48px); opacity: 0; }
+}
+@keyframes slideOutRight {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(48px); opacity: 0; }
+}
+@keyframes slideInFromRight {
+  from { transform: translateX(48px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideInFromLeft {
+  from { transform: translateX(-48px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+.day-slide-out-left  { animation: slideOutLeft     200ms ease forwards; }
+.day-slide-out-right { animation: slideOutRight    200ms ease forwards; }
+.day-slide-in-right  { animation: slideInFromRight 220ms ease forwards; }
+.day-slide-in-left   { animation: slideInFromLeft  220ms ease forwards; }
+
 /* Lien d'évitement pour la navigation clavier */
 .skip-link {
   position: absolute;
