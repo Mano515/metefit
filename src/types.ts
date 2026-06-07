@@ -1,5 +1,9 @@
 export type ClothingCategory = 'haut' | 'bas' | 'manteau' | 'chaussures' | 'accessoire'
 
+export type ThermalProfile = 'frileux' | 'normal' | 'chaud'
+
+export type OutfitFeedback = 'parfait' | 'trop_chaud' | 'trop_froid'
+
 export interface ClothingItem {
   id: string
   name: string
@@ -28,4 +32,14 @@ export interface TimeSlot {
   description: string
   rain: boolean
   snow: boolean
+}
+
+export interface HistoryEntry {
+  id: string
+  date: string
+  weatherTemp: number
+  weatherRain: boolean
+  weatherCity: string
+  items: { id: string; name: string }[]
+  feedback: OutfitFeedback
 }

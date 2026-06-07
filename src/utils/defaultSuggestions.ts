@@ -1,4 +1,4 @@
-import type { ClothingItem, Weather } from '../types'
+import type { ClothingItem, Weather, TimeSlot } from '../types'
 
 function make(name: string, category: ClothingItem['category'], minTemp: number, maxTemp: number, rainproof = false): ClothingItem {
   return { id: `default-${name}`, name, category, minTemp, maxTemp, rainproof }
@@ -8,7 +8,7 @@ const DEFAULTS: ClothingItem[] = [
   make('Doudoune', 'manteau', -20, 5),
   make('Manteau chaud', 'manteau', -5, 10),
   make('Veste légère', 'manteau', 8, 18),
-  make('Imperméable', 'manteau', 0, 30, true),
+  make('Imperméable', 'manteau', 0, 25, true),
   make('Pull épais', 'haut', -10, 10),
   make('Sweat', 'haut', 5, 18),
   make('T-shirt', 'haut', 15, 40),
@@ -26,37 +26,44 @@ const DEFAULTS: ClothingItem[] = [
   make('Parapluie', 'accessoire', 0, 30, true),
 ]
 
-export function getDefaultSuggestion(weather: Weather): ClothingItem[] {
-  const CATEGORY_ORDER = ['manteau', 'haut', 'bas', 'chaussures', 'accessoire'] as const
+const CATEGORY_ORDER = ['manteau', 'haut', 'bas', 'chaussures', 'accessoire'] as const
+
+function fitScore(item: ClothingItem, temp: number): number {
+  const center = (item.minTemp + item.maxTemp) / 2
+  return -Math.abs(temp - center)
+}
+
+export function getDefaultSuggestion(weather: Weather, slots: TimeSlot[], thermalOffset: number): ClothingItem[] {
+  const effectiveTemp = weather.temp + thermalOffset
+  const dayMin = slots.length > 0 ? Math.min(...slots.map((s) => s.temp)) + thermalOffset : effectiveTemp
   const result: ClothingItem[] = []
 
   for (const category of CATEGORY_ORDER) {
     const candidates = DEFAULTS.filter(
-      (item) =>
-        item.category === category &&
-        weather.temp >= item.minTemp &&
-        weather.temp <= item.maxTemp
+      (item) => item.category === category && effectiveTemp >= item.minTemp && effectiveTemp <= item.maxTemp
     )
+
     if (candidates.length === 0) continue
 
     if (weather.rain && category === 'manteau') {
-      // Quand il pleut : imperméable en priorité + manteau chaud si froid
       const raincoat = candidates.find((i) => i.rainproof)
-      const warm = candidates.find((i) => !i.rainproof)
+      const warm = candidates.filter((i) => !i.rainproof && dayMin >= i.minTemp)
+        .sort((a, b) => fitScore(b, effectiveTemp) - fitScore(a, effectiveTemp))[0]
       if (raincoat) result.push(raincoat)
       if (warm) result.push(warm)
     } else if (!weather.rain && category === 'manteau') {
-      // Pas de pluie : exclure les imperméables
-      const nonRain = candidates.filter((i) => !i.rainproof)
-      if (nonRain.length > 0) result.push(nonRain[0])
+      const best = candidates.filter((i) => !i.rainproof)
+        .sort((a, b) => fitScore(b, effectiveTemp) - fitScore(a, effectiveTemp))[0]
+      if (best) result.push(best)
     } else if (weather.rain && category === 'accessoire') {
-      // Pluie : ajouter parapluie + autres accessoires utiles
       const umbrella = candidates.find((i) => i.name === 'Parapluie')
-      const other = candidates.find((i) => !i.rainproof)
+      const other = candidates.filter((i) => !i.rainproof)
+        .sort((a, b) => fitScore(b, effectiveTemp) - fitScore(a, effectiveTemp))[0]
       if (other) result.push(other)
       if (umbrella) result.push(umbrella)
     } else {
-      result.push(candidates[0])
+      const best = [...candidates].sort((a, b) => fitScore(b, effectiveTemp) - fitScore(a, effectiveTemp))[0]
+      result.push(best)
     }
   }
 
