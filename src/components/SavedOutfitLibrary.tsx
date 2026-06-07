@@ -18,7 +18,7 @@ export function SavedOutfitLibrary({ outfits, onRemove }: Props) {
   }
 
   return (
-    <ul className="space-y-2">
+    <ul aria-label="Tenues sauvegardées" className="space-y-2">
       {outfits.map((outfit) => {
         const sorted = [...outfit.items].sort(
           (a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category)
@@ -29,20 +29,20 @@ export function SavedOutfitLibrary({ outfits, onRemove }: Props) {
               <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{outfit.name}</p>
               <button
                 onClick={() => onRemove(outfit.id)}
-                className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none"
-                aria-label="Supprimer"
+                aria-label={`Supprimer la tenue ${outfit.name}`}
+                className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
               >
-                ×
+                <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <ul aria-label={`Vêtements de la tenue ${outfit.name}`} className="flex flex-wrap gap-1.5">
               {sorted.map((item) => (
-                <span key={item.id} className="flex items-center gap-1 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-lg px-2 py-1 text-xs text-gray-600 dark:text-gray-300">
-                  <span>{getClothingEmoji({ ...item, id: item.id, minTemp: 0, maxTemp: 0, rainproof: false })}</span>
+                <li key={item.id} className="flex items-center gap-1 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-lg px-2 py-1 text-xs text-gray-600 dark:text-gray-300">
+                  <span aria-hidden="true">{getClothingEmoji({ ...item, id: item.id, minTemp: 0, maxTemp: 0, rainproof: false })}</span>
                   {item.name}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </li>
         )
       })}

@@ -1,2 +1,32 @@
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
+
+/* Lien d'évitement pour la navigation clavier */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  background: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Classe utilitaire pour cacher visuellement mais garder accessible aux lecteurs d'écran */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

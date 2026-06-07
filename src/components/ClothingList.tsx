@@ -24,10 +24,10 @@ export function ClothingList({ items, onRemove }: Props) {
   }
 
   return (
-    <ul className="space-y-2">
+    <ul aria-label="Mes vêtements" className="space-y-2">
       {items.map((item) => (
         <li key={item.id} className="flex items-center gap-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-3 shadow-sm">
-          <span className="text-xl">{getClothingEmoji(item)}</span>
+          <span aria-hidden="true" className="text-xl">{getClothingEmoji(item)}</span>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{item.name}</p>
             <p className="text-xs text-gray-400 dark:text-gray-500">
@@ -37,10 +37,10 @@ export function ClothingList({ items, onRemove }: Props) {
           </div>
           <button
             onClick={() => onRemove(item.id)}
-            className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none flex-shrink-0"
-            aria-label="Supprimer"
+            aria-label={`Supprimer ${item.name}`}
+            className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors text-lg leading-none flex-shrink-0 p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
           >
-            ×
+            <span aria-hidden="true">×</span>
           </button>
         </li>
       ))}

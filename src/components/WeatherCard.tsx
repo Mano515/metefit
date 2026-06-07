@@ -5,17 +5,22 @@ interface Props {
 }
 
 export function WeatherCard({ weather }: Props) {
+  const locationParts = [weather.region, weather.country].filter(Boolean).join(', ')
+
   return (
-    <div className="bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-2xl p-6 shadow-lg">
+    <article
+      aria-label={`Météo à ${weather.city}${locationParts ? `, ${locationParts}` : ''} : ${weather.temp}°C, ${weather.description}`}
+      className="bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-2xl p-6 shadow-lg"
+    >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium opacity-90">{weather.city}</p>
-          {(weather.region || weather.country) && (
-            <p className="text-xs opacity-60 mb-1">
-              {[weather.region, weather.country].filter(Boolean).join(', ')}
-            </p>
+          {locationParts && (
+            <p className="text-xs opacity-60 mb-1">{locationParts}</p>
           )}
-          <p className="text-6xl font-bold mt-1">{weather.temp}°</p>
+          <p className="text-6xl font-bold mt-1" aria-label={`${weather.temp} degrés Celsius`}>
+            {weather.temp}°
+          </p>
           <p className="text-sm capitalize opacity-90 mt-1">{weather.description}</p>
         </div>
         <img
@@ -24,17 +29,26 @@ export function WeatherCard({ weather }: Props) {
           className="w-20 h-20"
         />
       </div>
-      <div className="flex gap-4 mt-4 text-sm opacity-80">
-        <span>Ressenti {weather.feelsLike}°</span>
-        <span>·</span>
-        <span>Vent {weather.wind} km/h</span>
+      <dl className="flex gap-4 mt-4 text-sm opacity-80">
+        <div>
+          <dt className="sr-only">Ressenti</dt>
+          <dd>Ressenti {weather.feelsLike}°</dd>
+        </div>
+        <span aria-hidden="true">·</span>
+        <div>
+          <dt className="sr-only">Vent</dt>
+          <dd>Vent {weather.wind} km/h</dd>
+        </div>
         {weather.rain && (
           <>
-            <span>·</span>
-            <span>🌧 Pluie</span>
+            <span aria-hidden="true">·</span>
+            <div>
+              <dt className="sr-only">Précipitations</dt>
+              <dd><span aria-hidden="true">🌧</span> Pluie</dd>
+            </div>
           </>
         )}
-      </div>
-    </div>
+      </dl>
+    </article>
   )
 }

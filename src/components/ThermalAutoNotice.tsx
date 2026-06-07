@@ -11,10 +11,16 @@ export function ThermalAutoNotice({ adjust, onDismiss }: Props) {
     : "Tu as souvent eu trop froid — Météfit a ajusté tes suggestions vers le chaud."
 
   return (
-    <div className="flex items-start gap-2 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl px-3 py-2.5">
-      <span className="text-base flex-shrink-0">🧠</span>
+    <div role="status" className="flex items-start gap-2 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl px-3 py-2.5">
+      <span aria-hidden="true" className="text-base flex-shrink-0">🧠</span>
       <p className="text-xs text-purple-800 dark:text-purple-300 leading-snug flex-1">{text}</p>
-      <button onClick={onDismiss} className="text-purple-300 dark:text-purple-600 hover:text-purple-500 dark:hover:text-purple-400 text-sm flex-shrink-0">✕</button>
+      <button
+        onClick={onDismiss}
+        aria-label="Ignorer cette notification"
+        className="text-purple-300 dark:text-purple-600 hover:text-purple-500 dark:hover:text-purple-400 text-sm flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded"
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
     </div>
   )
 }
