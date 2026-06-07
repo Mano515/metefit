@@ -125,7 +125,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
         {/* Favoris — uniquement si aucune ville active */}
         {!currentCity && favs.length > 0 && (
-          <ul role="list" aria-label="Villes favorites" className="flex flex-wrap gap-2 mt-2">
+          <ul role="list" aria-label="Villes favorites" className="grid grid-cols-2 gap-2 mt-2">
             {favs.map((city) => (
               <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
                 <button

@@ -43,8 +43,9 @@ export default function App() {
   const [view, setView] = useState<View>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
-  const [dayAnim, setDayAnim] = useState('')
+  const [contentAnim, setContentAnim] = useState('')
   const animating = useRef(false)
+  const prevCityRef = useRef<string | undefined>(undefined)
 
   const personalSuggestion = weather ? getSuggestion(weather, slots, offset) : []
   const suggestion = personalSuggestion.length > 0
@@ -56,17 +57,31 @@ export default function App() {
   function goToDay(newDay: number, dir: 'next' | 'prev') {
     if (animating.current) return
     animating.current = true
-    setDayAnim(dir === 'next' ? 'day-slide-out-left' : 'day-slide-out-right')
+    setContentAnim(dir === 'next' ? 'day-slide-out-left' : 'day-slide-out-right')
     setTimeout(() => {
       setSelectedDay(newDay)
       setShowOptions(false)
-      setDayAnim(dir === 'next' ? 'day-slide-in-right' : 'day-slide-in-left')
+      setContentAnim(dir === 'next' ? 'day-slide-in-right' : 'day-slide-in-left')
       setTimeout(() => {
-        setDayAnim('')
+        setContentAnim('')
         animating.current = false
       }, 220)
     }, 200)
   }
+
+  // Animation d'entrée quand une nouvelle ville est chargée
+  useEffect(() => {
+    if (!weather?.city) return
+    if (prevCityRef.current === undefined) {
+      prevCityRef.current = weather.city
+      return
+    }
+    if (weather.city !== prevCityRef.current) {
+      prevCityRef.current = weather.city
+      setContentAnim('day-slide-in-right')
+      setTimeout(() => setContentAnim(''), 220)
+    }
+  }, [weather?.city])
 
   useEffect(() => {
     if (weather && suggestion.length > 0) sendMorningNotif(weather, suggestion)
@@ -137,7 +152,11 @@ export default function App() {
           error={error}
           favs={favs}
           recent={recent}
-          onSelect={(coords, city) => { searchCity(coords); addToRecent(city) }}
+          onSelect={(coords, city) => {
+            if (weather) setContentAnim('day-slide-out-left')
+            searchCity(coords)
+            addToRecent(city)
+          }}
           onToggleFav={toggleFav}
           isFav={isFav}
         />
@@ -154,10 +173,10 @@ export default function App() {
               {/* Bloc animé au changement de jour */}
               {weather && (
                 <div
-                  className={dayAnim}
+                  className={contentAnim}
                   style={{ willChange: 'transform, opacity' }}
                   aria-live="polite"
-                  aria-busy={!!dayAnim}
+                  aria-busy={!!contentAnim}
                 >
                   <div className="space-y-4">
                     <WeatherCard
