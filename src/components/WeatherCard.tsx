@@ -24,10 +24,7 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
   const canNext = selectedDay < totalDays - 1
 
   return (
-    <div
-      aria-label={`Météo ${dayLabel} à ${weather.city}${locationParts ? `, ${locationParts}` : ''} : ${weather.temp}°C, ${weather.description}`}
-      className="rounded-2xl shadow-lg overflow-hidden"
-    >
+    <div aria-label={`Météo ${dayLabel} à ${weather.city}${locationParts ? `, ${locationParts}` : ''} : ${weather.temp}°C, ${weather.description}`}>
       {/* Navigation — sans fond, au-dessus de la carte */}
       <div className="flex items-center justify-between px-2 py-2">
         <button
@@ -59,8 +56,8 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
         </button>
       </div>
 
-      {/* Carte météo — gradient bleu */}
-      <article className="bg-gradient-to-br from-sky-400 to-blue-600 text-white">
+      {/* Carte météo — gradient bleu, indépendante */}
+      <article className="bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-2xl shadow-lg">
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div>
             <p className="text-sm font-medium opacity-90">{weather.city}</p>
