@@ -14,7 +14,39 @@ const TIME_LABELS: Record<string, string> = {
 
 const SLOT_HOURS = ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00']
 
-function parseForecast(data: any): { forecast: Weather[]; slotsByDay: TimeSlot[][] } {
+const countryNames = new Intl.DisplayNames(['fr'], { type: 'region' })
+
+function countryLabel(code: string): string {
+  try { return countryNames.of(code) ?? code } catch { return code }
+}
+
+interface GeoResult {
+  name: string
+  state?: string
+  country: string
+  lat: number
+  lon: number
+}
+
+async function geocodeCity(city: string): Promise<GeoResult> {
+  const res = await fetch(
+    `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${API_KEY}`
+  )
+  const data = await res.json()
+  if (!data.length) throw new Error('Ville introuvable')
+  return data[0]
+}
+
+async function reverseGeocode(lat: number, lon: number): Promise<GeoResult> {
+  const res = await fetch(
+    `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${API_KEY}`
+  )
+  const data = await res.json()
+  if (!data.length) throw new Error('Localisation introuvable')
+  return data[0]
+}
+
+function parseForecast(data: any, geo: GeoResult): { forecast: Weather[]; slotsByDay: TimeSlot[][] } {
   const byDay: Record<string, any[]> = {}
   for (const item of data.list) {
     const [date] = item.dt_txt.split(' ')
@@ -33,7 +65,9 @@ function parseForecast(data: any): { forecast: Weather[]; slotsByDay: TimeSlot[]
       description: noon.weather[0].description,
       rain,
       wind: Math.round(noon.wind.speed * 3.6),
-      city: data.city.name,
+      city: geo.name,
+      region: geo.state,
+      country: countryLabel(geo.country),
       icon: noon.weather[0].icon,
       date,
     }
@@ -60,19 +94,21 @@ function parseForecast(data: any): { forecast: Weather[]; slotsByDay: TimeSlot[]
 }
 
 async function fetchByCoords(lat: number, lon: number) {
-  const res = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`
-  )
-  if (!res.ok) throw new Error('Erreur météo')
-  return parseForecast(await res.json())
+  const [geo, forecastRes] = await Promise.all([
+    reverseGeocode(lat, lon),
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`)
+  ])
+  if (!forecastRes.ok) throw new Error('Erreur météo')
+  return parseForecast(await forecastRes.json(), geo)
 }
 
 async function fetchByCity(city: string) {
+  const geo = await geocodeCity(city)
   const res = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=fr`
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${geo.lat}&lon=${geo.lon}&appid=${API_KEY}&units=metric&lang=fr`
   )
-  if (!res.ok) throw new Error('Ville introuvable')
-  return parseForecast(await res.json())
+  if (!res.ok) throw new Error('Erreur météo')
+  return parseForecast(await res.json(), geo)
 }
 
 export function useWeather() {
@@ -81,16 +117,18 @@ export function useWeather() {
   const [selectedDay, setSelectedDay] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [needsCity, setNeedsCity] = useState(false)
   const [manualCity, setManualCity] = useState('')
 
   function apply(result: { forecast: Weather[]; slotsByDay: TimeSlot[][] }) {
     setForecast(result.forecast)
     setSlotsByDay(result.slotsByDay)
+    setNeedsCity(false)
   }
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError('Géolocalisation non supportée')
+      setNeedsCity(true)
       setLoading(false)
       return
     }
@@ -105,7 +143,8 @@ export function useWeather() {
         }
       },
       () => {
-        setError('Localisation refusée — entre ta ville manuellement')
+        // Refus silencieux — on montre juste le champ ville
+        setNeedsCity(true)
         setLoading(false)
       }
     )
@@ -118,8 +157,8 @@ export function useWeather() {
       apply(await fetchByCity(city))
       setSelectedDay(0)
       setManualCity('')
-    } catch {
-      setError('Ville introuvable')
+    } catch (e: any) {
+      setError(e.message ?? 'Ville introuvable')
     } finally {
       setLoading(false)
     }
@@ -133,6 +172,7 @@ export function useWeather() {
     setSelectedDay,
     loading,
     error,
+    needsCity,
     manualCity,
     setManualCity,
     searchCity,

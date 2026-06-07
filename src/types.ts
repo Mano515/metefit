@@ -27,6 +27,8 @@ export interface Weather {
   rain: boolean
   wind: number
   city: string
+  region?: string
+  country?: string
   icon: string
   date?: string
 }

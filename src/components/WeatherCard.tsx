@@ -9,7 +9,12 @@ export function WeatherCard({ weather }: Props) {
     <div className="bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-2xl p-6 shadow-lg">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium opacity-80">{weather.city}</p>
+          <p className="text-sm font-medium opacity-90">{weather.city}</p>
+          {(weather.region || weather.country) && (
+            <p className="text-xs opacity-60 mb-1">
+              {[weather.region, weather.country].filter(Boolean).join(', ')}
+            </p>
+          )}
           <p className="text-6xl font-bold mt-1">{weather.temp}°</p>
           <p className="text-sm capitalize opacity-90 mt-1">{weather.description}</p>
         </div>

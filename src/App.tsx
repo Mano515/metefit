@@ -64,18 +64,6 @@ export default function App() {
 
         {/* Météo */}
         {loading && <div className="bg-sky-100 rounded-2xl p-6 animate-pulse h-36" />}
-        {error && (
-          <div className="space-y-2">
-            <p className="text-sm text-red-500">{error}</p>
-            <form onSubmit={(e) => { e.preventDefault(); searchCity(manualCity) }} className="flex gap-2">
-              <input type="text" placeholder="Entrer une ville..."
-                value={manualCity} onChange={(e) => setManualCity(e.target.value)}
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              <button type="submit" className="bg-blue-500 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors">OK</button>
-            </form>
-          </div>
-        )}
         {weather && <WeatherCard weather={weather} />}
 
         {forecast.length > 0 && (
@@ -89,16 +77,18 @@ export default function App() {
           </>
         )}
 
-        {!error && (
+        {/* Champ ville — toujours visible */}
+        <div className="space-y-1">
           <form onSubmit={(e) => { e.preventDefault(); if (manualCity.trim()) searchCity(manualCity) }} className="flex gap-2">
             <input type="text"
-              placeholder={weather ? `${weather.city} — changer de ville...` : 'Entrer une ville...'}
+              placeholder={weather ? `${weather.city} — changer de ville...` : 'Entre ta ville (ex: Valence, FR)'}
               value={manualCity} onChange={(e) => setManualCity(e.target.value)}
               className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
             />
             <button type="submit" className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors">OK</button>
           </form>
-        )}
+          {error && <p className="text-xs text-red-500 px-1">{error}</p>}
+        </div>
 
         {/* Onglets */}
         <div className="flex bg-gray-200 rounded-xl p-1">
