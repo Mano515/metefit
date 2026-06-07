@@ -1,108 +1,163 @@
 import { useState } from 'react'
 import type { ClothingCategory, ClothingItem } from '../types'
 
-const CATEGORIES: { value: ClothingCategory; label: string }[] = [
-  { value: 'haut', label: 'Haut' },
-  { value: 'bas', label: 'Bas' },
-  { value: 'manteau', label: 'Manteau / Veste' },
-  { value: 'chaussures', label: 'Chaussures' },
-  { value: 'accessoire', label: 'Accessoire' },
+interface Preset {
+  name: string
+  emoji: string
+  category: ClothingCategory
+  minTemp: number
+  maxTemp: number
+  rainproof: boolean
+}
+
+const PRESETS: Preset[] = [
+  // Hauts
+  { name: 'T-shirt',     emoji: '👕', category: 'haut',       minTemp: 18, maxTemp: 40,  rainproof: false },
+  { name: 'Chemise',     emoji: '👔', category: 'haut',       minTemp: 12, maxTemp: 30,  rainproof: false },
+  { name: 'Sweat',       emoji: '👕', category: 'haut',       minTemp: 5,  maxTemp: 18,  rainproof: false },
+  { name: 'Pull',        emoji: '🧶', category: 'haut',       minTemp: -5, maxTemp: 12,  rainproof: false },
+  // Bas
+  { name: 'Short',       emoji: '🩳', category: 'bas',        minTemp: 22, maxTemp: 40,  rainproof: false },
+  { name: 'Jean',        emoji: '👖', category: 'bas',        minTemp: 5,  maxTemp: 25,  rainproof: false },
+  { name: 'Pantalon',    emoji: '👖', category: 'bas',        minTemp: 0,  maxTemp: 20,  rainproof: false },
+  { name: 'Jupe',        emoji: '👗', category: 'bas',        minTemp: 18, maxTemp: 40,  rainproof: false },
+  // Manteaux
+  { name: 'Veste',       emoji: '🫱', category: 'manteau',    minTemp: 10, maxTemp: 20,  rainproof: false },
+  { name: 'Manteau',     emoji: '🧥', category: 'manteau',    minTemp: -5, maxTemp: 12,  rainproof: false },
+  { name: 'Doudoune',    emoji: '🧥', category: 'manteau',    minTemp: -20, maxTemp: 5,  rainproof: false },
+  { name: 'Imperméable', emoji: '🌧️', category: 'manteau',    minTemp: 0,  maxTemp: 25,  rainproof: true  },
+  // Chaussures
+  { name: 'Sandales',    emoji: '👡', category: 'chaussures', minTemp: 22, maxTemp: 40,  rainproof: false },
+  { name: 'Baskets',     emoji: '👟', category: 'chaussures', minTemp: 5,  maxTemp: 30,  rainproof: false },
+  { name: 'Boots',       emoji: '🥾', category: 'chaussures', minTemp: -5, maxTemp: 15,  rainproof: false },
+  // Accessoires
+  { name: 'Bonnet',      emoji: '🧢', category: 'accessoire', minTemp: -20, maxTemp: 8,  rainproof: false },
+  { name: 'Écharpe',     emoji: '🧣', category: 'accessoire', minTemp: -20, maxTemp: 10, rainproof: false },
+  { name: 'Parapluie',   emoji: '☂️', category: 'accessoire', minTemp: 0,  maxTemp: 30,  rainproof: true  },
+  { name: 'Lunettes',    emoji: '🕶️', category: 'accessoire', minTemp: 18, maxTemp: 40,  rainproof: false },
 ]
 
 interface Props {
   onAdd: (item: Omit<ClothingItem, 'id'>) => void
 }
 
+function TempButton({ value, onChange, delta }: { value: number; onChange: (v: number) => void; delta: number }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(value + delta)}
+      className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-bold flex items-center justify-center transition-colors"
+    >
+      {delta > 0 ? '+' : '−'}
+    </button>
+  )
+}
+
 export function AddClothingForm({ onAdd }: Props) {
-  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState<Preset | null>(null)
   const [name, setName] = useState('')
-  const [category, setCategory] = useState<ClothingCategory>('haut')
-  const [minTemp, setMinTemp] = useState(-10)
-  const [maxTemp, setMaxTemp] = useState(15)
+  const [minTemp, setMinTemp] = useState(0)
+  const [maxTemp, setMaxTemp] = useState(20)
   const [rainproof, setRainproof] = useState(false)
+
+  function pick(preset: Preset) {
+    setSelected(preset)
+    setName(preset.name)
+    setMinTemp(preset.minTemp)
+    setMaxTemp(preset.maxTemp)
+    setRainproof(preset.rainproof)
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!name.trim()) return
-    onAdd({ name: name.trim(), category, minTemp, maxTemp, rainproof })
-    setName('')
-    setOpen(false)
+    if (!selected || !name.trim()) return
+    onAdd({ name: name.trim(), category: selected.category, minTemp, maxTemp, rainproof })
+    setSelected(null)
   }
 
-  if (!open) {
+  function cancel() {
+    setSelected(null)
+  }
+
+  if (selected) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="w-full border-2 border-dashed border-gray-300 rounded-xl py-4 text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors"
-      >
-        + Ajouter un vêtement
-      </button>
+      <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-4 space-y-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">{selected.emoji}</span>
+          <input
+            autoFocus
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="flex-1 text-base font-medium text-gray-800 border-b border-gray-200 focus:outline-none focus:border-blue-400 pb-1"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <p className="text-xs text-gray-400 uppercase tracking-wide">Température d'usage</p>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <TempButton value={minTemp} onChange={setMinTemp} delta={-1} />
+              <span className="text-sm font-semibold text-gray-700 w-12 text-center">{minTemp}°</span>
+              <TempButton value={minTemp} onChange={setMinTemp} delta={1} />
+            </div>
+            <span className="text-gray-300">→</span>
+            <div className="flex items-center gap-2">
+              <TempButton value={maxTemp} onChange={setMaxTemp} delta={-1} />
+              <span className="text-sm font-semibold text-gray-700 w-12 text-center">{maxTemp}°</span>
+              <TempButton value={maxTemp} onChange={setMaxTemp} delta={1} />
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setRainproof(!rainproof)}
+          className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors ${
+            rainproof
+              ? 'bg-blue-50 text-blue-600 border border-blue-200'
+              : 'bg-gray-50 text-gray-500 border border-gray-100'
+          }`}
+        >
+          <span>{rainproof ? '☂️' : '☀️'}</span>
+          <span>{rainproof ? 'Résistant à la pluie' : 'Pas résistant à la pluie'}</span>
+        </button>
+
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="flex-1 bg-blue-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-600 transition-colors"
+          >
+            Ajouter
+          </button>
+          <button
+            type="button"
+            onClick={cancel}
+            className="px-4 bg-gray-100 text-gray-500 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-200 transition-colors"
+          >
+            ←
+          </button>
+        </div>
+      </form>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-4 space-y-3 shadow-sm">
-      <input
-        autoFocus
-        type="text"
-        placeholder="Nom du vêtement"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value as ClothingCategory)}
-        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-      >
-        {CATEGORIES.map((c) => (
-          <option key={c.value} value={c.value}>{c.label}</option>
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+      <p className="text-xs text-gray-400 uppercase tracking-wide mb-3">Ajouter un vêtement</p>
+      <div className="grid grid-cols-4 gap-2">
+        {PRESETS.map((preset) => (
+          <button
+            key={preset.name}
+            type="button"
+            onClick={() => pick(preset)}
+            className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-blue-50 hover:border-blue-200 border border-transparent transition-colors"
+          >
+            <span className="text-2xl">{preset.emoji}</span>
+            <span className="text-xs text-gray-500 text-center leading-tight">{preset.name}</span>
+          </button>
         ))}
-      </select>
-      <div className="flex gap-3">
-        <div className="flex-1">
-          <label className="text-xs text-gray-500 mb-1 block">Temp. min (°C)</label>
-          <input
-            type="number"
-            value={minTemp}
-            onChange={(e) => setMinTemp(Number(e.target.value))}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-        <div className="flex-1">
-          <label className="text-xs text-gray-500 mb-1 block">Temp. max (°C)</label>
-          <input
-            type="number"
-            value={maxTemp}
-            onChange={(e) => setMaxTemp(Number(e.target.value))}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
       </div>
-      <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={rainproof}
-          onChange={(e) => setRainproof(e.target.checked)}
-          className="rounded"
-        />
-        Résistant à la pluie
-      </label>
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          className="flex-1 bg-blue-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-600 transition-colors"
-        >
-          Ajouter
-        </button>
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="flex-1 bg-gray-100 text-gray-600 rounded-lg py-2 text-sm font-medium hover:bg-gray-200 transition-colors"
-        >
-          Annuler
-        </button>
-      </div>
-    </form>
+    </div>
   )
 }

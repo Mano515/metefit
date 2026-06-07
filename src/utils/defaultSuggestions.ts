@@ -35,22 +35,28 @@ export function getDefaultSuggestion(weather: Weather): ClothingItem[] {
       (item) =>
         item.category === category &&
         weather.temp >= item.minTemp &&
-        weather.temp <= item.maxTemp &&
-        (!weather.rain || item.rainproof || category === 'haut' || category === 'bas')
+        weather.temp <= item.maxTemp
     )
-    // Ajouter imperméable si pluie, sinon le premier candidat de chaque catégorie
+    if (candidates.length === 0) continue
+
     if (weather.rain && category === 'manteau') {
+      // Quand il pleut : imperméable en priorité + manteau chaud si froid
       const raincoat = candidates.find((i) => i.rainproof)
       const warm = candidates.find((i) => !i.rainproof)
       if (raincoat) result.push(raincoat)
       if (warm) result.push(warm)
-    } else if (candidates.length > 0) {
+    } else if (!weather.rain && category === 'manteau') {
+      // Pas de pluie : exclure les imperméables
+      const nonRain = candidates.filter((i) => !i.rainproof)
+      if (nonRain.length > 0) result.push(nonRain[0])
+    } else if (weather.rain && category === 'accessoire') {
+      // Pluie : ajouter parapluie + autres accessoires utiles
+      const umbrella = candidates.find((i) => i.name === 'Parapluie')
+      const other = candidates.find((i) => !i.rainproof)
+      if (other) result.push(other)
+      if (umbrella) result.push(umbrella)
+    } else {
       result.push(candidates[0])
-      // Ajouter parapluie si pluie
-      if (weather.rain && category === 'accessoire') {
-        const umbrella = candidates.find((i) => i.rainproof && i.name === 'Parapluie')
-        if (umbrella && !result.includes(umbrella)) result.push(umbrella)
-      }
     }
   }
 
