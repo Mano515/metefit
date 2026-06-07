@@ -19,6 +19,7 @@ import { SaveOutfitButton } from './components/SaveOutfitButton'
 import { SavedOutfitLibrary } from './components/SavedOutfitLibrary'
 import { HistoryList } from './components/HistoryList'
 import { NotificationBanner } from './components/NotificationBanner'
+import { CitySearch } from './components/CitySearch'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import type { OutfitFeedback } from './types'
 import './index.css'
@@ -26,7 +27,7 @@ import './index.css'
 type Tab = 'suggestion' | 'wardrobe' | 'historique'
 
 export default function App() {
-  const { weather, forecast, slots, selectedDay, setSelectedDay, loading, error, manualCity, setManualCity, searchCity } = useWeather()
+  const { weather, forecast, slots, selectedDay, setSelectedDay, loading, error, searchCity } = useWeather()
   const { items, addItem, removeItem, getSuggestion } = useWardrobe()
   const { profile, setProfile, offset, lastAutoAdjust, clearAutoAdjustNotice, recalibrate } = useThermal()
   const { entries, addEntry, todayEntry } = useHistory()
@@ -77,18 +78,8 @@ export default function App() {
           </>
         )}
 
-        {/* Champ ville — toujours visible */}
-        <div className="space-y-1">
-          <form onSubmit={(e) => { e.preventDefault(); if (manualCity.trim()) searchCity(manualCity) }} className="flex gap-2">
-            <input type="text"
-              placeholder={weather ? `${weather.city} — changer de ville...` : 'Entre ta ville (ex: Valence, FR)'}
-              value={manualCity} onChange={(e) => setManualCity(e.target.value)}
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-            />
-            <button type="submit" className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors">OK</button>
-          </form>
-          {error && <p className="text-xs text-red-500 px-1">{error}</p>}
-        </div>
+        {/* Champ ville avec autocomplétion */}
+        <CitySearch currentCity={weather?.city} error={error} onSelect={searchCity} />
 
         {/* Onglets */}
         <div className="flex bg-gray-200 rounded-xl p-1">

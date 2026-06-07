@@ -150,11 +150,17 @@ export function useWeather() {
     )
   }, [])
 
-  async function searchCity(city: string) {
+  async function searchCity(input: string) {
     setLoading(true)
     setError(null)
     try {
-      apply(await fetchByCity(city))
+      // Si on reçoit "lat,lon" (sélection depuis autocomplétion)
+      const coordsMatch = input.match(/^(-?\d+\.?\d*),(-?\d+\.?\d*)$/)
+      if (coordsMatch) {
+        apply(await fetchByCoords(parseFloat(coordsMatch[1]), parseFloat(coordsMatch[2])))
+      } else {
+        apply(await fetchByCity(input))
+      }
       setSelectedDay(0)
       setManualCity('')
     } catch (e: any) {
