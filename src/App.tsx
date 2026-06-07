@@ -44,6 +44,7 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
   const [contentAnim, setContentAnim] = useState('')
+  const [searchAnim, setSearchAnim] = useState('')
   const animating = useRef(false)
   const prevCityRef = useRef<string | undefined>(undefined)
 
@@ -79,7 +80,8 @@ export default function App() {
     if (weather.city !== prevCityRef.current) {
       prevCityRef.current = weather.city
       setContentAnim('day-slide-in-right')
-      setTimeout(() => setContentAnim(''), 220)
+      setSearchAnim('day-slide-in-right')
+      setTimeout(() => { setContentAnim(''); setSearchAnim('') }, 220)
     }
   }, [weather?.city])
 
@@ -147,12 +149,14 @@ export default function App() {
           </button>
         </header>
 
+        <div className={searchAnim} style={{ willChange: 'transform, opacity' }}>
         <CitySearch
           currentCity={weather?.city}
           error={error}
           favs={favs}
           recent={recent}
           onSelect={(coords, city) => {
+            setSearchAnim('day-slide-out-left')
             if (weather) setContentAnim('day-slide-out-left')
             searchCity(coords)
             addToRecent(city)
@@ -160,6 +164,7 @@ export default function App() {
           onToggleFav={toggleFav}
           isFav={isFav}
         />
+        </div>
 
         <main id="main-content" className="space-y-4">
 
