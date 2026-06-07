@@ -152,13 +152,13 @@ export default function App() {
               )}
 
               {/* Bloc animé au changement de jour */}
-              <div
-                className={dayAnim}
-                style={{ willChange: 'transform, opacity' }}
-                aria-live="polite"
-                aria-busy={!!dayAnim}
-              >
-                {weather && (
+              {weather && (
+                <div
+                  className={dayAnim}
+                  style={{ willChange: 'transform, opacity' }}
+                  aria-live="polite"
+                  aria-busy={!!dayAnim}
+                >
                   <div className="space-y-4">
                     <WeatherCard
                       weather={weather}
@@ -169,18 +169,8 @@ export default function App() {
                     />
                     <DayTimeline slots={slots} />
                     <DayChangeAlert slots={slots} />
-                  </div>
-                )}
-              </div>
+                    <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
 
-              <div className="space-y-3">
-                {!weather && !loading && (
-                  <p className="text-sm text-gray-400 dark:text-gray-500 text-center">Entre ta ville pour obtenir une suggestion.</p>
-                )}
-                {weather && <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />}
-
-                {weather && (
-                  <>
                     {/* Bouton "Plus d'options" */}
                     <button
                       onClick={() => setShowOptions((v) => !v)}
@@ -188,12 +178,7 @@ export default function App() {
                       className="w-full flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl"
                     >
                       <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
-                      <span
-                        aria-hidden="true"
-                        className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}
-                      >
-                        ▾
-                      </span>
+                      <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
                     </button>
 
                     {/* Options dépliables */}
@@ -205,9 +190,13 @@ export default function App() {
                         )}
                       </div>
                     )}
-                  </>
-                )}
-              </div>
+                  </div>
+                </div>
+              )}
+
+              {!weather && !loading && (
+                <p className="text-sm text-gray-400 dark:text-gray-500 text-center">Entre ta ville pour obtenir une suggestion.</p>
+              )}
             </>
           )}
 
