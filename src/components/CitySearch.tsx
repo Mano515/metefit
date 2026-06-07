@@ -89,25 +89,6 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
   return (
     <div ref={containerRef} className="space-y-2">
-      {/* Favoris — toujours visibles sous la barre */}
-      {favs.length > 0 && (
-        <div role="list" aria-label="Villes favorites" className="flex flex-wrap gap-2">
-          {favs.map((city) => (
-            <button
-              key={`${city.lat},${city.lon}`}
-              role="listitem"
-              aria-label={`Chercher la météo à ${city.name}${city.region ? `, ${city.region}` : ''}`}
-              onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
-              className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-yellow-200 dark:border-yellow-700 text-gray-700 dark:text-gray-200 text-xs px-3 py-1.5 rounded-full shadow-sm hover:border-yellow-400 dark:hover:border-yellow-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-            >
-              <span aria-hidden="true">⭐</span>
-              <span className="font-medium">{city.name}</span>
-              {city.region && <span className="text-gray-400 dark:text-gray-500">{city.region}</span>}
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Barre de recherche */}
       <div className="relative">
         <form onSubmit={handleSubmit} className="flex gap-2" role="search" aria-label="Recherche de ville">
@@ -140,6 +121,34 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
         {error && (
           <p id={errorId} role="alert" className="text-xs text-red-500 px-1 mt-1">{error}</p>
+        )}
+
+        {/* Favoris — uniquement si aucune ville active */}
+        {!currentCity && favs.length > 0 && (
+          <ul role="list" aria-label="Villes favorites" className="flex flex-wrap gap-2 mt-2">
+            {favs.map((city) => (
+              <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+                <button
+                  type="button"
+                  aria-label={`Chercher la météo à ${city.name}${city.region ? `, ${city.region}` : ''}`}
+                  onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
+                  className="flex items-center gap-1.5 pl-3 pr-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
+                >
+                  <span aria-hidden="true" className="text-sm">⭐</span>
+                  <span className="font-medium">{city.name}</span>
+                  {city.region && <span className="text-gray-400 dark:text-gray-500 text-xs">{city.region}</span>}
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Retirer ${city.name} des favoris`}
+                  onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
+                  className="flex items-center px-2 text-gray-300 dark:text-gray-600 hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 border-l border-gray-100 dark:border-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400 text-xs"
+                >
+                  <span aria-hidden="true">✕</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         )}
 
         {/* Dropdown : suggestions de l'API */}

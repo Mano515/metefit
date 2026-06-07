@@ -26,7 +26,7 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
   return (
     <div aria-label={`Météo ${dayLabel} à ${weather.city}${locationParts ? `, ${locationParts}` : ''} : ${weather.temp}°C, ${weather.description}`}>
       {/* Navigation — sans fond, au-dessus de la carte */}
-      <div className="flex items-center justify-between px-2 py-2">
+      <div className="flex items-center justify-between px-2 pb-2">
         <button
           onClick={onPrev}
           disabled={!canPrev}
@@ -36,7 +36,7 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
                      disabled:opacity-25 disabled:pointer-events-none
                      transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
-          <span aria-hidden="true" className="text-3xl font-bold leading-none">‹</span>
+          <span aria-hidden="true" className="text-3xl font-bold leading-none -translate-y-px">‹</span>
         </button>
 
         <p className="text-base font-bold text-gray-800 dark:text-gray-100 capitalize">
