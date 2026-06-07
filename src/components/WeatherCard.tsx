@@ -28,18 +28,18 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
       aria-label={`Météo ${dayLabel} à ${weather.city}${locationParts ? `, ${locationParts}` : ''} : ${weather.temp}°C, ${weather.description}`}
       className="rounded-2xl shadow-lg overflow-hidden"
     >
-      {/* Onglet navigation — fond blanc, collé à la carte */}
-      <div className="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-gray-700">
+      {/* Navigation — sans fond, au-dessus de la carte */}
+      <div className="flex items-center justify-between px-2 py-2">
         <button
           onClick={onPrev}
           disabled={!canPrev}
           aria-label="Jour précédent"
-          className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
-                     hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
+                     hover:text-blue-500 dark:hover:text-blue-400
                      disabled:opacity-25 disabled:pointer-events-none
                      transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
-          <span aria-hidden="true" className="text-2xl font-bold leading-none">‹</span>
+          <span aria-hidden="true" className="text-3xl font-bold leading-none">‹</span>
         </button>
 
         <p className="text-base font-bold text-gray-800 dark:text-gray-100 capitalize">
@@ -50,12 +50,12 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
           onClick={onNext}
           disabled={!canNext}
           aria-label="Jour suivant"
-          className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
-                     hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-500 dark:hover:text-blue-400
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
+                     hover:text-blue-500 dark:hover:text-blue-400
                      disabled:opacity-25 disabled:pointer-events-none
                      transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
-          <span aria-hidden="true" className="text-2xl font-bold leading-none">›</span>
+          <span aria-hidden="true" className="text-3xl font-bold leading-none">›</span>
         </button>
       </div>
 
