@@ -42,6 +42,7 @@ export default function App() {
   const { dark, toggle: toggleDark } = useDarkMode()
   const [view, setView] = useState<View>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [showOptions, setShowOptions] = useState(false)
 
   const personalSuggestion = weather ? getSuggestion(weather, slots, offset) : []
   const suggestion = personalSuggestion.length > 0
@@ -151,10 +152,35 @@ export default function App() {
                 {!weather && !loading && (
                   <p className="text-sm text-gray-400 dark:text-gray-500 text-center">Entre ta ville pour obtenir une suggestion.</p>
                 )}
-                {weather && <OutfitSuggestion items={suggestion} isDefault={isDefault} />}
-                {weather && <SaveOutfitButton items={suggestion} onSave={saveOutfit} />}
-                {weather && isToday && (
-                  <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />
+                {weather && <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />}
+
+                {weather && (
+                  <>
+                    {/* Bouton "Plus d'options" */}
+                    <button
+                      onClick={() => setShowOptions((v) => !v)}
+                      aria-expanded={showOptions}
+                      className="w-full flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl"
+                    >
+                      <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
+                      <span
+                        aria-hidden="true"
+                        className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}
+                      >
+                        ▾
+                      </span>
+                    </button>
+
+                    {/* Options dépliables */}
+                    {showOptions && (
+                      <div className="space-y-3">
+                        <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
+                        {isToday && (
+                          <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />
+                        )}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </>
