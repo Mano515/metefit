@@ -18,6 +18,7 @@ import { SavedOutfitLibrary } from './components/SavedOutfitLibrary'
 import { HistoryList } from './components/HistoryList'
 import { CitySearch } from './components/CitySearch'
 import { SettingsPanel } from './components/SettingsPanel'
+import { useCityMemory } from './hooks/useCityMemory'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import type { OutfitFeedback } from './types'
 import './index.css'
@@ -31,6 +32,7 @@ export default function App() {
   const { entries, addEntry, todayEntry } = useHistory()
   const { outfits, saveOutfit, removeOutfit } = useSavedOutfits()
   const { permission, requestPermission, sendMorningNotif } = useNotifications()
+  const { favs, recent, addToRecent, toggleFav, isFav } = useCityMemory()
   const [tab, setTab] = useState<Tab>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -92,7 +94,15 @@ export default function App() {
           </>
         )}
 
-        <CitySearch currentCity={weather?.city} error={error} onSelect={searchCity} />
+        <CitySearch
+          currentCity={weather?.city}
+          error={error}
+          favs={favs}
+          recent={recent}
+          onSelect={(coords, city) => { searchCity(coords); addToRecent(city) }}
+          onToggleFav={toggleFav}
+          isFav={isFav}
+        />
 
         {/* Onglets */}
         <div className="flex bg-gray-200 rounded-xl p-1">

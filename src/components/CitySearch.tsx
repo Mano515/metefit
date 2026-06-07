@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import type { SavedCity } from '../hooks/useCityMemory'
 
 const API_KEY = 'b1bbad1503a2ff186dd957972daf4b53'
 
@@ -15,23 +16,28 @@ function countryLabel(code: string): string {
   try { return countryNames.of(code) ?? code } catch { return code }
 }
 
+
 interface Props {
   currentCity?: string
   error?: string | null
-  onSelect: (city: string) => void
+  favs: SavedCity[]
+  recent: SavedCity[]
+  onSelect: (coords: string, city: SavedCity) => void
+  onToggleFav: (city: SavedCity) => void
+  isFav: (city: SavedCity) => boolean
 }
 
-export function CitySearch({ currentCity, error, onSelect }: Props) {
+export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggleFav, isFav }: Props) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<GeoSuggestion[]>([])
-  const [open, setOpen] = useState(false)
+  const [focused, setFocused] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false)
+        setFocused(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -41,7 +47,7 @@ export function CitySearch({ currentCity, error, onSelect }: Props) {
   function handleChange(value: string) {
     setQuery(value)
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    if (value.trim().length < 2) { setSuggestions([]); setOpen(false); return }
+    if (value.trim().length < 2) { setSuggestions([]); return }
 
     debounceRef.current = setTimeout(async () => {
       try {
@@ -50,75 +56,135 @@ export function CitySearch({ currentCity, error, onSelect }: Props) {
         )
         const data: GeoSuggestion[] = await res.json()
         setSuggestions(data)
-        setOpen(data.length > 0)
       } catch {
         setSuggestions([])
-        setOpen(false)
       }
     }, 300)
   }
 
-  function handleSelect(s: GeoSuggestion) {
+  function handleSelectGeo(s: GeoSuggestion) {
+    const city: SavedCity = { name: s.name, region: s.state, country: countryLabel(s.country), lat: s.lat, lon: s.lon }
     setQuery('')
     setSuggestions([])
-    setOpen(false)
-    onSelect(`${s.lat},${s.lon}`) // on passe les coords directement
+    setFocused(false)
+    onSelect(`${s.lat},${s.lon}`, city)
+  }
+
+  function handleSelectSaved(city: SavedCity) {
+    setFocused(false)
+    onSelect(`${city.lat},${city.lon}`, city)
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!query.trim()) return
-    if (suggestions.length > 0) {
-      handleSelect(suggestions[0])
-    } else {
-      onSelect(query.trim())
-      setQuery('')
-    }
+    if (suggestions.length > 0) handleSelectGeo(suggestions[0])
   }
 
+  const showSuggestions = focused && query.trim().length >= 2 && suggestions.length > 0
+  const showQuickAccess = focused && query.trim().length < 2 && (recent.length > 0 || favs.length === 0)
+
   return (
-    <div ref={containerRef} className="relative space-y-1">
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <input
-          type="text"
-          placeholder={currentCity ? `${currentCity} — changer de ville...` : 'Entre ta ville (ex: Valence, FR)'}
-          value={query}
-          onChange={(e) => handleChange(e.target.value)}
-          onFocus={() => suggestions.length > 0 && setOpen(true)}
-          className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-        />
-        <button
-          type="submit"
-          className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
-        >
-          OK
-        </button>
-      </form>
+    <div ref={containerRef} className="space-y-2">
+      {/* Favoris — toujours visibles sous la barre */}
+      {favs.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {favs.map((city) => (
+            <button
+              key={`${city.lat},${city.lon}`}
+              onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
+              className="flex items-center gap-1.5 bg-white border border-yellow-200 text-gray-700 text-xs px-3 py-1.5 rounded-full shadow-sm hover:border-yellow-400 transition-colors"
+            >
+              <span>⭐</span>
+              <span className="font-medium">{city.name}</span>
+              {city.region && <span className="text-gray-400">{city.region}</span>}
+            </button>
+          ))}
+        </div>
+      )}
 
-      {error && <p className="text-xs text-red-500 px-1">{error}</p>}
+      {/* Barre de recherche */}
+      <div className="relative">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="text"
+            placeholder={currentCity ? `${currentCity} — changer de ville...` : 'Entre ta ville (ex: Valence, FR)'}
+            value={query}
+            onChange={(e) => handleChange(e.target.value)}
+            onFocus={() => setFocused(true)}
+            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+          />
+          <button
+            type="submit"
+            className="bg-gray-200 text-gray-700 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
+          >
+            OK
+          </button>
+        </form>
 
-      {open && suggestions.length > 0 && (
-        <ul className="absolute z-10 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
-          {suggestions.map((s, i) => {
-            const parts = [s.name, s.state, countryLabel(s.country)].filter(Boolean)
-            return (
-              <li key={i}>
+        {error && <p className="text-xs text-red-500 px-1 mt-1">{error}</p>}
+
+        {/* Dropdown : suggestions de l'API */}
+        {showSuggestions && (
+          <ul className="absolute z-10 left-0 right-10 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mt-1">
+            {suggestions.map((s, i) => {
+              const geo: SavedCity = { name: s.name, region: s.state, country: countryLabel(s.country), lat: s.lat, lon: s.lon }
+              const alreadyFav = isFav(geo)
+              return (
+                <li key={i} className="flex items-center">
+                  <button
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); handleSelectGeo(s) }}
+                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-gray-400 text-xs">📍</span>
+                    <span className="font-medium text-gray-800">{s.name}</span>
+                    <span className="text-gray-400 text-xs">{[s.state, countryLabel(s.country)].filter(Boolean).join(', ')}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); onToggleFav(geo) }}
+                    className="px-3 py-2.5 text-base hover:bg-yellow-50 transition-colors"
+                    title={alreadyFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                  >
+                    {alreadyFav ? '⭐' : '☆'}
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+
+        {/* Dropdown : historique récent (quand champ vide et focusé) */}
+        {showQuickAccess && recent.length > 0 && (
+          <ul className="absolute z-10 left-0 right-10 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mt-1">
+            <li className="px-4 pt-2 pb-1">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">Recherches récentes</span>
+            </li>
+            {recent.map((city) => (
+              <li key={`${city.lat},${city.lon}`} className="flex items-center">
                 <button
                   type="button"
-                  onMouseDown={(e) => { e.preventDefault(); handleSelect(s) }}
-                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-blue-50 transition-colors flex items-center gap-2"
+                  onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
+                  className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 transition-colors flex items-center gap-2"
                 >
-                  <span className="text-gray-400 text-xs">📍</span>
-                  <span className="font-medium text-gray-800">{parts[0]}</span>
-                  {parts.length > 1 && (
-                    <span className="text-gray-400 text-xs">{parts.slice(1).join(', ')}</span>
-                  )}
+                  <span className="text-gray-400 text-xs">🕐</span>
+                  <span className="font-medium text-gray-800">{city.name}</span>
+                  <span className="text-gray-400 text-xs">{[city.region, city.country].filter(Boolean).join(', ')}</span>
+                </button>
+                <button
+                  type="button"
+                  onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
+                  className="px-3 py-2.5 text-base hover:bg-yellow-50 transition-colors"
+                  title="Ajouter aux favoris"
+                >
+                  ☆
                 </button>
               </li>
-            )
-          })}
-        </ul>
-      )}
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   )
 }
