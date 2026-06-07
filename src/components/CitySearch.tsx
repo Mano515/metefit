@@ -24,9 +24,10 @@ interface Props {
   onSelect: (coords: string, city: SavedCity) => void
   onToggleFav: (city: SavedCity) => void
   isFav: (city: SavedCity) => boolean
+  favsAnimClass?: string
 }
 
-export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggleFav, isFav }: Props) {
+export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggleFav, isFav, favsAnimClass = '' }: Props) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<GeoSuggestion[]>([])
   const [focused, setFocused] = useState(false)
@@ -125,30 +126,32 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
         {/* Favoris — uniquement si aucune ville active */}
         {!currentCity && favs.length > 0 && (
-          <ul role="list" aria-label="Villes favorites" className="flex flex-col gap-1.5 mt-2">
-            {favs.map((city) => (
-              <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
-                <button
-                  type="button"
-                  aria-label={`Chercher la météo à ${city.name}${city.region ? `, ${city.region}` : ''}`}
-                  onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
-                  className="flex items-center gap-1.5 pl-3 pr-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
-                >
-                  <span aria-hidden="true" className="text-sm">⭐</span>
-                  <span className="font-medium">{city.name}</span>
-                  {city.region && <span className="text-gray-400 dark:text-gray-500 text-xs">{city.region}</span>}
-                </button>
-                <button
-                  type="button"
-                  aria-label={`Retirer ${city.name} des favoris`}
-                  onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
-                  className="flex items-center px-2 text-gray-300 dark:text-gray-600 hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 border-l border-gray-100 dark:border-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400 text-xs"
-                >
-                  <span aria-hidden="true">✕</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className={favsAnimClass} style={{ willChange: 'transform, opacity' }}>
+            <ul role="list" aria-label="Villes favorites" className="flex flex-col gap-1.5 mt-2">
+              {favs.map((city) => (
+                <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+                  <button
+                    type="button"
+                    aria-label={`Chercher la météo à ${city.name}${city.region ? `, ${city.region}` : ''}`}
+                    onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
+                    className="flex-1 flex items-center gap-1.5 pl-3 pr-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
+                  >
+                    <span aria-hidden="true" className="text-sm">⭐</span>
+                    <span className="font-medium">{city.name}</span>
+                    {city.region && <span className="text-gray-400 dark:text-gray-500 text-xs">{city.region}</span>}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`Retirer ${city.name} des favoris`}
+                    onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
+                    className="flex items-center px-3 text-gray-300 dark:text-gray-600 hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 border-l border-gray-100 dark:border-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400 text-xs"
+                  >
+                    <span aria-hidden="true">✕</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         {/* Dropdown : suggestions de l'API */}

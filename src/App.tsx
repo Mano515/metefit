@@ -44,6 +44,7 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
   const [contentAnim, setContentAnim] = useState('')
+  const [favsAnim, setFavsAnim] = useState('')
   const animating = useRef(false)
   const prevCityRef = useRef<string | undefined>(undefined)
 
@@ -74,12 +75,15 @@ export default function App() {
     if (!weather?.city) return
     if (prevCityRef.current === undefined) {
       prevCityRef.current = weather.city
+      setContentAnim('day-slide-in-right')
+      setTimeout(() => setContentAnim(''), 220)
       return
     }
     if (weather.city !== prevCityRef.current) {
       prevCityRef.current = weather.city
       setContentAnim('day-slide-in-right')
-      setTimeout(() => setContentAnim(''), 220)
+      setFavsAnim('day-slide-in-right')
+      setTimeout(() => { setContentAnim(''); setFavsAnim('') }, 220)
     }
   }, [weather?.city])
 
@@ -149,10 +153,12 @@ export default function App() {
 
         <CitySearch
           currentCity={weather?.city}
+          favsAnimClass={favsAnim}
           error={error}
           favs={favs}
           recent={recent}
           onSelect={(coords, city) => {
+            setFavsAnim('day-slide-out-left')
             if (weather) setContentAnim('day-slide-out-left')
             searchCity(coords)
             addToRecent(city)
