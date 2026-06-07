@@ -17,4 +17,5 @@ export interface Weather {
   wind: number
   city: string
   icon: string
+  date?: string
 }

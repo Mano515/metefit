@@ -2,23 +2,27 @@ import { useState } from 'react'
 import { useWeather } from './hooks/useWeather'
 import { useWardrobe } from './hooks/useWardrobe'
 import { WeatherCard } from './components/WeatherCard'
+import { DaySelector } from './components/DaySelector'
 import { AddClothingForm } from './components/AddClothingForm'
 import { ClothingList } from './components/ClothingList'
 import { OutfitSuggestion } from './components/OutfitSuggestion'
+import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import './index.css'
 
 type Tab = 'suggestion' | 'wardrobe'
 
 export default function App() {
-  const { weather, loading, error, manualCity, setManualCity, searchCity } = useWeather()
+  const { weather, forecast, selectedDay, setSelectedDay, loading, error, manualCity, setManualCity, searchCity } = useWeather()
   const { items, addItem, removeItem, getSuggestion } = useWardrobe()
   const [tab, setTab] = useState<Tab>('suggestion')
 
-  const suggestion = weather ? getSuggestion(weather) : []
+  const personalSuggestion = weather ? getSuggestion(weather) : []
+  const suggestion = personalSuggestion.length > 0 ? personalSuggestion : weather ? getDefaultSuggestion(weather) : []
+  const isDefault = personalSuggestion.length === 0
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-md mx-auto px-4 py-6 space-y-5">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
         <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Météfit</h1>
 
         {/* Météo */}
@@ -50,18 +54,23 @@ export default function App() {
         )}
         {weather && <WeatherCard weather={weather} />}
 
+        {/* Sélecteur de jours */}
+        {forecast.length > 0 && (
+          <DaySelector forecast={forecast} selectedDay={selectedDay} onChange={setSelectedDay} />
+        )}
+
         {/* Changer de ville */}
-        {weather && (
+        {!error && (
           <form
-            onSubmit={(e) => { e.preventDefault(); searchCity(manualCity) }}
+            onSubmit={(e) => { e.preventDefault(); if (manualCity.trim()) searchCity(manualCity) }}
             className="flex gap-2"
           >
             <input
               type="text"
-              placeholder="Changer de ville..."
+              placeholder={weather ? `${weather.city} — changer de ville...` : 'Entrer une ville...'}
               value={manualCity}
               onChange={(e) => setManualCity(e.target.value)}
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
             />
             <button
               type="submit"
@@ -93,7 +102,7 @@ export default function App() {
             {!weather && !loading && (
               <p className="text-sm text-gray-400 text-center">Entre ta ville pour obtenir une suggestion.</p>
             )}
-            {weather && <OutfitSuggestion items={suggestion} />}
+            {weather && <OutfitSuggestion items={suggestion} isDefault={isDefault} />}
           </div>
         )}
 
