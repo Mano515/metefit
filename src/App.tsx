@@ -172,7 +172,7 @@ export default function App() {
           {/* Vue Tenue */}
           {view === 'suggestion' && (
             <>
-              {loading && (
+              {loading && !!prevCityRef.current && (
                 <div className="bg-sky-100 dark:bg-sky-900/30 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
               )}
 
