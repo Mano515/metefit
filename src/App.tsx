@@ -9,8 +9,6 @@ import { WeatherCard } from './components/WeatherCard'
 import { DaySelector } from './components/DaySelector'
 import { DayTimeline } from './components/DayTimeline'
 import { DayChangeAlert } from './components/DayChangeAlert'
-import { ThermalSelector } from './components/ThermalSelector'
-import { ThermalAutoNotice } from './components/ThermalAutoNotice'
 import { AddClothingForm } from './components/AddClothingForm'
 import { ClothingList } from './components/ClothingList'
 import { OutfitSuggestion } from './components/OutfitSuggestion'
@@ -18,8 +16,8 @@ import { OutfitValidator } from './components/OutfitValidator'
 import { SaveOutfitButton } from './components/SaveOutfitButton'
 import { SavedOutfitLibrary } from './components/SavedOutfitLibrary'
 import { HistoryList } from './components/HistoryList'
-import { NotificationBanner } from './components/NotificationBanner'
 import { CitySearch } from './components/CitySearch'
+import { SettingsPanel } from './components/SettingsPanel'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import type { OutfitFeedback } from './types'
 import './index.css'
@@ -34,6 +32,7 @@ export default function App() {
   const { outfits, saveOutfit, removeOutfit } = useSavedOutfits()
   const { permission, requestPermission, sendMorningNotif } = useNotifications()
   const [tab, setTab] = useState<Tab>('suggestion')
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const personalSuggestion = weather ? getSuggestion(weather, slots, offset) : []
   const suggestion = personalSuggestion.length > 0
@@ -42,11 +41,8 @@ export default function App() {
   const isDefault = personalSuggestion.length === 0
   const isToday = selectedDay === 0
 
-  // Notification matinale automatique dès que météo + suggestion sont prêtes
   useEffect(() => {
-    if (weather && suggestion.length > 0) {
-      sendMorningNotif(weather, suggestion)
-    }
+    if (weather && suggestion.length > 0) sendMorningNotif(weather, suggestion)
   }, [weather?.city, suggestion.length])
 
   function handleFeedback(feedback: OutfitFeedback) {
@@ -57,11 +53,29 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Météfit</h1>
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        profile={profile}
+        onProfileChange={setProfile}
+        autoAdjust={lastAutoAdjust}
+        onDismissAutoAdjust={clearAutoAdjustNotice}
+        notifPermission={permission}
+        onRequestNotif={requestPermission}
+      />
 
-        <NotificationBanner permission={permission} onRequest={requestPermission} />
-        <ThermalAutoNotice adjust={lastAutoAdjust} onDismiss={clearAutoAdjustNotice} />
+      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Météfit</h1>
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-500 transition-colors shadow-sm"
+            aria-label="Paramètres"
+          >
+            ⚙️
+          </button>
+        </div>
 
         {/* Météo */}
         {loading && <div className="bg-sky-100 rounded-2xl p-6 animate-pulse h-36" />}
@@ -78,7 +92,6 @@ export default function App() {
           </>
         )}
 
-        {/* Champ ville avec autocomplétion */}
         <CitySearch currentCity={weather?.city} error={error} onSelect={searchCity} />
 
         {/* Onglets */}
@@ -96,7 +109,6 @@ export default function App() {
 
         {tab === 'suggestion' && (
           <div className="space-y-3">
-            <ThermalSelector profile={profile} onChange={setProfile} />
             {!weather && !loading && (
               <p className="text-sm text-gray-400 text-center">Entre ta ville pour obtenir une suggestion.</p>
             )}
