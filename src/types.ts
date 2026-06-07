@@ -41,6 +41,7 @@ export interface TimeSlot {
   description: string
   rain: boolean
   snow: boolean
+  isPast?: boolean
 }
 
 export interface HistoryEntry {

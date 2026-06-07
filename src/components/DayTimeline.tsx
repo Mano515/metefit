@@ -50,14 +50,23 @@ export function DayTimeline({ slots }: Props) {
         {slots.map((slot) => (
           <li
             key={slot.hour}
-            aria-label={`${slot.label} : ${slot.temp}°, ${conditionLabel(slot)}`}
-            className="flex-shrink-0 flex flex-col items-center gap-1 min-w-[56px]"
+            aria-label={slot.isPast ? `${slot.label} (passé)` : `${slot.label} : ${slot.temp}°, ${conditionLabel(slot)}`}
+            className={`flex-shrink-0 flex flex-col items-center gap-1 min-w-[56px] transition-opacity ${slot.isPast ? 'opacity-30' : 'opacity-100'}`}
           >
             <span aria-hidden="true" className="text-xs text-gray-400 dark:text-gray-500">{slot.label}</span>
-            <span aria-hidden="true" className="text-xl">{conditionEmoji(slot)}</span>
-            <span aria-hidden="true" className={`text-sm font-semibold ${tempColor(slot.temp)}`}>{slot.temp}°</span>
-            {slot.rain && <span aria-hidden="true" className="text-xs text-blue-400">pluie</span>}
-            {slot.snow && <span aria-hidden="true" className="text-xs text-sky-300">neige</span>}
+            {slot.isPast ? (
+              <>
+                <span aria-hidden="true" className="text-xl grayscale">—</span>
+                <span aria-hidden="true" className="text-sm font-semibold text-gray-300 dark:text-gray-600">–</span>
+              </>
+            ) : (
+              <>
+                <span aria-hidden="true" className="text-xl">{conditionEmoji(slot)}</span>
+                <span aria-hidden="true" className={`text-sm font-semibold ${tempColor(slot.temp)}`}>{slot.temp}°</span>
+                {slot.rain && <span aria-hidden="true" className="text-xs text-blue-400">pluie</span>}
+                {slot.snow && <span aria-hidden="true" className="text-xs text-sky-300">neige</span>}
+              </>
+            )}
           </li>
         ))}
       </ol>

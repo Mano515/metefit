@@ -73,12 +73,30 @@ function parseForecast(data: any, geo: GeoResult): { forecast: Weather[]; slotsB
     }
   })
 
-  const slotsByDay: TimeSlot[][] = days.map(([, slots]) => {
-    return SLOT_HOURS.flatMap((hour) => {
+  const nowHour = new Date().getHours()
+
+  const slotsByDay: TimeSlot[][] = days.map(([, slots], dayIndex) => {
+    return SLOT_HOURS.map((hour) => {
       const slot = slots.find((s: any) => s.dt_txt.endsWith(` ${hour}:00`))
-      if (!slot) return []
+      const slotHour = parseInt(hour.split(':')[0], 10)
+      const isPast = dayIndex === 0 && slotHour + 3 <= nowHour // créneau de 3h déjà passé
+
+      if (!slot) {
+        // Créneau dans le passé : on l'inclut comme fantôme
+        return {
+          hour,
+          label: TIME_LABELS[hour] ?? hour,
+          temp: 0,
+          icon: '01d',
+          description: '',
+          rain: false,
+          snow: false,
+          isPast: true,
+        } satisfies TimeSlot
+      }
+
       const main = slot.weather[0].main
-      return [{
+      return {
         hour,
         label: TIME_LABELS[hour] ?? hour,
         temp: Math.round(slot.main.temp),
@@ -86,7 +104,8 @@ function parseForecast(data: any, geo: GeoResult): { forecast: Weather[]; slotsB
         description: slot.weather[0].description,
         rain: ['Rain', 'Drizzle', 'Thunderstorm'].includes(main),
         snow: main === 'Snow',
-      }]
+        isPast,
+      } satisfies TimeSlot
     })
   })
 
