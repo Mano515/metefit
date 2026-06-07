@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ClothingItem, Weather } from '../types'
+import type { ClothingItem, Weather } from '../types'
 
 const STORAGE_KEY = 'metefit_wardrobe'
 

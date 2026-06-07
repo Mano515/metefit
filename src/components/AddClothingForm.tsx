@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ClothingCategory, ClothingItem } from '../types'
+import type { ClothingCategory, ClothingItem } from '../types'
 
 const CATEGORIES: { value: ClothingCategory; label: string }[] = [
   { value: 'haut', label: 'Haut' },

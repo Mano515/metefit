@@ -1,4 +1,4 @@
-import { Weather } from '../types'
+import type { Weather } from '../types'
 
 interface Props {
   weather: Weather

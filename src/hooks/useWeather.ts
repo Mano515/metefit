@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Weather } from '../types'
+import type { Weather } from '../types'
 
 const API_KEY = 'b1bbad1503a2ff186dd957972daf4b53'
 

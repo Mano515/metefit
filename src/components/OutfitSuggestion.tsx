@@ -1,4 +1,4 @@
-import { ClothingItem } from '../types'
+import type { ClothingItem } from '../types'
 
 const CATEGORY_LABELS: Record<string, string> = {
   haut: 'Haut',
