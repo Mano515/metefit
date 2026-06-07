@@ -18,6 +18,7 @@ import { SavedOutfitLibrary } from './components/SavedOutfitLibrary'
 import { HistoryList } from './components/HistoryList'
 import { CitySearch } from './components/CitySearch'
 import { SettingsPanel } from './components/SettingsPanel'
+import { SplashScreen } from './components/SplashScreen'
 import { useCityMemory } from './hooks/useCityMemory'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import type { OutfitFeedback } from './types'
@@ -40,6 +41,7 @@ export default function App() {
   const { permission, requestPermission, sendMorningNotif } = useNotifications()
   const { favs, recent, addToRecent, toggleFav, isFav } = useCityMemory()
   const { dark, toggle: toggleDark } = useDarkMode()
+  const [splashDone, setSplashDone] = useState(false)
   const [view, setView] = useState<View>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
@@ -101,6 +103,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <a href="#main-content" className="skip-link">Aller au contenu principal</a>
 
       <SettingsPanel
