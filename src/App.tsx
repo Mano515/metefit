@@ -20,6 +20,7 @@ import { CitySearch } from './components/CitySearch'
 import { SettingsPanel } from './components/SettingsPanel'
 import { SplashScreen } from './components/SplashScreen'
 import { useCityMemory } from './hooks/useCityMemory'
+import { useSwipe } from './hooks/useSwipe'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import type { OutfitFeedback } from './types'
 import './index.css'
@@ -98,6 +99,14 @@ export default function App() {
     const updated = addEntry(weather, suggestion, feedback)
     recalibrate(updated)
   }
+
+  const canPrev = selectedDay > 0
+  const canNext = selectedDay < forecast.length - 1
+
+  const swipeHandlers = useSwipe({
+    onSwipeLeft:  () => { if (canNext) goToDay(selectedDay + 1, 'next') },
+    onSwipeRight: () => { if (canPrev) goToDay(selectedDay - 1, 'prev') },
+  })
 
   const isSuggestionView = view === 'suggestion'
 
@@ -179,11 +188,12 @@ export default function App() {
                 <div className="bg-sky-100 dark:bg-sky-900/30 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
               )}
 
-              {/* Bloc animé au changement de jour */}
+              {/* Bloc animé au changement de jour — swipeable sur mobile */}
               {weather && (
                 <div
                   className={contentAnim}
                   style={{ willChange: 'transform, opacity' }}
+                  {...swipeHandlers}
                   aria-live="polite"
                   aria-busy={!!contentAnim}
                 >
