@@ -5,21 +5,22 @@ interface Props {
 }
 
 export function DayChangeAlert({ slots }: Props) {
-  if (slots.length < 2) return null
+  const activeSlots = slots.filter((s) => !s.isPast)
+  if (activeSlots.length < 2) return null
 
-  const temps = slots.map((s) => s.temp)
+  const temps = activeSlots.map((s) => s.temp)
   const min = Math.min(...temps)
   const max = Math.max(...temps)
   const amplitude = max - min
 
-  const rainStart = slots.findIndex((s) => s.rain)
+  const rainStart = activeSlots.findIndex((s) => s.rain)
   const rainOnlyPart = rainStart > 0
 
   const alerts: { emoji: string; text: string }[] = []
 
   if (amplitude >= 10) {
-    const coldSlot = slots.find((s) => s.temp === min)
-    const hotSlot = slots.find((s) => s.temp === max)
+    const coldSlot = activeSlots.find((s) => s.temp === min)
+    const hotSlot = activeSlots.find((s) => s.temp === max)
     alerts.push({
       emoji: '🌡️',
       text: `Grosse amplitude : ${min}° le ${coldSlot?.label.toLowerCase()} → ${max}° ${hotSlot?.label.toLowerCase()}. Prévois une couche à enlever.`,
@@ -32,14 +33,14 @@ export function DayChangeAlert({ slots }: Props) {
   }
 
   if (rainOnlyPart && rainStart !== -1) {
-    const rainSlot = slots[rainStart]
+    const rainSlot = activeSlots[rainStart]
     alerts.push({
       emoji: '🌂',
       text: `Pluie prévue à partir de ${rainSlot.label.toLowerCase()} — pense au parapluie.`,
     })
   }
 
-  const snowSlot = slots.find((s) => s.snow)
+  const snowSlot = activeSlots.find((s) => s.snow)
   if (snowSlot) {
     alerts.push({ emoji: '❄️', text: `Neige prévue ${snowSlot.label.toLowerCase()}.` })
   }

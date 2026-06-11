@@ -36,7 +36,8 @@ export function useWardrobe() {
   function getSuggestion(weather: Weather, slots: TimeSlot[], thermalOffset: number): ClothingItem[] {
     const effectiveTemp = weather.temp + thermalOffset
     // Amplitude thermique du jour pour choisir le manteau le plus adapté
-    const dayMin = slots.length > 0 ? Math.min(...slots.map((s) => s.temp)) + thermalOffset : effectiveTemp
+    const activeSlots = slots.filter((s) => !s.isPast)
+    const dayMin = activeSlots.length > 0 ? Math.min(...activeSlots.map((s) => s.temp)) + thermalOffset : effectiveTemp
     const result: ClothingItem[] = []
 
     for (const category of CATEGORY_ORDER) {
