@@ -134,8 +134,8 @@ export default function App() {
         {/* Header */}
         <header className="flex items-center justify-between">
           {isSuggestionView ? (
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
-              Météfit
+            <h1 aria-label="Météfit">
+              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto dark:invert" />
             </h1>
           ) : (
             <div className="flex items-center gap-2">
