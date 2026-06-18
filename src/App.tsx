@@ -111,7 +111,7 @@ export default function App() {
   const isSuggestionView = view === 'suggestion'
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <a href="#main-content" className="skip-link">Aller au contenu principal</a>
 
@@ -135,7 +135,7 @@ export default function App() {
         <header className="flex items-center justify-between">
           {isSuggestionView ? (
             <h1 aria-label="Météfit">
-              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto dark:invert" />
+              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto invert dark:invert-0" />
             </h1>
           ) : (
             <div className="flex items-center gap-2">
