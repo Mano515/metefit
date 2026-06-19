@@ -22,32 +22,32 @@ export function getWeatherGradient(icon?: string): string {
   }
 
   switch (code) {
-    case '01': // Ciel dégagé — chaud, soleil haut, bleu vif en bas pour rejoindre la carte
-      return 'linear-gradient(160deg, #f97316 0%, #fb923c 20%, #38bdf8 65%, #1d4ed8 100%)'
+    case '01': // Ciel dégagé — orange tamisé en haut, bleu profond en bas
+      return 'linear-gradient(160deg, #92400e 0%, #c2540a 20%, #0369a1 65%, #1e3a8a 100%)'
 
-    case '02': // Quelques nuages — légèrement voilé, bleu lumineux
-      return 'linear-gradient(160deg, #7dd3fc 0%, #38bdf8 40%, #2563eb 80%, #1e40af 100%)'
+    case '02': // Quelques nuages — bleu moyen, pas trop clair
+      return 'linear-gradient(160deg, #1e6a9e 0%, #1d4ed8 50%, #1e3a8a 100%)'
 
-    case '03': // Nuages épars — bleu plus doux
-      return 'linear-gradient(160deg, #93c5fd 0%, #60a5fa 40%, #2563eb 80%, #1e3a8a 100%)'
+    case '03': // Nuages épars — bleu-gris modéré
+      return 'linear-gradient(160deg, #2563a8 0%, #1e40af 50%, #1e3a8a 100%)'
 
-    case '04': // Couvert — gris-bleu, cohérent mais désaturé
-      return 'linear-gradient(160deg, #64748b 0%, #475569 40%, #334155 80%, #1e293b 100%)'
+    case '04': // Couvert — gris-bleu sombre
+      return 'linear-gradient(160deg, #374151 0%, #1f2937 50%, #111827 100%)'
 
     case '09': // Averses — bleu sombre profond
-      return 'linear-gradient(160deg, #1e40af 0%, #1e3a8a 50%, #172554 100%)'
+      return 'linear-gradient(160deg, #1e3a8a 0%, #172554 50%, #0c1a3a 100%)'
 
-    case '10': // Pluie — bleu nuit, cohérent avec la carte bleue
-      return 'linear-gradient(160deg, #1d4ed8 0%, #1e3a8a 50%, #0f172a 100%)'
+    case '10': // Pluie — bleu nuit
+      return 'linear-gradient(160deg, #1e40af 0%, #1e3a8a 50%, #0f172a 100%)'
 
     case '11': // Orage — violet-bleu très sombre
       return 'linear-gradient(160deg, #1e1b4b 0%, #312e81 40%, #0f0a2e 100%)'
 
-    case '13': // Neige — bleu très pâle, presque blanc
-      return 'linear-gradient(160deg, #bfdbfe 0%, #dbeafe 50%, #93c5fd 100%)'
+    case '13': // Neige — bleu glacier assombri
+      return 'linear-gradient(160deg, #1e4a7a 0%, #2563a8 40%, #1e3a6e 100%)'
 
-    case '50': // Brume — gris-bleu neutre
-      return 'linear-gradient(160deg, #94a3b8 0%, #64748b 50%, #475569 100%)'
+    case '50': // Brume — gris-bleu sombre
+      return 'linear-gradient(160deg, #1e2a3a 0%, #2d3f52 50%, #1a2535 100%)'
 
     default:
       return 'linear-gradient(160deg, #0c1a3a 0%, #1e3a6e 60%, #0a1628 100%)'
