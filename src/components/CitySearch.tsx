@@ -187,7 +187,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             id={listboxId}
             role="listbox"
             aria-label="Suggestions de villes"
-            className="absolute z-10 left-0 right-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden mt-1"
+            className="absolute z-10 left-0 right-10 bg-white/15 backdrop-blur-xl border border-white/25 rounded-xl shadow-2xl overflow-hidden mt-1"
           >
             {suggestions.map((s, i) => {
               const geo: SavedCity = { name: s.name, region: s.state, country: countryLabel(s.country), lat: s.lat, lon: s.lon }
@@ -200,24 +200,24 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                   id={`${optionIdBase}-${i}`}
                   role="option"
                   aria-selected={isActive}
-                  className={`flex items-center ${isActive ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
+                  className={`flex items-center ${isActive ? 'bg-white/20' : ''}`}
                 >
                   <button
                     type="button"
                     aria-label={`Sélectionner ${label}`}
                     onMouseDown={(e) => { e.preventDefault(); handleSelectGeo(s) }}
-                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
+                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-white/15 transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
-                    <span aria-hidden="true" className="text-gray-400 text-xs">📍</span>
-                    <span className="font-medium text-gray-800 dark:text-gray-100">{s.name}</span>
-                    <span className="text-gray-400 dark:text-gray-500 text-xs">{[s.state, countryLabel(s.country)].filter(Boolean).join(', ')}</span>
+                    <span aria-hidden="true" className="text-white/40 text-xs">📍</span>
+                    <span className="font-medium text-white">{s.name}</span>
+                    <span className="text-white/50 text-xs">{[s.state, countryLabel(s.country)].filter(Boolean).join(', ')}</span>
                   </button>
                   <button
                     type="button"
                     aria-label={alreadyFav ? `Retirer ${s.name} des favoris` : `Ajouter ${s.name} aux favoris`}
                     aria-pressed={alreadyFav}
                     onMouseDown={(e) => { e.preventDefault(); onToggleFav(geo) }}
-                    className="px-3 py-2.5 text-base hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
+                    className="px-3 py-2.5 text-base hover:bg-white/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true">{alreadyFav ? '⭐' : '☆'}</span>
                   </button>
@@ -233,10 +233,10 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             id={listboxId}
             role="listbox"
             aria-label="Recherches récentes"
-            className="absolute z-10 left-0 right-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg overflow-hidden mt-1"
+            className="absolute z-10 left-0 right-10 bg-white/15 backdrop-blur-xl border border-white/25 rounded-xl shadow-2xl overflow-hidden mt-1"
           >
             <li role="presentation" className="px-4 pt-2 pb-1">
-              <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">Recherches récentes</span>
+              <span className="text-xs text-white/40 uppercase tracking-wide">Recherches récentes</span>
             </li>
             {recent.map((city) => {
               const label = [city.name, city.region, city.country].filter(Boolean).join(', ')
@@ -246,18 +246,18 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                     type="button"
                     aria-label={`Sélectionner ${label}`}
                     onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
-                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
+                    className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-white/15 transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
-                    <span aria-hidden="true" className="text-gray-400 text-xs">🕐</span>
-                    <span className="font-medium text-gray-800 dark:text-gray-100">{city.name}</span>
-                    <span className="text-gray-400 dark:text-gray-500 text-xs">{[city.region, city.country].filter(Boolean).join(', ')}</span>
+                    <span aria-hidden="true" className="text-white/40 text-xs">🕐</span>
+                    <span className="font-medium text-white">{city.name}</span>
+                    <span className="text-white/50 text-xs">{[city.region, city.country].filter(Boolean).join(', ')}</span>
                   </button>
                   <button
                     type="button"
                     aria-label={`Ajouter ${city.name} aux favoris`}
                     aria-pressed={false}
                     onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
-                    className="px-3 py-2.5 text-base hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
+                    className="px-3 py-2.5 text-base hover:bg-white/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true">☆</span>
                   </button>

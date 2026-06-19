@@ -32,11 +32,11 @@ export function SaveOutfitButton({ items, onSave }: Props) {
           placeholder="Nom de la tenue…"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+          className="flex-1 border border-white/30 rounded-lg px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 bg-white/20 backdrop-blur-md text-white placeholder-white/40"
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-3 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          className="bg-white/25 backdrop-blur-md text-white border border-white/30 px-3 rounded-lg text-sm font-medium hover:bg-white/35 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         >
           Sauver
         </button>
@@ -44,7 +44,7 @@ export function SaveOutfitButton({ items, onSave }: Props) {
           type="button"
           onClick={() => setOpen(false)}
           aria-label="Annuler"
-          className="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-3 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2"
+          className="bg-white/10 backdrop-blur-md text-white/60 border border-white/20 px-3 rounded-lg text-sm hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         >
           <span aria-hidden="true">✕</span>
         </button>
@@ -55,7 +55,7 @@ export function SaveOutfitButton({ items, onSave }: Props) {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="w-full text-sm text-blue-500 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-xl py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+      className="w-full text-sm text-white/70 border border-white/20 bg-white/10 backdrop-blur-md rounded-xl py-2 hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
     >
       <span aria-hidden="true">💾</span> Sauvegarder cette tenue
     </button>

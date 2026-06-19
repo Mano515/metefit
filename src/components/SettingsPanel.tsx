@@ -90,16 +90,16 @@ export function SettingsPanel({
         aria-modal="true"
         aria-labelledby="settings-title"
         aria-hidden={!open}
-        className={`fixed top-0 right-0 h-full w-96 max-w-full bg-white dark:bg-gray-900 shadow-xl z-30 flex flex-col transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-96 max-w-full bg-white/10 backdrop-blur-2xl border-l border-white/20 shadow-2xl z-30 flex flex-col transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* En-tête */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-          <h2 id="settings-title" className="text-base font-semibold text-gray-800 dark:text-gray-100">Menu</h2>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/15">
+          <h2 id="settings-title" className="text-base font-semibold text-white">Menu</h2>
           <button
             ref={closeRef}
             onClick={onClose}
             aria-label="Fermer le menu"
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none p-1 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="text-white/50 hover:text-white text-xl leading-none p-1 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -109,7 +109,7 @@ export function SettingsPanel({
 
           {/* Navigation : Garde-robe & Historique */}
           <nav aria-label="Sections de l'application">
-            <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
+            <p className="text-xs font-medium text-white/40 uppercase tracking-wide mb-2">
               Sections
             </p>
             <ul className="space-y-2">
@@ -117,25 +117,25 @@ export function SettingsPanel({
                 <li key={item.view}>
                   <button
                     onClick={() => handleNavigate(item.view)}
-                    className="w-full flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-4 py-3 text-left hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="w-full flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 text-left hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true" className="text-xl">{item.emoji}</span>
                     <div>
-                      <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{item.label}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">{item.desc}</p>
+                      <p className="text-sm font-medium text-white">{item.label}</p>
+                      <p className="text-xs text-white/50">{item.desc}</p>
                     </div>
-                    <span aria-hidden="true" className="ml-auto text-gray-300 dark:text-gray-600">›</span>
+                    <span aria-hidden="true" className="ml-auto text-white/30">›</span>
                   </button>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <div className="border-t border-gray-100 dark:border-gray-800" />
+          <div className="border-t border-white/15" />
 
           {/* Paramètres */}
           <div className="space-y-4">
-            <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+            <p className="text-xs font-medium text-white/40 uppercase tracking-wide">
               Paramètres
             </p>
 
@@ -144,12 +144,12 @@ export function SettingsPanel({
             <NotificationBanner permission={notifPermission} onRequest={onRequestNotif} />
 
             {notifPermission === 'granted' && (
-              <p className="text-xs text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 border border-green-100 dark:border-green-800 rounded-xl px-3 py-2" role="status">
+              <p className="text-xs text-white/80 bg-white/15 border border-white/20 rounded-xl px-3 py-2" role="status">
                 <span aria-hidden="true">🔔</span> Notifications activées — tu recevras ta tenue chaque matin à l'ouverture de l'app.
               </p>
             )}
             {notifPermission === 'denied' && (
-              <p className="text-xs text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-xl px-3 py-2" role="status">
+              <p className="text-xs text-white/50 bg-white/10 border border-white/15 rounded-xl px-3 py-2" role="status">
                 Notifications bloquées par le navigateur. Autorise-les dans les paramètres de ton navigateur.
               </p>
             )}
