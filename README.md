@@ -1,154 +1,137 @@
-# 🌤️ Météfit
+# Météfit
 
 > *Habille-toi intelligemment selon la météo du jour.*
 
-Météfit est une **Progressive Web App** qui te suggère une tenue vestimentaire adaptée à la météo de ta ville, en tenant compte de ton confort thermique personnel et de ton historique de retours.
+Météfit est une **Progressive Web App** qui suggère une tenue vestimentaire adaptée à la météo de ta ville, en tenant compte de ton profil thermique personnel.
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
-### 🌡️ Météo en temps réel
+### Météo en temps réel
 - Géolocalisation automatique ou recherche manuelle de ville
-- Autocomplete avec disambiguation région / pays (fini Valence ES au lieu de Valence FR)
-- Prévisions sur **5 jours** avec sélecteur de jour
-- Timeline heure par heure avec icônes météo
+- Autocomplete avec disambiguation région / pays
+- Prévisions sur **5 jours** avec sélecteur de jour (pills sur desktop, flèches sur mobile)
+- Timeline heure par heure (Matin · Midi · Après-m. · Soir · Nuit)
 - Alertes amplitude thermique et pluie en cours de journée
 
-### 👕 Suggestions de tenues
+### Suggestions de tenues
+- Grille visuelle de tuiles (emoji · nom · catégorie)
 - Suggestion personnalisée basée sur ta garde-robe
-- Suggestion générique si aucun vêtement n'est renseigné
-- L'imperméable n'est suggéré **que s'il pleut**
-- Algorithme de meilleur ajustement (score = -|temp - centre_plage|)
+- Suggestion générique si la garde-robe est vide
+- L'imperméable n'est proposé **que s'il pleut**
+- Algorithme de meilleur ajustement : `score = -|temp - centre_plage|`
 
-### 🧠 Apprentissage automatique
-- **Profil thermique** : frileux (−5°C), normal, j'ai chaud (+5°C)
-- **Auto-calibration** : analyse tes 10 derniers retours et ajuste ±1°C automatiquement
-- Feedback quotidien : 👌 Parfait · 🥵 Trop chaud · 🥶 Trop froid
+### Profil thermique
+- **Frileux** (−5 °C) · **Normal** · **J'ai chaud** (+5 °C)
+- Auto-calibration : analyse les 10 derniers retours et ajuste ±1 °C automatiquement
 
-### 📍 Gestion des villes
+### Gestion des villes
 - Villes **favorites** accessibles en un clic sous la barre de recherche
-- **Historique** des 3 dernières villes recherchées
+- Historique des 3 dernières villes recherchées
 - Ajout aux favoris depuis les suggestions ou l'historique
 
-### 💾 Tenues sauvegardées
-- Sauvegarde des tenues suggestions sous un nom personnalisé
-- Bibliothèque accessible dans l'onglet Garde-robe
+### Garde-robe & tenues sauvegardées
+- Ajout de vêtements via presets ou formulaire libre
+- Sauvegarde d'une tenue sous un nom personnalisé
+- Bibliothèque des tenues sauvegardées dans l'onglet Garde-robe
 
-### 🔔 Notifications
+### Notifications
 - Notification matinale (6h–11h) avec la tenue du jour à l'ouverture de l'app
-- Une seule notification par jour
+- Une seule notification par jour maximum
 
-### 🌙 Dark mode
-- Toggle dans les paramètres
-- Respecte la préférence système par défaut
-- Persisté en localStorage
-
-### ♿ Accessibilité
+### Accessibilité
 - Structure sémantique complète (`<header>`, `<main>`, `<nav>`, `<article>`)
-- ARIA complet : `role="tablist"`, `role="dialog"`, `role="combobox"`, `role="alert"`, `role="switch"`…
+- ARIA complet : `role="dialog"`, `role="combobox"`, `role="alert"`, `role="switch"`…
 - Focus trap dans le panel paramètres + fermeture sur `Escape`
 - Lien d'évitement "Aller au contenu principal"
-- Tous les boutons icônes ont un `aria-label` descriptif
 - Emojis décoratifs masqués avec `aria-hidden`
 - Annonces dynamiques via `aria-live`
 
-### 📱 PWA
+### PWA
 - Installable sur mobile et desktop
-- Service worker pour le cache offline
 - Manifest avec icônes et theme color
 
 ---
 
-## 🛠️ Stack technique
+## Stack technique
 
-| Outil | Version | Rôle |
-|---|---|---|
-| [React](https://react.dev) | 19 | UI |
-| [TypeScript](https://www.typescriptlang.org) | 6 | Typage |
-| [Vite](https://vite.dev) | 8 | Bundler / Dev server |
-| [Tailwind CSS](https://tailwindcss.com) | 4 | Styles |
-| [OpenWeatherMap API](https://openweathermap.org/api) | — | Météo + Geocoding |
+| Outil | Rôle |
+|---|---|
+| React 19 | UI |
+| TypeScript | Typage |
+| Vite | Bundler / Dev server |
+| Tailwind CSS v4 | Styles (glassmorphism + dégradé bleu ciel) |
+| OpenWeatherMap API | Météo + Geocoding |
 
-**Pas de dépendance runtime externe** en dehors de React.  
+Pas de dépendance runtime externe en dehors de React.  
 Toutes les données sont persistées en `localStorage`.
 
 ---
 
-## 🚀 Démarrage rapide
+## Démarrage rapide
 
 ```bash
-# Cloner le repo
 git clone https://github.com/Mano515/metefit.git
 cd metefit
-
-# Installer les dépendances
 npm install
-
-# Lancer en développement
-npm run dev
-```
-
-L'app sera disponible sur [http://localhost:5173](http://localhost:5173).
-
-```bash
-# Build de production
-npm run build
-
-# Prévisualiser le build
-npm run preview
+npm run dev        # http://localhost:5173
+npm run build      # build de production
+npm run preview    # prévisualiser le build
 ```
 
 ---
 
-## 📁 Structure du projet
+## Structure du projet
 
 ```
 src/
-├── components/           # Composants React
-│   ├── WeatherCard        # Carte météo principale
-│   ├── DaySelector        # Sélecteur de jour (5 jours)
-│   ├── DayTimeline        # Timeline heure par heure
-│   ├── DayChangeAlert     # Alertes amplitude / pluie
-│   ├── CitySearch         # Recherche + autocomplete + favoris
-│   ├── OutfitSuggestion   # Affichage de la tenue
-│   ├── OutfitValidator    # Feedback (parfait / trop chaud / froid)
-│   ├── ThermalSelector    # Profil thermique
-│   ├── AddClothingForm    # Formulaire ajout vêtement (presets)
-│   ├── ClothingList       # Liste de la garde-robe
-│   ├── SaveOutfitButton   # Sauvegarde d'une tenue
-│   ├── SavedOutfitLibrary # Bibliothèque des tenues sauvegardées
-│   ├── HistoryList        # Historique des tenues portées
-│   ├── SettingsPanel      # Panel paramètres (drawer)
-│   ├── NotificationBanner # Activation notifications
-│   └── ThermalAutoNotice  # Notice auto-calibration thermique
+├── components/
+│   ├── WeatherCard.tsx         # Carte météo (temp, description, icône)
+│   ├── DaySelector.tsx         # Pills desktop / flèches mobile
+│   ├── DayTimeline.tsx         # Timeline heure par heure
+│   ├── DayChangeAlert.tsx      # Alertes amplitude thermique et pluie
+│   ├── CitySearch.tsx          # Recherche autocomplete + favoris
+│   ├── OutfitSuggestion.tsx    # Grille de tuiles tenue
+│   ├── ThermalSelector.tsx     # Choix du profil thermique
+│   ├── AddClothingForm.tsx     # Ajout de vêtement (presets + libre)
+│   ├── ClothingList.tsx        # Garde-robe
+│   ├── SaveOutfitButton.tsx    # Sauvegarde d'une tenue
+│   ├── SavedOutfitLibrary.tsx  # Bibliothèque des tenues sauvegardées
+│   ├── HistoryList.tsx         # Historique des tenues portées
+│   ├── SettingsPanel.tsx       # Drawer paramètres (focus trap)
+│   ├── NotificationBanner.tsx  # Activation des notifications
+│   ├── ThermalAutoNotice.tsx   # Notice d'auto-calibration
+│   └── SplashScreen.tsx        # Écran de chargement initial
 │
-├── hooks/                # Logique métier
-│   ├── useWeather         # Météo + geocoding + prévisions
-│   ├── useWardrobe        # Garde-robe + algorithme de suggestion
-│   ├── useThermal         # Profil thermique + auto-calibration
-│   ├── useHistory         # Historique des tenues portées
-│   ├── useSavedOutfits    # Tenues sauvegardées
-│   ├── useCityMemory      # Favoris + villes récentes
-│   ├── useNotifications   # Notifications push
-│   └── useDarkMode        # Dark mode + persistance
+├── hooks/
+│   ├── useWeather.ts           # Météo + geocoding + prévisions 5 jours
+│   ├── useWardrobe.ts          # Garde-robe + algorithme de suggestion
+│   ├── useThermal.ts           # Profil thermique + auto-calibration
+│   ├── useHistory.ts           # Historique des tenues portées
+│   ├── useSavedOutfits.ts      # Tenues sauvegardées
+│   ├── useCityMemory.ts        # Favoris + villes récentes
+│   ├── useNotifications.ts     # Notifications push
+│   └── useSwipe.ts             # Détection swipe gauche/droite
 │
 ├── utils/
-│   ├── defaultSuggestions # Suggestions génériques par météo
-│   └── clothingEmoji      # Emoji associé à chaque vêtement
+│   ├── weatherGradient.ts      # Thème de couleur unique (BRAND_BG / BRAND_CARD)
+│   ├── defaultSuggestions.ts   # Suggestions génériques par conditions météo
+│   └── clothingEmoji.ts        # Emoji associé à chaque vêtement
 │
-├── types.ts              # Types TypeScript centraux
-├── App.tsx               # Composant racine
-└── index.css             # Tailwind + dark mode variant
+├── types.ts                    # Types TypeScript centraux
+├── App.tsx                     # Composant racine
+└── index.css                   # Tailwind + animations de transition
 
 public/
-├── manifest.json         # PWA manifest
-└── sw.js                 # Service worker
+├── manifest.json               # PWA manifest
+├── logo_metefit.svg            # Icône seule
+└── logo_metefit_nom.svg        # Icône + nom
 ```
 
 ---
 
-## 🔑 Configuration API
+## Configuration API
 
 L'app utilise l'[API OpenWeatherMap](https://openweathermap.org/api) (gratuite jusqu'à 60 req/min).
 
@@ -157,15 +140,14 @@ Pour utiliser ta propre clé, remplace la constante `API_KEY` dans ces deux fich
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [ ] Déploiement (Vercel / Netlify)
 - [ ] Partage de tenue (lien ou image)
-- [ ] Thèmes de couleur personnalisables
 - [ ] Support multi-langue
 
 ---
 
-## 📄 Licence
+## Licence
 
 Projet personnel — tous droits réservés.

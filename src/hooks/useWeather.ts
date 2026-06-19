@@ -7,7 +7,7 @@ const TIME_LABELS: Record<string, string> = {
   '06:00': 'Matin',
   '09:00': 'Matin',
   '12:00': 'Midi',
-  '15:00': 'Après-midi',
+  '15:00': 'Après-m.',
   '18:00': 'Soir',
   '21:00': 'Nuit',
 }
@@ -79,10 +79,11 @@ function parseForecast(data: any, geo: GeoResult): { forecast: Weather[]; slotsB
     return SLOT_HOURS.map((hour) => {
       const slot = slots.find((s: any) => s.dt_txt.endsWith(` ${hour}:00`))
       const slotHour = parseInt(hour.split(':')[0], 10)
-      const isPast = dayIndex === 0 && slotHour + 3 <= nowHour // créneau de 3h déjà passé
+      // OWM 3h forecast omits past slots, so a missing entry on day 0 means it's already gone
+      const isPast = dayIndex === 0 && slotHour + 3 <= nowHour
 
       if (!slot) {
-        // Créneau dans le passé : on l'inclut comme fantôme
+        // Phantom entry so the grid keeps its fixed column count
         return {
           hour,
           label: TIME_LABELS[hour] ?? hour,
@@ -162,7 +163,7 @@ export function useWeather() {
         }
       },
       () => {
-        // Refus silencieux — on montre juste le champ ville
+        // Geolocation denied — fall back silently to the city search field
         setNeedsCity(true)
         setLoading(false)
       }
@@ -173,7 +174,7 @@ export function useWeather() {
     setLoading(true)
     setError(null)
     try {
-      // Si on reçoit "lat,lon" (sélection depuis autocomplétion)
+      // CitySearch passes "lat,lon" when a suggestion is picked; plain text otherwise
       const coordsMatch = input.match(/^(-?\d+\.?\d*),(-?\d+\.?\d*)$/)
       if (coordsMatch) {
         apply(await fetchByCoords(parseFloat(coordsMatch[1]), parseFloat(coordsMatch[2])))

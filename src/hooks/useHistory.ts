@@ -14,6 +14,7 @@ function save(entries: HistoryEntry[]) {
 export function useHistory() {
   const [entries, setEntries] = useState<HistoryEntry[]>(load)
 
+  // Returns the full updated list so callers can immediately pass it to recalibrate()
   function addEntry(weather: Weather, items: ClothingItem[], feedback: OutfitFeedback): HistoryEntry[] {
     const entry: HistoryEntry = {
       id: crypto.randomUUID(),

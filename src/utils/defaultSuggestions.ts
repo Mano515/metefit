@@ -28,6 +28,7 @@ const DEFAULTS: ClothingItem[] = [
 
 const CATEGORY_ORDER = ['manteau', 'haut', 'bas', 'chaussures', 'accessoire'] as const
 
+// Negative distance so higher score = better fit (sort descending)
 function fitScore(item: ClothingItem, temp: number): number {
   const center = (item.minTemp + item.maxTemp) / 2
   return -Math.abs(temp - center)

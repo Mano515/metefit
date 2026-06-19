@@ -115,7 +115,6 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
 
   return (
     <div ref={containerRef} className="space-y-2">
-      {/* Barre de recherche */}
       <div className="relative">
         <form onSubmit={handleSubmit} className="flex gap-2" role="search" aria-label="Recherche de ville">
           <label htmlFor={inputId} className="sr-only">
@@ -141,7 +140,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
           <button
             type="submit"
             aria-label="Valider la ville"
-            className="bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            className="bg-white/20 backdrop-blur-md text-white border border-white/30 px-2 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           >
             OK
           </button>
@@ -151,16 +150,16 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
           <p id={errorId} role="alert" className="text-xs text-red-500 px-1 mt-1">{error}</p>
         )}
 
-        {/* Favoris — uniquement si aucune ville active */}
+        {/* Favourites pinned below the input on the landing page only */}
         {!currentCity && favs.length > 0 && (
           <div className={favsAnimClass} style={{ willChange: 'transform, opacity' }}>
-            <ul role="list" aria-label="Villes favorites" className="flex flex-col gap-1.5 mt-2">
+            <ul aria-label="Villes favorites" className="flex flex-col gap-1.5 mt-2">
               {favs.map((city) => (
                 <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white/20 backdrop-blur-md border border-white/25 rounded-xl overflow-hidden">
                   <button
                     type="button"
                     aria-label={`Chercher la météo à ${city.name}${city.region ? `, ${city.region}` : ''}`}
-                    onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
+                    onClick={() => handleSelectSaved(city)}
                     className="flex-1 flex items-center gap-1.5 pl-3 pr-2 py-2 text-sm text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true" className="text-sm">⭐</span>
@@ -170,7 +169,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                   <button
                     type="button"
                     aria-label={`Retirer ${city.name} des favoris`}
-                    onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
+                    onClick={() => onToggleFav(city)}
                     className="flex items-center px-3 text-white/40 hover:text-red-300 hover:bg-white/10 border-l border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-300 text-xs"
                   >
                     <span aria-hidden="true">✕</span>
@@ -181,7 +180,6 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
           </div>
         )}
 
-        {/* Dropdown : suggestions de l'API */}
         {showSuggestions && (
           <ul
             id={listboxId}
@@ -205,7 +203,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                   <button
                     type="button"
                     aria-label={`Sélectionner ${label}`}
-                    onMouseDown={(e) => { e.preventDefault(); handleSelectGeo(s) }}
+                    onClick={() => handleSelectGeo(s)}
                     className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-white/15 transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true" className="text-white/40 text-xs">📍</span>
@@ -216,7 +214,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                     type="button"
                     aria-label={alreadyFav ? `Retirer ${s.name} des favoris` : `Ajouter ${s.name} aux favoris`}
                     aria-pressed={alreadyFav}
-                    onMouseDown={(e) => { e.preventDefault(); onToggleFav(geo) }}
+                    onClick={() => onToggleFav(geo)}
                     className="px-3 py-2.5 text-base hover:bg-white/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true">{alreadyFav ? '⭐' : '☆'}</span>
@@ -227,7 +225,6 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
           </ul>
         )}
 
-        {/* Dropdown : historique récent */}
         {showQuickAccess && recent.length > 0 && (
           <ul
             id={listboxId}
@@ -240,12 +237,13 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             </li>
             {recent.map((city) => {
               const label = [city.name, city.region, city.country].filter(Boolean).join(', ')
+              const alreadySaved = isFav(city)
               return (
                 <li key={`${city.lat},${city.lon}`} role="option" aria-selected={false} className="flex items-center">
                   <button
                     type="button"
                     aria-label={`Sélectionner ${label}`}
-                    onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
+                    onClick={() => handleSelectSaved(city)}
                     className="flex-1 text-left px-4 py-2.5 text-sm hover:bg-white/15 transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true" className="text-white/40 text-xs">🕐</span>
@@ -254,12 +252,12 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
                   </button>
                   <button
                     type="button"
-                    aria-label={`Ajouter ${city.name} aux favoris`}
-                    aria-pressed={false}
-                    onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
+                    aria-label={alreadySaved ? `Retirer ${city.name} des favoris` : `Ajouter ${city.name} aux favoris`}
+                    aria-pressed={alreadySaved}
+                    onClick={() => onToggleFav(city)}
                     className="px-3 py-2.5 text-base hover:bg-white/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
-                    <span aria-hidden="true">☆</span>
+                    <span aria-hidden="true">{alreadySaved ? '⭐' : '☆'}</span>
                   </button>
                 </li>
               )

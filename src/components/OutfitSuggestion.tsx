@@ -31,12 +31,14 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
     return acc
   }, {})
 
+  const allItems = CATEGORY_ORDER.flatMap((cat) => (byCategory[cat] ?? []).map((item) => ({ item, cat })))
+
   return (
     <section
       aria-label={isDefault ? 'Tenue suggérée (tenue de base)' : 'Tenue suggérée'}
-      className="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-5 space-y-3 shadow-xl shadow-black/10"
+      className="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-xl shadow-black/10"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-white font-semibold text-sm drop-shadow">Tenue suggérée</h2>
         {isDefault && (
           <span className="text-xs text-white font-medium bg-white/30 border border-white/40 px-2 py-0.5 rounded-full drop-shadow">
@@ -45,38 +47,29 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
         )}
       </div>
 
-      {Object.entries(byCategory).map(([cat, catItems]) => (
-        <div key={cat}>
-          <h3 className="text-xs text-white font-bold uppercase tracking-widest mb-1 drop-shadow-sm [text-shadow:0_1px_3px_rgba(0,0,0,0.3)]">
-            {CATEGORY_LABELS[cat]}
-          </h3>
-          <ul aria-label={CATEGORY_LABELS[cat]} className="space-y-1">
-            {catItems.map((item) => {
-              const showGlareNote = isSunglasses(item) && !sunny && slots.length > 0
-              return (
-                <li
-                  key={item.id}
-                  className="flex flex-col gap-1 text-sm text-white bg-white/25 rounded-xl px-3 py-2.5 border border-white/50 shadow shadow-black/5"
-                >
-                  <div className="flex items-center gap-2">
-                    <span aria-hidden="true" className="text-base">{getClothingEmoji(item)}</span>
-                    <span className="font-medium drop-shadow-sm">{item.name}</span>
-                    {item.rainproof && (
-                      <span className="ml-auto text-xs text-white/80 bg-white/20 px-1.5 rounded" aria-label="imperméable">☂️</span>
-                    )}
-                  </div>
-                  {showGlareNote && (
-                    <p className="text-xs text-white/80 flex items-center gap-1 pl-6">
-                      <span aria-hidden="true">💡</span>
-                      Luminosité élevée malgré les nuages
-                    </p>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      ))}
+      <ul aria-label="Pièces de la tenue" className="grid grid-cols-3 gap-3">
+        {allItems.map(({ item, cat }) => {
+          const showGlareNote = isSunglasses(item) && !sunny && slots.length > 0
+          return (
+            <li
+              key={item.id}
+              className="flex flex-col items-center gap-2 bg-white/25 rounded-2xl px-2 py-4 border border-white/50 shadow shadow-black/5 text-center"
+            >
+              <span aria-hidden="true" className="text-4xl drop-shadow">{getClothingEmoji(item)}</span>
+              <div className="space-y-0.5">
+                <p className="text-sm font-semibold text-white leading-tight drop-shadow-sm">{item.name}</p>
+                <p className="text-xs text-white/60 uppercase tracking-wide">{CATEGORY_LABELS[cat]}</p>
+              </div>
+              {item.rainproof && (
+                <span className="text-xs text-white/80 bg-white/20 px-1.5 py-0.5 rounded-full" aria-label="imperméable">☂️ imperméable</span>
+              )}
+              {showGlareNote && (
+                <p className="text-xs text-white/70 leading-tight">💡 Lumineux même nuageux</p>
+              )}
+            </li>
+          )
+        })}
+      </ul>
     </section>
   )
 }

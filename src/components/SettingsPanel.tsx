@@ -92,7 +92,6 @@ export function SettingsPanel({
         aria-hidden={!open}
         className={`fixed top-0 right-0 h-full w-96 max-w-full bg-white/10 backdrop-blur-2xl border-l border-white/20 shadow-2xl z-30 flex flex-col transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        {/* En-tête */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/15">
           <h2 id="settings-title" className="text-base font-semibold text-white">Menu</h2>
           <button
@@ -107,7 +106,6 @@ export function SettingsPanel({
 
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
 
-          {/* Navigation : Garde-robe & Historique */}
           <nav aria-label="Sections de l'application">
             <p className="text-xs font-medium text-white/40 uppercase tracking-wide mb-2">
               Sections
@@ -133,7 +131,6 @@ export function SettingsPanel({
 
           <div className="border-t border-white/15" />
 
-          {/* Paramètres */}
           <div className="space-y-4">
             <p className="text-xs font-medium text-white/40 uppercase tracking-wide">
               Paramètres

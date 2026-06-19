@@ -31,10 +31,10 @@ export function useNotifications() {
 
     const today = new Date().toISOString().split('T')[0]
     const lastNotif = localStorage.getItem(NOTIF_DATE_KEY)
-    if (lastNotif === today) return // déjà notifié aujourd'hui
+    if (lastNotif === today) return // one notification per day is enough
 
     const hour = new Date().getHours()
-    if (hour < 6 || hour > 11) return // seulement le matin
+    if (hour < 6 || hour > 11) return // morning window only — not useful mid-afternoon
 
     const summary = getClothingSummary(items)
     const rainText = weather.rain ? ' · 🌧️ Pluie prévue' : ''

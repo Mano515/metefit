@@ -19,16 +19,14 @@ export function DayChangeAlert({ slots }: Props) {
   const alerts: { emoji: string; text: string }[] = []
 
   if (amplitude >= 10) {
-    const coldSlot = activeSlots.find((s) => s.temp === min)
-    const hotSlot = activeSlots.find((s) => s.temp === max)
     alerts.push({
       emoji: '🌡️',
-      text: `Grosse amplitude : ${min}° le ${coldSlot?.label.toLowerCase()} → ${max}° ${hotSlot?.label.toLowerCase()}. Prévois une couche à enlever.`,
+      text: `${min}° → ${max}° — prévois une couche à enlever !`,
     })
   } else if (amplitude >= 6) {
     alerts.push({
       emoji: '🌡️',
-      text: `Amplitude de ${amplitude}° dans la journée (${min}° → ${max}°). Adapte-toi.`,
+      text: `${min}° → ${max}° dans la journée — garde une couche !`,
     })
   }
 
@@ -36,13 +34,13 @@ export function DayChangeAlert({ slots }: Props) {
     const rainSlot = activeSlots[rainStart]
     alerts.push({
       emoji: '🌂',
-      text: `Pluie prévue à partir de ${rainSlot.label.toLowerCase()} — pense au parapluie.`,
+      text: `Pluie dès ${rainSlot.label.toLowerCase()} — pense au parapluie !`,
     })
   }
 
   const snowSlot = activeSlots.find((s) => s.snow)
   if (snowSlot) {
-    alerts.push({ emoji: '❄️', text: `Neige prévue ${snowSlot.label.toLowerCase()}.` })
+    alerts.push({ emoji: '❄️', text: `Neige ${snowSlot.label.toLowerCase()} — couvre-toi !` })
   }
 
   if (alerts.length === 0) return null
@@ -52,10 +50,10 @@ export function DayChangeAlert({ slots }: Props) {
       {alerts.map((alert, i) => (
         <div
           key={i}
-          className="flex gap-2 items-start bg-white/30 backdrop-blur-xl border border-white/50 rounded-xl px-3 py-2.5 shadow-lg shadow-black/10"
+          className="flex gap-2 items-center bg-white/40 backdrop-blur-xl border border-white/60 rounded-xl px-3 py-2.5 shadow-lg shadow-black/10"
         >
-          <span aria-hidden="true" className="text-base flex-shrink-0">{alert.emoji}</span>
-          <p className="text-xs text-white/90 leading-snug">{alert.text}</p>
+          <span aria-hidden="true" className="text-base leading-none flex-shrink-0">{alert.emoji}</span>
+          <p className="text-sm font-medium text-white leading-snug">{alert.text}</p>
         </div>
       ))}
     </section>

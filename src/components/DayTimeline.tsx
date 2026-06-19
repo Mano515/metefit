@@ -36,11 +36,13 @@ export function DayTimeline({ slots }: Props) {
   if (slots.length === 0) return null
 
   return (
-    <section aria-label="Météo de la journée" className="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-4 shadow-xl shadow-black/10">
-      <p className="text-xs font-bold text-white uppercase tracking-widest mb-3 drop-shadow" aria-hidden="true">Météo de la journée</p>
+    <section aria-label="Météo de la journée" className="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-xl shadow-black/10">
+      <p className="text-xs font-bold text-white uppercase tracking-widest mb-4 drop-shadow" aria-hidden="true">Météo de la journée</p>
+      {/* stopPropagation prevents the parent day-swipe handler from stealing horizontal touch events */}
       <ol
         aria-label="Prévisions heure par heure"
-        className="flex gap-2 overflow-x-auto pb-1"
+        className="grid pb-1"
+        style={{ gridTemplateColumns: `repeat(${slots.length}, minmax(0, 1fr))` }}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
       >
@@ -48,20 +50,20 @@ export function DayTimeline({ slots }: Props) {
           <li
             key={slot.hour}
             aria-label={slot.isPast ? `${slot.label} (passé)` : `${slot.label} : ${slot.temp}°, ${conditionLabel(slot)}`}
-            className={`flex-shrink-0 flex flex-col items-center gap-1 min-w-[56px] ${slot.isPast ? 'opacity-25' : 'opacity-100'}`}
+            className={`flex flex-col items-center gap-1.5 ${slot.isPast ? 'opacity-25' : 'opacity-100'}`}
           >
             <span aria-hidden="true" className={`text-xs font-semibold drop-shadow-sm ${slot.isPast ? 'text-white/60' : 'text-white'}`}>
               {slot.label}
             </span>
             {slot.isPast ? (
               <>
-                <span aria-hidden="true" className="text-xl text-white/40">—</span>
-                <span aria-hidden="true" className="text-sm font-bold text-white/40">–</span>
+                <span aria-hidden="true" className="text-2xl text-white/40">—</span>
+                <span aria-hidden="true" className="text-base font-bold text-white/40">–</span>
               </>
             ) : (
               <>
-                <span aria-hidden="true" className="text-xl drop-shadow">{conditionEmoji(slot)}</span>
-                <span aria-hidden="true" className="text-sm font-bold text-white drop-shadow">{slot.temp}°</span>
+                <span aria-hidden="true" className="text-2xl drop-shadow">{conditionEmoji(slot)}</span>
+                <span aria-hidden="true" className="text-base font-bold text-white drop-shadow">{slot.temp}°</span>
                 {slot.rain && <span aria-hidden="true" className="text-xs text-white font-medium">pluie</span>}
                 {slot.snow && <span aria-hidden="true" className="text-xs text-white font-medium">neige</span>}
               </>

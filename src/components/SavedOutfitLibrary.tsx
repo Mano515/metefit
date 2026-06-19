@@ -35,7 +35,7 @@ export function SavedOutfitLibrary({ outfits, onRemove }: Props) {
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <ul aria-label={`Vêtements de la tenue ${outfit.name}`} className="flex flex-wrap gap-1.5">
+            <ul className="flex flex-wrap gap-1.5">
               {sorted.map((item) => (
                 <li key={item.id} className="flex items-center gap-1 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-lg px-2 py-1 text-xs text-gray-600 dark:text-gray-300">
                   <span aria-hidden="true">{getClothingEmoji({ ...item, id: item.id, minTemp: 0, maxTemp: 0, rainproof: false })}</span>

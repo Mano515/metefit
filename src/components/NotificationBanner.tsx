@@ -14,7 +14,9 @@ export function NotificationBanner({ permission, onRequest }: Props) {
         <p className="text-xs text-white/50">Reçois ta tenue du jour à l'ouverture de l'app le matin.</p>
       </div>
       <button
+        type="button"
         onClick={onRequest}
+        aria-label="Activer les notifications matinales"
         className="flex-shrink-0 bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs px-3 py-1.5 rounded-lg hover:bg-white/30 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
       >
         Activer

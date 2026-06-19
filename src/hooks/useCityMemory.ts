@@ -25,6 +25,7 @@ export function useCityMemory() {
 
   function addToRecent(city: SavedCity) {
     const withoutDupe = recent.filter((c) => !(c.lat === city.lat && c.lon === city.lon))
+    // Don't store in recents if it's already a favourite — it would appear twice
     const withoutFav = withoutDupe.filter(
       () => !favs.some((f) => f.lat === city.lat && f.lon === city.lon)
     )
@@ -40,7 +41,7 @@ export function useCityMemory() {
       updated = favs.filter((f) => !(f.lat === city.lat && f.lon === city.lon))
     } else {
       updated = [...favs, city]
-      // Retirer des recents si on la met en favori
+      // Move from recents to favs so it doesn't appear in both lists
       const cleanRecent = recent.filter((c) => !(c.lat === city.lat && c.lon === city.lon))
       setRecent(cleanRecent)
       localStorage.setItem(RECENT_KEY, JSON.stringify(cleanRecent))
@@ -53,7 +54,7 @@ export function useCityMemory() {
     return favs.some((f) => f.lat === city.lat && f.lon === city.lon)
   }
 
-  // Recents filtrés : sans les favoris
+  // Defensive filter — toggleFav should already keep these disjoint, but guard anyway
   const recentFiltered = recent.filter(
     (c) => !favs.some((f) => f.lat === c.lat && f.lon === c.lon)
   ).slice(0, 3)

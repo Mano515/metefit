@@ -1,56 +1,72 @@
-import type { Weather } from '../types'
+﻿import type { Weather } from '../types'
+
+const SHORT_LABELS = ["Aujourd'hui", 'Demain']
+
+function getDayLabel(dateStr: string | undefined, index: number): string {
+  if (SHORT_LABELS[index]) return SHORT_LABELS[index]
+  if (!dateStr) return `J+${index}`
+  const date = new Date(dateStr + 'T12:00:00')
+  return date.toLocaleDateString('fr-FR', { weekday: 'long' })
+}
 
 interface Props {
   forecast: Weather[]
   selectedDay: number
-  onChange: (index: number) => void
+  onSelect: (day: number) => void
 }
 
-const DAY_LABELS = ['Aujourd\'hui', 'Demain']
+export function DaySelector({ forecast, selectedDay, onSelect }: Props) {
+  if (forecast.length <= 1) return null
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr + 'T12:00:00')
-  return date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
-}
+  const canPrev = selectedDay > 0
+  const canNext = selectedDay < forecast.length - 1
+  const label = getDayLabel(forecast[selectedDay]?.date, selectedDay)
 
-function formatDateShort(dateStr: string): string {
-  const date = new Date(dateStr + 'T12:00:00')
-  return date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' })
-}
-
-export function DaySelector({ forecast, selectedDay, onChange }: Props) {
   return (
-    <nav aria-label="Sélection du jour">
-      <div role="tablist" aria-label="Jours de prévision" className="flex gap-2 overflow-x-auto pb-1">
-        {forecast.map((day, i) => {
-          const shortLabel = DAY_LABELS[i] ?? (day.date ? formatDateShort(day.date) : `Jour +${i}`)
-          const fullLabel = DAY_LABELS[i] ?? (day.date ? formatDate(day.date) : `Dans ${i} jours`)
-          const isSelected = i === selectedDay
-          return (
+    <nav aria-label="Sélection du jour" className="mb-2 lg:mb-6">
+
+      {/* Mobile : flèches */}
+      <div className="flex lg:hidden items-center justify-between px-2">
+        <button
+          onClick={() => canPrev && onSelect(selectedDay - 1)}
+          disabled={!canPrev}
+          aria-label="Jour précédent"
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-white/80 hover:text-white disabled:opacity-25 disabled:pointer-events-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        >
+          <span aria-hidden="true" className="text-3xl font-bold leading-none">‹</span>
+        </button>
+        <p className="text-base font-bold text-white drop-shadow capitalize">{label}</p>
+        <button
+          onClick={() => canNext && onSelect(selectedDay + 1)}
+          disabled={!canNext}
+          aria-label="Jour suivant"
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-white/80 hover:text-white disabled:opacity-25 disabled:pointer-events-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        >
+          <span aria-hidden="true" className="text-3xl font-bold leading-none">›</span>
+        </button>
+      </div>
+
+      {/* Desktop : pills */}
+      <div className="hidden lg:flex justify-center">
+        <div className="flex gap-2 bg-white/20 backdrop-blur-md rounded-2xl p-1.5 border border-white/30">
+          {forecast.map((day, i) => (
             <button
               key={i}
-              role="tab"
-              aria-selected={isSelected}
-              aria-label={`${fullLabel}, ${day.temp}°C, ${day.description ?? ''}`}
-              onClick={() => onChange(i)}
-              className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
-                isSelected
-                  ? 'bg-blue-500 text-white shadow'
-                  : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
+              onClick={() => onSelect(i)}
+              aria-current={i === selectedDay ? 'date' : undefined}
+              className={`px-3 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 capitalize whitespace-nowrap ${
+                i === selectedDay
+                  ? 'bg-white/40 text-white shadow-sm'
+                  : 'text-white/70 hover:text-white hover:bg-white/20'
               }`}
             >
-              <span>{shortLabel}</span>
-              <span className="text-sm font-bold mt-0.5" aria-hidden="true">{day.temp}°</span>
-              <img
-                src={`https://openweathermap.org/img/wn/${day.icon}.png`}
-                alt=""
-                aria-hidden="true"
-                className="w-6 h-6"
-              />
+              {getDayLabel(day.date, i)}
             </button>
-          )
-        })}
+          ))}
+        </div>
       </div>
+
     </nav>
   )
 }
+

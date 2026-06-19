@@ -17,6 +17,7 @@ import { HistoryList } from './components/HistoryList'
 import { CitySearch } from './components/CitySearch'
 import { SettingsPanel } from './components/SettingsPanel'
 import { SplashScreen } from './components/SplashScreen'
+import { DaySelector } from './components/DaySelector'
 import { useCityMemory } from './hooks/useCityMemory'
 import { useSwipe } from './hooks/useSwipe'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
@@ -32,6 +33,7 @@ const VIEW_LABELS: Record<View, string> = {
 }
 
 export default function App() {
+  // ── Data & state ──────────────────────────────────────────────────────────
   const { weather, forecast, slots, selectedDay, setSelectedDay, loading, error, searchCity } = useWeather()
   const { items, addItem, removeItem, getSuggestion } = useWardrobe()
   const { profile, setProfile, offset, lastAutoAdjust, clearAutoAdjustNotice } = useThermal()
@@ -42,25 +44,26 @@ export default function App() {
   const [splashDone, setSplashDone] = useState(false)
   const [view, setView] = useState<View>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [showOptions, setShowOptions] = useState(false)
   const [contentAnim, setContentAnim] = useState('')
   const [favsAnim, setFavsAnim] = useState('')
+  // animating guards against overlapping day-slide transitions
   const animating = useRef(false)
   const prevCityRef = useRef<string | undefined>(undefined)
 
+  // ── Derive outfit: personal wardrobe first, default catalog as fallback ───
   const personalSuggestion = weather ? getSuggestion(weather, slots, offset) : []
   const suggestion = personalSuggestion.length > 0
     ? personalSuggestion
     : weather ? getDefaultSuggestion(weather, slots, offset) : []
   const isDefault = personalSuggestion.length === 0
 
+  // ── Day navigation with slide animation ──────────────────────────────────
   function goToDay(newDay: number, dir: 'next' | 'prev') {
     if (animating.current) return
     animating.current = true
     setContentAnim(dir === 'next' ? 'day-slide-out-left' : 'day-slide-out-right')
     setTimeout(() => {
       setSelectedDay(newDay)
-      setShowOptions(false)
       setContentAnim(dir === 'next' ? 'day-slide-in-right' : 'day-slide-in-left')
       setTimeout(() => {
         setContentAnim('')
@@ -69,7 +72,7 @@ export default function App() {
     }, 200)
   }
 
-  // Animation d'entrée quand une nouvelle ville est chargée
+  // Slide content in whenever the city changes (first load or new search)
   useEffect(() => {
     if (!weather?.city) return
     if (prevCityRef.current === undefined) {
@@ -86,11 +89,12 @@ export default function App() {
     }
   }, [weather?.city])
 
+  // Fire morning notification once per day when weather + outfit are ready
   useEffect(() => {
     if (weather && suggestion.length > 0) sendMorningNotif(weather, suggestion)
   }, [weather?.city, suggestion.length])
 
-
+  // ── Swipe to change day on mobile ────────────────────────────────────────
   const canPrev = selectedDay > 0
   const canNext = selectedDay < forecast.length - 1
 
@@ -102,10 +106,11 @@ export default function App() {
   const isSuggestionView = view === 'suggestion'
 
   const theme = getWeatherTheme(weather?.icon, new Date().getHours())
-  const isLanding = !weather && !loading
+  const isLanding = !weather
 
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen" style={{ background: theme.bg }}>
+    <div className="min-h-dvh overflow-x-hidden" style={{ background: theme.bg }}>
       {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <a href="#main-content" className="skip-link">Aller au contenu principal</a>
 
@@ -121,10 +126,9 @@ export default function App() {
         onNavigate={(v) => setView(v)}
       />
 
-      {/* ── Page d'accueil (aucune ville) ── */}
+      {/* Landing page — shown before any city is selected */}
       {isLanding ? (
-        <main id="main-content" className="min-h-screen flex flex-col items-center justify-center px-4 relative">
-          {/* Bouton menu en haut à droite */}
+        <main id="main-content" className="min-h-dvh flex flex-col items-center justify-center px-4 relative">
           <button
             onClick={() => setSettingsOpen(true)}
             aria-label="Ouvrir le menu"
@@ -135,35 +139,44 @@ export default function App() {
             <span aria-hidden="true">☰</span>
           </button>
 
-          <div className="w-full max-w-md space-y-8 text-center">
-            <h1 aria-label="Météfit">
-              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-16 mx-auto" />
+          <div className="w-full max-w-xs lg:max-w-2xl space-y-6 lg:space-y-8 text-center">
+            {/* Icon-only on mobile, full wordmark on desktop */}
+            <h1 aria-label="Météfit" className="flex flex-col items-center gap-3">
+              <img src="/logo_metefit.svg" alt="" aria-hidden="true" className="h-16 w-16 lg:h-20 lg:w-20" />
+              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-10 w-auto max-w-[260px] hidden lg:block" />
             </h1>
-            <CitySearch
-              currentCity={undefined}
-              favsAnimClass={favsAnim}
-              error={error}
-              favs={favs}
-              recent={recent}
-              onSelect={(coords, city) => {
-                searchCity(coords)
-                addToRecent(city)
-              }}
-              onToggleFav={toggleFav}
-              isFav={isFav}
-            />
+
+            <div className={favsAnim} style={{ willChange: 'transform, opacity' }}>
+              <CitySearch
+                currentCity={undefined}
+                favsAnimClass=""
+                error={error}
+                favs={favs}
+                recent={recent}
+                onSelect={(coords, city) => {
+                  searchCity(coords)
+                  addToRecent(city)
+                }}
+                onToggleFav={toggleFav}
+                isFav={isFav}
+              />
+            </div>
+
+            {loading && (
+              <p className="text-sm text-white/60 animate-pulse">Chargement de la météo…</p>
+            )}
           </div>
         </main>
       ) : (
         <>
           {/* ── Header ── */}
-          <header className="sticky top-0 z-10 backdrop-blur-xl bg-white/30 border-b border-white/40 shadow-md shadow-black/5">
-            <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-3 flex items-center gap-4">
+          <header className="sticky top-0 z-10">
+            <div className="w-full lg:w-4/5 mx-auto px-3 lg:px-8 py-3 flex items-center gap-2 lg:gap-4">
 
-              {/* Logo / titre */}
               {isSuggestionView ? (
                 <h1 aria-label="Météfit" className="flex-shrink-0">
-                  <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto" />
+                  <img src="/logo_metefit.svg" alt="" aria-hidden="true" className="h-10 w-10 lg:hidden" />
+                  <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto hidden lg:block" />
                 </h1>
               ) : (
                 <div className="flex items-center gap-2 flex-shrink-0">
@@ -178,7 +191,7 @@ export default function App() {
                 </div>
               )}
 
-              {/* Barre de recherche — prend tout l'espace central sur desktop */}
+              {/* Search bar takes all remaining horizontal space */}
               <div className="flex-1 min-w-0">
                 <CitySearch
                   currentCity={weather?.city}
@@ -197,7 +210,6 @@ export default function App() {
                 />
               </div>
 
-              {/* Bouton menu */}
               <button
                 onClick={() => setSettingsOpen(true)}
                 aria-label="Ouvrir le menu"
@@ -210,11 +222,11 @@ export default function App() {
             </div>
           </header>
 
-          {/* ── Contenu ── */}
-          <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-6">
+          {/* ── Content ── */}
+          <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 pb-4 lg:py-6">
             <main id="main-content">
 
-              {/* Vue Tenue */}
+              {/* Suggestion view */}
               {view === 'suggestion' && (
                 <>
                   {loading && !!prevCityRef.current && (
@@ -222,86 +234,74 @@ export default function App() {
                   )}
 
                   {weather && (
+                    <>
+                      <div className="sticky top-0 z-10 -mx-4 lg:-mx-8 px-4 lg:px-8 lg:py-3 backdrop-blur-md">
+                        <DaySelector
+                          forecast={forecast}
+                          selectedDay={selectedDay}
+                          onSelect={(i) => goToDay(i, i > selectedDay ? 'next' : 'prev')}
+                        />
+                      </div>
+
                     <div
                       className={contentAnim}
                       style={{ willChange: 'transform, opacity' }}
                       {...swipeHandlers}
                       aria-live="polite"
-                      aria-busy={!!contentAnim}
+                      aria-busy={contentAnim ? 'true' : 'false'}
                     >
-                      {/* Desktop : 2 colonnes — Mobile : colonne unique */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
+                      {/* Single column on mobile, two columns on desktop */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 lg:items-start">
 
-                        {/* Colonne gauche : météo */}
-                        <div className="space-y-4">
+                        <div className="space-y-4 lg:space-y-6">
                           <WeatherCard
                             weather={weather}
-                            selectedDay={selectedDay}
-                            totalDays={forecast.length}
-                            onPrev={() => goToDay(selectedDay - 1, 'prev')}
-                            onNext={() => goToDay(selectedDay + 1, 'next')}
                             cardGradient={theme.card}
                           />
                           <DayTimeline slots={slots} />
                           <DayChangeAlert slots={slots} />
                         </div>
 
-                        {/* Colonne droite : tenue + options */}
-                        <div className="space-y-4 lg:pt-14">
+                        <div className="space-y-4 lg:space-y-6">
                           <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
-
-                          {/* Options : toujours visibles sur desktop, dépliables sur mobile */}
-                          <div className="lg:hidden">
-                            <button
-                              onClick={() => setShowOptions((v) => !v)}
-                              aria-expanded={showOptions}
-                              aria-controls="outfit-options-panel"
-                              className="w-full flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white py-2 min-h-[44px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-xl"
-                            >
-                              <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
-                              <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
-                            </button>
-                          </div>
-
-                          <div id="outfit-options-panel" className={`space-y-3 ${!showOptions ? 'hidden lg:block' : ''}`}>
-                            <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
-                          </div>
                         </div>
                       </div>
                     </div>
+                    </>
                   )}
                 </>
               )}
 
-          {/* Vue Garde-robe */}
-          {view === 'wardrobe' && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
-              <div className="space-y-4">
-                <AddClothingForm onAdd={addItem} />
-              </div>
-              <div className="space-y-4">
-                <ClothingList items={items} onRemove={removeItem} />
-                {outfits.length > 0 && (
-                  <div>
-                    <p className="text-xs font-medium text-white/50 uppercase tracking-wide mb-2">
-                      Tenues sauvegardées
-                    </p>
-                    <SavedOutfitLibrary outfits={outfits} onRemove={removeOutfit} />
+              {/* Wardrobe view */}
+              {view === 'wardrobe' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
+                  <div className="space-y-4">
+                    <AddClothingForm onAdd={addItem} />
                   </div>
-                )}
-              </div>
-            </div>
-          )}
+                  <div className="space-y-4">
+                    <ClothingList items={items} onRemove={removeItem} />
+                    {outfits.length > 0 && (
+                      <div>
+                        <p className="text-xs font-medium text-white/50 uppercase tracking-wide mb-2">
+                          Tenues sauvegardées
+                        </p>
+                        <SavedOutfitLibrary outfits={outfits} onRemove={removeOutfit} />
+                      </div>
+                    )}
+                    <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
+                  </div>
+                </div>
+              )}
 
-          {/* Vue Historique */}
-          {view === 'historique' && (
-            <div className="max-w-2xl mx-auto">
-              <HistoryList entries={entries} />
-            </div>
-          )}
+              {/* History view */}
+              {view === 'historique' && (
+                <div className="max-w-2xl mx-auto">
+                  <HistoryList entries={entries} />
+                </div>
+              )}
 
-        </main>
-      </div>
+            </main>
+          </div>
         </>
       )}
     </div>

@@ -10,15 +10,15 @@ function loadOffset(): number {
   return Number(localStorage.getItem(OFFSET_KEY) ?? '0')
 }
 
-// Analyse les N derniers retours et retourne un ajustement suggéré (-1, 0, ou +1)
+// Returns -1, 0, or +1 — needs at least 3 entries to avoid noise
 export function computeAutoAdjust(entries: HistoryEntry[]): number {
   const recent = entries.slice(0, 10)
   if (recent.length < 3) return 0
   const hot = recent.filter((e) => e.feedback === 'trop_chaud').length
   const cold = recent.filter((e) => e.feedback === 'trop_froid').length
   const ratio = recent.length
-  if (hot / ratio >= 0.5) return 1   // Majorité trop chaud → décaler +1°C
-  if (cold / ratio >= 0.5) return -1 // Majorité trop froid → décaler -1°C
+  if (hot / ratio >= 0.5) return 1
+  if (cold / ratio >= 0.5) return -1
   return 0
 }
 
@@ -36,7 +36,7 @@ export function useThermal() {
     localStorage.setItem(OFFSET_KEY, '0')
   }
 
-  // Appelé après chaque feedback pour recalculer l'offset automatique
+  // Increments autoOffset by ±1 each time feedback is consistent; capped at ±8 so it can't drift forever
   function recalibrate(entries: HistoryEntry[]) {
     const adjust = computeAutoAdjust(entries)
     if (adjust === 0) return
