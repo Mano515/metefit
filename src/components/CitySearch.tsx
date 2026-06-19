@@ -185,7 +185,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             id={listboxId}
             role="listbox"
             aria-label="Suggestions de villes"
-            className="absolute z-10 left-0 right-10 bg-white/15 backdrop-blur-xl border border-white/25 rounded-xl shadow-2xl overflow-hidden mt-1"
+            className="absolute z-50 left-0 right-10 bg-white/15 backdrop-blur-xl border border-white/25 rounded-xl shadow-2xl overflow-hidden mt-1"
           >
             {suggestions.map((s, i) => {
               const geo: SavedCity = { name: s.name, region: s.state, country: countryLabel(s.country), lat: s.lat, lon: s.lon }
@@ -230,7 +230,7 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             id={listboxId}
             role="listbox"
             aria-label="Recherches récentes"
-            className="absolute z-10 left-0 right-10 bg-white/15 backdrop-blur-xl border border-white/25 rounded-xl shadow-2xl overflow-hidden mt-1"
+            className="absolute z-50 left-0 right-10 bg-white/15 backdrop-blur-xl border border-white/25 rounded-xl shadow-2xl overflow-hidden mt-1"
           >
             <li role="presentation" className="px-4 pt-2 pb-1">
               <span className="text-xs text-white/40 uppercase tracking-wide">Recherches récentes</span>
