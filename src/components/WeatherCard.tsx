@@ -59,7 +59,7 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext, c
 
       {/* Carte météo — gradient dynamique selon la météo */}
       <article
-        className="text-white rounded-2xl shadow-lg transition-all duration-1000"
+        className="text-white rounded-2xl shadow-xl transition-all duration-1000 ring-1 ring-white/20"
         style={{ background: cardGradient ?? 'linear-gradient(135deg, #2980b9 0%, #0c3460 100%)' }}
       >
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
@@ -73,11 +73,13 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext, c
             </p>
             <p className="text-sm capitalize opacity-90 mt-1">{weather.description}</p>
           </div>
-          <img
-            src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-            alt={weather.description}
-            className="w-20 h-20"
-          />
+          <div className="flex-shrink-0 w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <img
+              src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+              alt={weather.description}
+              className="w-16 h-16"
+            />
+          </div>
         </div>
 
         <dl className="flex gap-4 px-6 pb-4 text-sm opacity-80">

@@ -7,7 +7,6 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const CATEGORY_ORDER = ['manteau', 'haut', 'bas', 'chaussures', 'accessoire']
 
-/** Vrai si au moins un créneau est dégagé/ensoleillé */
 function hasSunnySlot(slots: TimeSlot[]): boolean {
   return slots.some((s) => s.icon.startsWith('01') || s.icon.startsWith('02'))
 }
@@ -34,21 +33,21 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
 
   return (
     <section
-      aria-label={isDefault ? 'Tenue suggérée (suggestion générique)' : 'Tenue suggérée'}
-      className="bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-5 space-y-3"
+      aria-label={isDefault ? 'Tenue suggérée (tenue de base)' : 'Tenue suggérée'}
+      className="bg-white/25 backdrop-blur-xl border border-white/40 rounded-2xl p-5 space-y-3 shadow-lg"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-white font-semibold text-sm">Tenue suggérée</h2>
+        <h2 className="text-white font-semibold text-sm drop-shadow">Tenue suggérée</h2>
         {isDefault && (
-          <span className="text-xs text-white/80 bg-white/20 px-2 py-0.5 rounded-full">
-            suggestion générique
+          <span className="text-xs text-white font-medium bg-white/30 border border-white/40 px-2 py-0.5 rounded-full drop-shadow">
+            tenue de base
           </span>
         )}
       </div>
 
       {Object.entries(byCategory).map(([cat, catItems]) => (
         <div key={cat}>
-          <h3 className="text-xs text-white/60 font-medium uppercase tracking-wide mb-1">
+          <h3 className="text-xs text-white font-semibold uppercase tracking-widest mb-1 drop-shadow">
             {CATEGORY_LABELS[cat]}
           </h3>
           <ul aria-label={CATEGORY_LABELS[cat]} className="space-y-1">
@@ -57,17 +56,17 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
               return (
                 <li
                   key={item.id}
-                  className="flex flex-col gap-1 text-sm text-white bg-white/10 rounded-lg px-3 py-2 border border-white/15"
+                  className="flex flex-col gap-1 text-sm text-white bg-white/20 rounded-xl px-3 py-2.5 border border-white/30"
                 >
                   <div className="flex items-center gap-2">
                     <span aria-hidden="true" className="text-base">{getClothingEmoji(item)}</span>
-                    <span>{item.name}</span>
+                    <span className="font-medium drop-shadow-sm">{item.name}</span>
                     {item.rainproof && (
-                      <span className="ml-auto text-xs text-blue-200" aria-label="imperméable">imperméable</span>
+                      <span className="ml-auto text-xs text-white/80 bg-white/20 px-1.5 rounded" aria-label="imperméable">☂️</span>
                     )}
                   </div>
                   {showGlareNote && (
-                    <p className="text-xs text-yellow-200 flex items-center gap-1 pl-6">
+                    <p className="text-xs text-white/80 flex items-center gap-1 pl-6">
                       <span aria-hidden="true">💡</span>
                       Luminosité élevée malgré les nuages
                     </p>

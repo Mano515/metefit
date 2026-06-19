@@ -55,7 +55,7 @@ export function SaveOutfitButton({ items, onSave }: Props) {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="w-full text-sm text-white/70 border border-white/20 bg-white/10 backdrop-blur-md rounded-xl py-2 hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+      className="w-full text-sm text-white font-medium border border-white/40 bg-white/25 backdrop-blur-xl rounded-xl py-2.5 hover:bg-white/35 transition-colors shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 drop-shadow"
     >
       <span aria-hidden="true">💾</span> Sauvegarder cette tenue
     </button>

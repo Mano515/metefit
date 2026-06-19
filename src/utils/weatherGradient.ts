@@ -25,10 +25,10 @@ function t(bg: string, card: string): WeatherTheme { return { bg, card } }
 
 // ── 01 : Ciel dégagé ──────────────────────────────────────────────────────────
 const CLEAR: Record<Period, WeatherTheme> = {
-  day:    t('linear-gradient(160deg, #d97706 0%, #f97316 60%, #fb923c 100%)',
-            'linear-gradient(135deg, #c2410c 0%, #92400e 100%)'),
-  golden: t('linear-gradient(160deg, #c2410c 0%, #ea580c 50%, #fbbf24 100%)',
-            'linear-gradient(135deg, #9a3412 0%, #c2410c 100%)'),
+  day:    t('linear-gradient(160deg, #fbbf24 0%, #fb923c 60%, #fde68a 100%)',
+            'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'),
+  golden: t('linear-gradient(160deg, #f97316 0%, #fbbf24 50%, #fde68a 100%)',
+            'linear-gradient(135deg, #ea580c 0%, #f97316 100%)'),
   night:  t('linear-gradient(160deg, #1e1b4b 0%, #312e81 100%)',
             'linear-gradient(135deg, #3730a3 0%, #1e1b4b 100%)'),
 }

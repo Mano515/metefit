@@ -37,8 +37,8 @@ export function DayTimeline({ slots }: Props) {
   if (slots.length === 0) return null
 
   return (
-    <section aria-label="Météo de la journée" className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-4 shadow-sm">
-      <p className="text-xs font-medium text-white/60 uppercase tracking-wide mb-3" aria-hidden="true">Météo de la journée</p>
+    <section aria-label="Météo de la journée" className="bg-white/25 backdrop-blur-xl border border-white/40 rounded-2xl p-4 shadow-lg">
+      <p className="text-xs font-semibold text-white uppercase tracking-widest mb-3 drop-shadow" aria-hidden="true">Météo de la journée</p>
       <ol
         aria-label="Prévisions heure par heure"
         className="flex gap-2 overflow-x-auto pb-1"
@@ -51,7 +51,7 @@ export function DayTimeline({ slots }: Props) {
             aria-label={slot.isPast ? `${slot.label} (passé)` : `${slot.label} : ${slot.temp}°, ${conditionLabel(slot)}`}
             className={`flex-shrink-0 flex flex-col items-center gap-1 min-w-[56px] transition-opacity ${slot.isPast ? 'opacity-30' : 'opacity-100'}`}
           >
-            <span aria-hidden="true" className="text-xs text-white/60">{slot.label}</span>
+            <span aria-hidden="true" className="text-xs text-white font-medium drop-shadow-sm">{slot.label}</span>
             {slot.isPast ? (
               <>
                 <span aria-hidden="true" className="text-xl">—</span>

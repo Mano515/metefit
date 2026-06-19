@@ -158,7 +158,7 @@ export default function App() {
       ) : (
         <>
           {/* ── Header ── */}
-          <header className="sticky top-0 z-10 backdrop-blur-md bg-black/10 border-b border-white/10">
+          <header className="sticky top-0 z-10 backdrop-blur-xl bg-white/15 border-b border-white/25">
             <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-3 flex items-center gap-4">
 
               {/* Logo / titre */}
