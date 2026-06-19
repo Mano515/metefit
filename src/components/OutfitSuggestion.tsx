@@ -34,7 +34,7 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
   return (
     <section
       aria-label={isDefault ? 'Tenue suggérée (tenue de base)' : 'Tenue suggérée'}
-      className="bg-white/25 backdrop-blur-xl border border-white/40 rounded-2xl p-5 space-y-3 shadow-lg"
+      className="bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-5 space-y-3 shadow-xl shadow-black/10"
     >
       <div className="flex items-center justify-between">
         <h2 className="text-white font-semibold text-sm drop-shadow">Tenue suggérée</h2>
@@ -47,7 +47,7 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
 
       {Object.entries(byCategory).map(([cat, catItems]) => (
         <div key={cat}>
-          <h3 className="text-xs text-white font-semibold uppercase tracking-widest mb-1 drop-shadow">
+          <h3 className="text-xs text-white font-bold uppercase tracking-widest mb-1 drop-shadow-sm [text-shadow:0_1px_3px_rgba(0,0,0,0.3)]">
             {CATEGORY_LABELS[cat]}
           </h3>
           <ul aria-label={CATEGORY_LABELS[cat]} className="space-y-1">
@@ -56,7 +56,7 @@ export function OutfitSuggestion({ items, isDefault, slots = [] }: Props) {
               return (
                 <li
                   key={item.id}
-                  className="flex flex-col gap-1 text-sm text-white bg-white/20 rounded-xl px-3 py-2.5 border border-white/30"
+                  className="flex flex-col gap-1 text-sm text-white bg-white/25 rounded-xl px-3 py-2.5 border border-white/50 shadow shadow-black/5"
                 >
                   <div className="flex items-center gap-2">
                     <span aria-hidden="true" className="text-base">{getClothingEmoji(item)}</span>
