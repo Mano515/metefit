@@ -103,10 +103,9 @@ export default function App() {
 
   const theme = getWeatherTheme(weather?.icon, new Date().getHours())
   const isLanding = !weather && !loading
-  const landingBg = 'linear-gradient(160deg, #3a6ea8 0%, #5b8fc4 50%, #7aaed8 100%)'
 
   return (
-    <div className="min-h-screen transition-all duration-1000" style={{ background: isLanding ? landingBg : theme.bg }}>
+    <div className="min-h-screen" style={{ background: theme.bg }}>
       {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <a href="#main-content" className="skip-link">Aller au contenu principal</a>
 

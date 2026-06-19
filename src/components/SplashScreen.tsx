@@ -19,7 +19,8 @@ export function SplashScreen({ onDone }: Props) {
     <div
       aria-label="Chargement de Météfit"
       role="status"
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-sky-400 to-blue-600 transition-opacity duration-500 ${hiding ? 'opacity-0' : 'opacity-100'}`}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center transition-opacity duration-500 ${hiding ? 'opacity-0' : 'opacity-100'}`}
+      style={{ background: 'linear-gradient(160deg, #bae6fd 0%, #38bdf8 50%, #0ea5e9 100%)' }}
     >
       {/* Icône météo animée */}
       <div className="flex flex-col items-center gap-5">
