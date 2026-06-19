@@ -248,7 +248,7 @@ export default function App() {
                         </div>
 
                         {/* Colonne droite : tenue + options */}
-                        <div className="space-y-4">
+                        <div className="space-y-4 lg:pt-14">
                           <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
 
                           {/* Options : toujours visibles sur desktop, dépliables sur mobile */}
