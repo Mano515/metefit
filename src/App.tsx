@@ -132,66 +132,71 @@ export default function App() {
         onNavigate={(v) => setView(v)}
       />
 
-      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-10 backdrop-blur-md bg-black/10 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3 flex items-center gap-4">
 
-        {/* Header */}
-        <header className="flex items-center justify-between">
+          {/* Logo / titre */}
           {isSuggestionView ? (
-            <h1 aria-label="Météfit">
+            <h1 aria-label="Météfit" className="flex-shrink-0">
               <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto" />
             </h1>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={() => setView('suggestion')}
                 aria-label="Retour à la tenue"
-                className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
               >
                 <span aria-hidden="true">←</span>
               </button>
-              <h1 className="text-lg font-bold text-white">
-                {VIEW_LABELS[view]}
-              </h1>
+              <h1 className="text-lg font-bold text-white whitespace-nowrap">{VIEW_LABELS[view]}</h1>
             </div>
           )}
 
+          {/* Barre de recherche — prend tout l'espace central sur desktop */}
+          <div className="flex-1 min-w-0">
+            <CitySearch
+              currentCity={weather?.city}
+              favsAnimClass={favsAnim}
+              error={error}
+              favs={favs}
+              recent={recent}
+              onSelect={(coords, city) => {
+                setFavsAnim('day-slide-out-left')
+                if (weather) setContentAnim('day-slide-out-left')
+                searchCity(coords)
+                addToRecent(city)
+              }}
+              onToggleFav={toggleFav}
+              isFav={isFav}
+            />
+          </div>
+
+          {/* Bouton menu */}
           <button
             onClick={() => setSettingsOpen(true)}
             aria-label="Ouvrir le menu"
             aria-expanded={settingsOpen}
             aria-controls="settings-panel"
-            className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           >
             <span aria-hidden="true">☰</span>
           </button>
-        </header>
+        </div>
+      </header>
 
-        <CitySearch
-          currentCity={weather?.city}
-          favsAnimClass={favsAnim}
-          error={error}
-          favs={favs}
-          recent={recent}
-          onSelect={(coords, city) => {
-            setFavsAnim('day-slide-out-left')
-            if (weather) setContentAnim('day-slide-out-left')
-            searchCity(coords)
-            addToRecent(city)
-          }}
-          onToggleFav={toggleFav}
-          isFav={isFav}
-        />
-
-        <main id="main-content" className="space-y-4">
+      {/* ── Contenu ── */}
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+        <main id="main-content">
 
           {/* Vue Tenue */}
           {view === 'suggestion' && (
             <>
               {loading && !!prevCityRef.current && (
-                <div className="bg-sky-100 dark:bg-sky-900/30 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
+                <div className="bg-white/10 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
               )}
 
-              {/* Bloc animé au changement de jour — swipeable sur mobile */}
               {weather && (
                 <div
                   className={contentAnim}
@@ -200,67 +205,84 @@ export default function App() {
                   aria-live="polite"
                   aria-busy={!!contentAnim}
                 >
-                  <div className="space-y-4">
-                    <WeatherCard
-                      weather={weather}
-                      selectedDay={selectedDay}
-                      totalDays={forecast.length}
-                      onPrev={() => goToDay(selectedDay - 1, 'prev')}
-                      onNext={() => goToDay(selectedDay + 1, 'next')}
-                    />
-                    <DayTimeline slots={slots} />
-                    <DayChangeAlert slots={slots} />
-                    <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
+                  {/* Desktop : 2 colonnes — Mobile : colonne unique */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
 
-                    {/* Bouton "Plus d'options" */}
-                    <button
-                      onClick={() => setShowOptions((v) => !v)}
-                      aria-expanded={showOptions}
-                      aria-controls="outfit-options-panel"
-                      className="w-full flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white py-2 min-h-[44px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-xl"
-                    >
-                      <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
-                      <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
-                    </button>
+                    {/* Colonne gauche : météo */}
+                    <div className="space-y-4">
+                      <WeatherCard
+                        weather={weather}
+                        selectedDay={selectedDay}
+                        totalDays={forecast.length}
+                        onPrev={() => goToDay(selectedDay - 1, 'prev')}
+                        onNext={() => goToDay(selectedDay + 1, 'next')}
+                      />
+                      <DayTimeline slots={slots} />
+                      <DayChangeAlert slots={slots} />
+                    </div>
 
-                    {/* Options dépliables */}
-                    {showOptions && (
-                      <div id="outfit-options-panel" className="space-y-3">
+                    {/* Colonne droite : tenue + options */}
+                    <div className="space-y-4">
+                      <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
+
+                      {/* Options : toujours visibles sur desktop, dépliables sur mobile */}
+                      <div className="lg:hidden">
+                        <button
+                          onClick={() => setShowOptions((v) => !v)}
+                          aria-expanded={showOptions}
+                          aria-controls="outfit-options-panel"
+                          className="w-full flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white py-2 min-h-[44px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-xl"
+                        >
+                          <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
+                          <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
+                        </button>
+                      </div>
+
+                      <div id="outfit-options-panel" className={`space-y-3 ${!showOptions ? 'hidden lg:block' : ''}`}>
                         <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
                         {isToday && (
                           <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />
                         )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               )}
 
               {!weather && !loading && (
-                <p className="text-sm text-gray-400 dark:text-gray-500 text-center">Entre ta ville pour obtenir une suggestion.</p>
+                <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
+                  <img src="/logo_metefit.svg" alt="" aria-hidden="true" className="h-20 w-20 opacity-40" />
+                  <p className="text-white/50 text-base">Entre ta ville pour obtenir ta tenue du jour.</p>
+                </div>
               )}
             </>
           )}
 
           {/* Vue Garde-robe */}
           {view === 'wardrobe' && (
-            <div className="space-y-4">
-              <AddClothingForm onAdd={addItem} />
-              <ClothingList items={items} onRemove={removeItem} />
-              {outfits.length > 0 && (
-                <div>
-                  <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
-                    Tenues sauvegardées
-                  </p>
-                  <SavedOutfitLibrary outfits={outfits} onRemove={removeOutfit} />
-                </div>
-              )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
+              <div className="space-y-4">
+                <AddClothingForm onAdd={addItem} />
+              </div>
+              <div className="space-y-4">
+                <ClothingList items={items} onRemove={removeItem} />
+                {outfits.length > 0 && (
+                  <div>
+                    <p className="text-xs font-medium text-white/50 uppercase tracking-wide mb-2">
+                      Tenues sauvegardées
+                    </p>
+                    <SavedOutfitLibrary outfits={outfits} onRemove={removeOutfit} />
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           {/* Vue Historique */}
           {view === 'historique' && (
-            <HistoryList entries={entries} />
+            <div className="max-w-2xl mx-auto">
+              <HistoryList entries={entries} />
+            </div>
           )}
 
         </main>
