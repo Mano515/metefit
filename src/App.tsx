@@ -11,7 +11,6 @@ import { DayChangeAlert } from './components/DayChangeAlert'
 import { AddClothingForm } from './components/AddClothingForm'
 import { ClothingList } from './components/ClothingList'
 import { OutfitSuggestion } from './components/OutfitSuggestion'
-import { OutfitValidator } from './components/OutfitValidator'
 import { SaveOutfitButton } from './components/SaveOutfitButton'
 import { SavedOutfitLibrary } from './components/SavedOutfitLibrary'
 import { HistoryList } from './components/HistoryList'
@@ -22,7 +21,6 @@ import { useCityMemory } from './hooks/useCityMemory'
 import { useSwipe } from './hooks/useSwipe'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
 import { getWeatherTheme } from './utils/weatherGradient'
-import type { OutfitFeedback } from './types'
 import './index.css'
 
 type View = 'suggestion' | 'wardrobe' | 'historique'
@@ -36,8 +34,8 @@ const VIEW_LABELS: Record<View, string> = {
 export default function App() {
   const { weather, forecast, slots, selectedDay, setSelectedDay, loading, error, searchCity } = useWeather()
   const { items, addItem, removeItem, getSuggestion } = useWardrobe()
-  const { profile, setProfile, offset, lastAutoAdjust, clearAutoAdjustNotice, recalibrate } = useThermal()
-  const { entries, addEntry, todayEntry } = useHistory()
+  const { profile, setProfile, offset, lastAutoAdjust, clearAutoAdjustNotice } = useThermal()
+  const { entries } = useHistory()
   const { outfits, saveOutfit, removeOutfit } = useSavedOutfits()
   const { permission, requestPermission, sendMorningNotif } = useNotifications()
   const { favs, recent, addToRecent, toggleFav, isFav } = useCityMemory()
@@ -55,7 +53,6 @@ export default function App() {
     ? personalSuggestion
     : weather ? getDefaultSuggestion(weather, slots, offset) : []
   const isDefault = personalSuggestion.length === 0
-  const isToday = selectedDay === 0
 
   function goToDay(newDay: number, dir: 'next' | 'prev') {
     if (animating.current) return
@@ -93,11 +90,6 @@ export default function App() {
     if (weather && suggestion.length > 0) sendMorningNotif(weather, suggestion)
   }, [weather?.city, suggestion.length])
 
-  function handleFeedback(feedback: OutfitFeedback) {
-    if (!weather) return
-    const updated = addEntry(weather, suggestion, feedback)
-    recalibrate(updated)
-  }
 
   const canPrev = selectedDay > 0
   const canNext = selectedDay < forecast.length - 1
