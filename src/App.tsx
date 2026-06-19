@@ -274,9 +274,6 @@ export default function App() {
 
                           <div id="outfit-options-panel" className={`space-y-3 ${!showOptions ? 'hidden lg:block' : ''}`}>
                             <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
-                            {isToday && (
-                              <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />
-                            )}
                           </div>
                         </div>
                       </div>
