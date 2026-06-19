@@ -170,7 +170,7 @@ export default function App() {
       ) : (
         <>
           {/* ── Header ── */}
-          <header className="sticky top-0 z-10">
+          <header className="sticky top-0 z-20">
             <div className="w-full lg:w-4/5 mx-auto px-3 lg:px-8 py-3 flex items-center gap-2 lg:gap-4">
 
               {isSuggestionView ? (
