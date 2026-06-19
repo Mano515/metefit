@@ -15,9 +15,10 @@ interface Props {
   totalDays: number
   onPrev: () => void
   onNext: () => void
+  cardGradient?: string
 }
 
-export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }: Props) {
+export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext, cardGradient }: Props) {
   const locationParts = [weather.region, weather.country].filter(Boolean).join(', ')
   const dayLabel = formatDayLabel(weather.date, selectedDay)
   const canPrev = selectedDay > 0
@@ -56,8 +57,11 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
         </button>
       </div>
 
-      {/* Carte météo — gradient bleu, indépendante */}
-      <article className="bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-2xl shadow-lg">
+      {/* Carte météo — gradient dynamique selon la météo */}
+      <article
+        className="text-white rounded-2xl shadow-lg transition-all duration-1000"
+        style={{ background: cardGradient ?? 'linear-gradient(135deg, #2980b9 0%, #0c3460 100%)' }}
+      >
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div>
             <p className="text-sm font-medium opacity-90">{weather.city}</p>

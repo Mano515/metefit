@@ -22,7 +22,7 @@ import { SplashScreen } from './components/SplashScreen'
 import { useCityMemory } from './hooks/useCityMemory'
 import { useSwipe } from './hooks/useSwipe'
 import { getDefaultSuggestion } from './utils/defaultSuggestions'
-import { getWeatherGradient } from './utils/weatherGradient'
+import { getWeatherTheme } from './utils/weatherGradient'
 import type { OutfitFeedback } from './types'
 import './index.css'
 
@@ -111,10 +111,10 @@ export default function App() {
 
   const isSuggestionView = view === 'suggestion'
 
-  const bgGradient = getWeatherGradient(weather?.icon)
+  const theme = getWeatherTheme(weather?.icon)
 
   return (
-    <div className="min-h-screen transition-all duration-1000" style={{ background: bgGradient }}>
+    <div className="min-h-screen transition-all duration-1000" style={{ background: theme.bg }}>
       {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <a href="#main-content" className="skip-link">Aller au contenu principal</a>
 
@@ -216,6 +216,7 @@ export default function App() {
                         totalDays={forecast.length}
                         onPrev={() => goToDay(selectedDay - 1, 'prev')}
                         onNext={() => goToDay(selectedDay + 1, 'next')}
+                        cardGradient={theme.card}
                       />
                       <DayTimeline slots={slots} />
                       <DayChangeAlert slots={slots} />
