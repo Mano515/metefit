@@ -111,7 +111,8 @@ export default function App() {
 
   const isSuggestionView = view === 'suggestion'
 
-  const theme = getWeatherTheme(weather?.icon)
+  const theme = getWeatherTheme(weather?.icon, new Date().getHours())
+  const isLanding = !weather && !loading
 
   return (
     <div className="min-h-screen transition-all duration-1000" style={{ background: theme.bg }}>
@@ -132,39 +133,31 @@ export default function App() {
         onNavigate={(v) => setView(v)}
       />
 
-      {/* ── Header ── */}
-      <header className="sticky top-0 z-10 backdrop-blur-md bg-black/10 border-b border-white/10">
-        <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-3 flex items-center gap-4">
+      {/* ── Page d'accueil (aucune ville) ── */}
+      {isLanding ? (
+        <main id="main-content" className="min-h-screen flex flex-col items-center justify-center px-4 relative">
+          {/* Bouton menu en haut à droite */}
+          <button
+            onClick={() => setSettingsOpen(true)}
+            aria-label="Ouvrir le menu"
+            aria-expanded={settingsOpen}
+            aria-controls="settings-panel"
+            className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
 
-          {/* Logo / titre */}
-          {isSuggestionView ? (
-            <h1 aria-label="Météfit" className="flex-shrink-0">
-              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto" />
+          <div className="w-full max-w-md space-y-8 text-center">
+            <h1 aria-label="Météfit">
+              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-16 mx-auto" />
             </h1>
-          ) : (
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <button
-                onClick={() => setView('suggestion')}
-                aria-label="Retour à la tenue"
-                className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-              >
-                <span aria-hidden="true">←</span>
-              </button>
-              <h1 className="text-lg font-bold text-white whitespace-nowrap">{VIEW_LABELS[view]}</h1>
-            </div>
-          )}
-
-          {/* Barre de recherche — prend tout l'espace central sur desktop */}
-          <div className="flex-1 min-w-0">
             <CitySearch
-              currentCity={weather?.city}
+              currentCity={undefined}
               favsAnimClass={favsAnim}
               error={error}
               favs={favs}
               recent={recent}
               onSelect={(coords, city) => {
-                setFavsAnim('day-slide-out-left')
-                if (weather) setContentAnim('day-slide-out-left')
                 searchCity(coords)
                 addToRecent(city)
               }}
@@ -172,92 +165,128 @@ export default function App() {
               isFav={isFav}
             />
           </div>
+        </main>
+      ) : (
+        <>
+          {/* ── Header ── */}
+          <header className="sticky top-0 z-10 backdrop-blur-md bg-black/10 border-b border-white/10">
+            <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-3 flex items-center gap-4">
 
-          {/* Bouton menu */}
-          <button
-            onClick={() => setSettingsOpen(true)}
-            aria-label="Ouvrir le menu"
-            aria-expanded={settingsOpen}
-            aria-controls="settings-panel"
-            className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-          >
-            <span aria-hidden="true">☰</span>
-          </button>
-        </div>
-      </header>
-
-      {/* ── Contenu ── */}
-      <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-6">
-        <main id="main-content">
-
-          {/* Vue Tenue */}
-          {view === 'suggestion' && (
-            <>
-              {loading && !!prevCityRef.current && (
-                <div className="bg-white/10 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
-              )}
-
-              {weather && (
-                <div
-                  className={contentAnim}
-                  style={{ willChange: 'transform, opacity' }}
-                  {...swipeHandlers}
-                  aria-live="polite"
-                  aria-busy={!!contentAnim}
-                >
-                  {/* Desktop : 2 colonnes — Mobile : colonne unique */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
-
-                    {/* Colonne gauche : météo */}
-                    <div className="space-y-4">
-                      <WeatherCard
-                        weather={weather}
-                        selectedDay={selectedDay}
-                        totalDays={forecast.length}
-                        onPrev={() => goToDay(selectedDay - 1, 'prev')}
-                        onNext={() => goToDay(selectedDay + 1, 'next')}
-                        cardGradient={theme.card}
-                      />
-                      <DayTimeline slots={slots} />
-                      <DayChangeAlert slots={slots} />
-                    </div>
-
-                    {/* Colonne droite : tenue + options */}
-                    <div className="space-y-4">
-                      <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
-
-                      {/* Options : toujours visibles sur desktop, dépliables sur mobile */}
-                      <div className="lg:hidden">
-                        <button
-                          onClick={() => setShowOptions((v) => !v)}
-                          aria-expanded={showOptions}
-                          aria-controls="outfit-options-panel"
-                          className="w-full flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white py-2 min-h-[44px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-xl"
-                        >
-                          <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
-                          <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
-                        </button>
-                      </div>
-
-                      <div id="outfit-options-panel" className={`space-y-3 ${!showOptions ? 'hidden lg:block' : ''}`}>
-                        <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
-                        {isToday && (
-                          <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />
-                        )}
-                      </div>
-                    </div>
-                  </div>
+              {/* Logo / titre */}
+              {isSuggestionView ? (
+                <h1 aria-label="Météfit" className="flex-shrink-0">
+                  <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto" />
+                </h1>
+              ) : (
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => setView('suggestion')}
+                    aria-label="Retour à la tenue"
+                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  >
+                    <span aria-hidden="true">←</span>
+                  </button>
+                  <h1 className="text-lg font-bold text-white whitespace-nowrap">{VIEW_LABELS[view]}</h1>
                 </div>
               )}
 
-              {!weather && !loading && (
-                <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
-                  <img src="/logo_metefit.svg" alt="" aria-hidden="true" className="h-20 w-20 opacity-40" />
-                  <p className="text-white/50 text-base">Entre ta ville pour obtenir ta tenue du jour.</p>
-                </div>
+              {/* Barre de recherche — prend tout l'espace central sur desktop */}
+              <div className="flex-1 min-w-0">
+                <CitySearch
+                  currentCity={weather?.city}
+                  favsAnimClass={favsAnim}
+                  error={error}
+                  favs={favs}
+                  recent={recent}
+                  onSelect={(coords, city) => {
+                    setFavsAnim('day-slide-out-left')
+                    if (weather) setContentAnim('day-slide-out-left')
+                    searchCity(coords)
+                    addToRecent(city)
+                  }}
+                  onToggleFav={toggleFav}
+                  isFav={isFav}
+                />
+              </div>
+
+              {/* Bouton menu */}
+              <button
+                onClick={() => setSettingsOpen(true)}
+                aria-label="Ouvrir le menu"
+                aria-expanded={settingsOpen}
+                aria-controls="settings-panel"
+                className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+              >
+                <span aria-hidden="true">☰</span>
+              </button>
+            </div>
+          </header>
+
+          {/* ── Contenu ── */}
+          <div className="w-full lg:w-4/5 mx-auto px-4 lg:px-8 py-6">
+            <main id="main-content">
+
+              {/* Vue Tenue */}
+              {view === 'suggestion' && (
+                <>
+                  {loading && !!prevCityRef.current && (
+                    <div className="bg-white/10 rounded-2xl p-6 animate-pulse h-44" role="status" aria-label="Chargement de la météo…" />
+                  )}
+
+                  {weather && (
+                    <div
+                      className={contentAnim}
+                      style={{ willChange: 'transform, opacity' }}
+                      {...swipeHandlers}
+                      aria-live="polite"
+                      aria-busy={!!contentAnim}
+                    >
+                      {/* Desktop : 2 colonnes — Mobile : colonne unique */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-start">
+
+                        {/* Colonne gauche : météo */}
+                        <div className="space-y-4">
+                          <WeatherCard
+                            weather={weather}
+                            selectedDay={selectedDay}
+                            totalDays={forecast.length}
+                            onPrev={() => goToDay(selectedDay - 1, 'prev')}
+                            onNext={() => goToDay(selectedDay + 1, 'next')}
+                            cardGradient={theme.card}
+                          />
+                          <DayTimeline slots={slots} />
+                          <DayChangeAlert slots={slots} />
+                        </div>
+
+                        {/* Colonne droite : tenue + options */}
+                        <div className="space-y-4">
+                          <OutfitSuggestion items={suggestion} isDefault={isDefault} slots={slots} />
+
+                          {/* Options : toujours visibles sur desktop, dépliables sur mobile */}
+                          <div className="lg:hidden">
+                            <button
+                              onClick={() => setShowOptions((v) => !v)}
+                              aria-expanded={showOptions}
+                              aria-controls="outfit-options-panel"
+                              className="w-full flex items-center justify-center gap-2 text-sm text-white/50 hover:text-white py-2 min-h-[44px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-xl"
+                            >
+                              <span>{showOptions ? 'Moins d\'options' : 'Plus d\'options'}</span>
+                              <span aria-hidden="true" className={`text-xs transition-transform duration-200 ${showOptions ? 'rotate-180' : ''}`}>▾</span>
+                            </button>
+                          </div>
+
+                          <div id="outfit-options-panel" className={`space-y-3 ${!showOptions ? 'hidden lg:block' : ''}`}>
+                            <SaveOutfitButton items={suggestion} onSave={saveOutfit} />
+                            {isToday && (
+                              <OutfitValidator onFeedback={handleFeedback} todayEntry={todayEntry} />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
-            </>
-          )}
 
           {/* Vue Garde-robe */}
           {view === 'wardrobe' && (
@@ -288,6 +317,8 @@ export default function App() {
 
         </main>
       </div>
+        </>
+      )}
     </div>
   )
 }
