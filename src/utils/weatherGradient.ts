@@ -18,92 +18,92 @@ function t(bg: string, card: string): WeatherTheme { return { bg, card } }
 
 // ── 01 : Ciel dégagé ──────────────────────────────────────────────────────────
 const CLEAR: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #020510 0%, #06102a 100%)', 'linear-gradient(135deg, #0a1835 0%, #020510 100%)'),
-  dawn:      t('linear-gradient(160deg, #1c0806 0%, #8a3010 50%, #d46828 100%)', 'linear-gradient(135deg, #c46025 0%, #1c0806 100%)'),
-  morning:   t('linear-gradient(160deg, #6a2004 0%, #c84808 50%, #e07818 100%)', 'linear-gradient(135deg, #d87020 0%, #6a2004 100%)'),
-  afternoon: t('linear-gradient(160deg, #7a2206 0%, #d05010 50%, #e88c1a 100%)', 'linear-gradient(135deg, #e09030 0%, #7a2206 100%)'),
-  evening:   t('linear-gradient(160deg, #5a1008 0%, #a83010 50%, #c86820 100%)', 'linear-gradient(135deg, #d07030 0%, #5a1008 100%)'),
-  dusk:      t('linear-gradient(160deg, #08051c 0%, #180a35 50%, #2a1255 100%)', 'linear-gradient(135deg, #301858 0%, #08051c 100%)'),
+  night:     t('linear-gradient(160deg, #1a1f3c 0%, #252d50 100%)', 'linear-gradient(135deg, #2e3a62 0%, #1a1f3c 100%)'),
+  dawn:      t('linear-gradient(160deg, #3d1c10 0%, #a04a1a 50%, #d4803a 100%)', 'linear-gradient(135deg, #c07030 0%, #3d1c10 100%)'),
+  morning:   t('linear-gradient(160deg, #8a3a10 0%, #d46020 50%, #e89040 100%)', 'linear-gradient(135deg, #e08030 0%, #8a3a10 100%)'),
+  afternoon: t('linear-gradient(160deg, #8a3a0a 0%, #d46010 50%, #e8a030 100%)', 'linear-gradient(135deg, #e09830 0%, #8a3a0a 100%)'),
+  evening:   t('linear-gradient(160deg, #6a2010 0%, #bc4820 50%, #d87838 100%)', 'linear-gradient(135deg, #d07838 0%, #6a2010 100%)'),
+  dusk:      t('linear-gradient(160deg, #1e1040 0%, #30185a 50%, #3c2070 100%)', 'linear-gradient(135deg, #3c2268 0%, #1e1040 100%)'),
 }
 
 // ── 02 : Quelques nuages ──────────────────────────────────────────────────────
 const FEW_CLOUDS: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #040818 0%, #0c1838 100%)', 'linear-gradient(135deg, #101e48 0%, #040818 100%)'),
-  dawn:      t('linear-gradient(160deg, #281008 0%, #6a3818 50%, #9a5830 100%)', 'linear-gradient(135deg, #8a5028 0%, #281008 100%)'),
-  morning:   t('linear-gradient(160deg, #0c2a50 0%, #1a4878 50%, #2a6090 100%)', 'linear-gradient(135deg, #2868a8 0%, #0c2a50 100%)'),
-  afternoon: t('linear-gradient(160deg, #0a2848 0%, #1a4070 50%, #2858a0 100%)', 'linear-gradient(135deg, #2668b0 0%, #0a2848 100%)'),
-  evening:   t('linear-gradient(160deg, #301808 0%, #784028 50%, #9a5830 100%)', 'linear-gradient(135deg, #8a5030 0%, #301808 100%)'),
-  dusk:      t('linear-gradient(160deg, #060818 0%, #10162a 50%, #1a2040 100%)', 'linear-gradient(135deg, #202848 0%, #060818 100%)'),
+  night:     t('linear-gradient(160deg, #181e38 0%, #242e50 100%)', 'linear-gradient(135deg, #2a3860 0%, #181e38 100%)'),
+  dawn:      t('linear-gradient(160deg, #3a2015 0%, #7a4828 50%, #a86840 100%)', 'linear-gradient(135deg, #9a6038 0%, #3a2015 100%)'),
+  morning:   t('linear-gradient(160deg, #1a3a5a 0%, #2a5880 50%, #3a70a0 100%)', 'linear-gradient(135deg, #3878b0 0%, #1a3a5a 100%)'),
+  afternoon: t('linear-gradient(160deg, #183858 0%, #2a5078 50%, #3868a0 100%)', 'linear-gradient(135deg, #3070b0 0%, #183858 100%)'),
+  evening:   t('linear-gradient(160deg, #3a2010 0%, #805030 50%, #a06848 100%)', 'linear-gradient(135deg, #906040 0%, #3a2010 100%)'),
+  dusk:      t('linear-gradient(160deg, #181828 0%, #222238 50%, #2c2c4a 100%)', 'linear-gradient(135deg, #2a2a48 0%, #181828 100%)'),
 }
 
 // ── 03 : Nuages épars ─────────────────────────────────────────────────────────
 const SCATTERED: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #060810 0%, #101828 100%)', 'linear-gradient(135deg, #182038 0%, #060810 100%)'),
-  dawn:      t('linear-gradient(160deg, #201208 0%, #503828 50%, #785040 100%)', 'linear-gradient(135deg, #685040 0%, #201208 100%)'),
-  morning:   t('linear-gradient(160deg, #182840 0%, #2a4060 50%, #3a5878 100%)', 'linear-gradient(135deg, #365878 0%, #182840 100%)'),
-  afternoon: t('linear-gradient(160deg, #182840 0%, #284868 50%, #3a5880 100%)', 'linear-gradient(135deg, #346080 0%, #182840 100%)'),
-  evening:   t('linear-gradient(160deg, #281808 0%, #583828 50%, #785040 100%)', 'linear-gradient(135deg, #684838 0%, #281808 100%)'),
-  dusk:      t('linear-gradient(160deg, #080818 0%, #101530 50%, #181e3a 100%)', 'linear-gradient(135deg, #1c2240 0%, #080818 100%)'),
+  night:     t('linear-gradient(160deg, #1c1e28 0%, #262c3a 100%)', 'linear-gradient(135deg, #2c3248 0%, #1c1e28 100%)'),
+  dawn:      t('linear-gradient(160deg, #302015 0%, #604030 50%, #806050 100%)', 'linear-gradient(135deg, #706050 0%, #302015 100%)'),
+  morning:   t('linear-gradient(160deg, #223050 0%, #344868 50%, #446080 100%)', 'linear-gradient(135deg, #406880 0%, #223050 100%)'),
+  afternoon: t('linear-gradient(160deg, #203050 0%, #345068 50%, #446080 100%)', 'linear-gradient(135deg, #3e6880 0%, #203050 100%)'),
+  evening:   t('linear-gradient(160deg, #302015 0%, #605040 50%, #806860 100%)', 'linear-gradient(135deg, #706050 0%, #302015 100%)'),
+  dusk:      t('linear-gradient(160deg, #1a1c28 0%, #222430 50%, #2c2e3c 100%)', 'linear-gradient(135deg, #2a2c3e 0%, #1a1c28 100%)'),
 }
 
 // ── 04 : Couvert ──────────────────────────────────────────────────────────────
 const OVERCAST: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #080a10 0%, #121820 100%)', 'linear-gradient(135deg, #182028 0%, #080a10 100%)'),
-  dawn:      t('linear-gradient(160deg, #181410 0%, #303028 50%, #484038 100%)', 'linear-gradient(135deg, #403830 0%, #181410 100%)'),
-  morning:   t('linear-gradient(160deg, #1c2030 0%, #2c3248 50%, #3a4260 100%)', 'linear-gradient(135deg, #3c4860 0%, #1c2030 100%)'),
-  afternoon: t('linear-gradient(160deg, #1c2333 0%, #2d3748 50%, #3a4860 100%)', 'linear-gradient(135deg, #4a5568 0%, #1c2333 100%)'),
-  evening:   t('linear-gradient(160deg, #1a1820 0%, #282830 50%, #383040 100%)', 'linear-gradient(135deg, #3a3248 0%, #1a1820 100%)'),
-  dusk:      t('linear-gradient(160deg, #0c0c18 0%, #181820 50%, #201e28 100%)', 'linear-gradient(135deg, #242030 0%, #0c0c18 100%)'),
+  night:     t('linear-gradient(160deg, #1c1e24 0%, #262830 100%)', 'linear-gradient(135deg, #2a2c38 0%, #1c1e24 100%)'),
+  dawn:      t('linear-gradient(160deg, #2a2420 0%, #3e3830 50%, #524a42 100%)', 'linear-gradient(135deg, #484038 0%, #2a2420 100%)'),
+  morning:   t('linear-gradient(160deg, #2c3040 0%, #3c4255 50%, #4c5268 100%)', 'linear-gradient(135deg, #485068 0%, #2c3040 100%)'),
+  afternoon: t('linear-gradient(160deg, #2c3040 0%, #3c4452 50%, #4c5464 100%)', 'linear-gradient(135deg, #505868 0%, #2c3040 100%)'),
+  evening:   t('linear-gradient(160deg, #28262e 0%, #36303e 50%, #443c4e 100%)', 'linear-gradient(135deg, #403848 0%, #28262e 100%)'),
+  dusk:      t('linear-gradient(160deg, #1e1e28 0%, #26242e 50%, #2e2c38 100%)', 'linear-gradient(135deg, #2c2a38 0%, #1e1e28 100%)'),
 }
 
 // ── 09/10 : Pluie ─────────────────────────────────────────────────────────────
 const RAIN: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #040810 0%, #08101c 100%)', 'linear-gradient(135deg, #0c1828 0%, #040810 100%)'),
-  dawn:      t('linear-gradient(160deg, #0a1018 0%, #142030 50%, #1e3040 100%)', 'linear-gradient(135deg, #1c3040 0%, #0a1018 100%)'),
-  morning:   t('linear-gradient(160deg, #0c1828 0%, #182840 50%, #243858 100%)', 'linear-gradient(135deg, #203858 0%, #0c1828 100%)'),
-  afternoon: t('linear-gradient(160deg, #0a1628 0%, #162540 50%, #203050 100%)', 'linear-gradient(135deg, #1e3a5f 0%, #0a1628 100%)'),
-  evening:   t('linear-gradient(160deg, #0c1220 0%, #162030 50%, #1e2838 100%)', 'linear-gradient(135deg, #1c2a3a 0%, #0c1220 100%)'),
-  dusk:      t('linear-gradient(160deg, #060810 0%, #0e1420 50%, #141c28 100%)', 'linear-gradient(135deg, #121c28 0%, #060810 100%)'),
+  night:     t('linear-gradient(160deg, #141c28 0%, #1c2838 100%)', 'linear-gradient(135deg, #20304a 0%, #141c28 100%)'),
+  dawn:      t('linear-gradient(160deg, #1a2030 0%, #263040 50%, #32404e 100%)', 'linear-gradient(135deg, #2e3e4e 0%, #1a2030 100%)'),
+  morning:   t('linear-gradient(160deg, #1c2a3e 0%, #2c3c52 50%, #3a4e68 100%)', 'linear-gradient(135deg, #344e68 0%, #1c2a3e 100%)'),
+  afternoon: t('linear-gradient(160deg, #1a2a3c 0%, #2a3a50 50%, #384c64 100%)', 'linear-gradient(135deg, #304a66 0%, #1a2a3c 100%)'),
+  evening:   t('linear-gradient(160deg, #1c2030 0%, #28303e 50%, #34404e 100%)', 'linear-gradient(135deg, #30404e 0%, #1c2030 100%)'),
+  dusk:      t('linear-gradient(160deg, #141820 0%, #1c2030 50%, #242838 100%)', 'linear-gradient(135deg, #202838 0%, #141820 100%)'),
 }
 
 // ── 11 : Orage ────────────────────────────────────────────────────────────────
 const THUNDER: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #060410 0%, #0e0a20 100%)', 'linear-gradient(135deg, #141030 0%, #060410 100%)'),
-  dawn:      t('linear-gradient(160deg, #100818 0%, #1e1230 50%, #2a1a45 100%)', 'linear-gradient(135deg, #281848 0%, #100818 100%)'),
-  morning:   t('linear-gradient(160deg, #0e0c20 0%, #1a1638 50%, #261e50 100%)', 'linear-gradient(135deg, #241e55 0%, #0e0c20 100%)'),
-  afternoon: t('linear-gradient(160deg, #0f0c24 0%, #1e1545 50%, #2a1e58 100%)', 'linear-gradient(135deg, #2d2060 0%, #0f0c24 100%)'),
-  evening:   t('linear-gradient(160deg, #0e0a1c 0%, #1a1230 50%, #24183c 100%)', 'linear-gradient(135deg, #221540 0%, #0e0a1c 100%)'),
-  dusk:      t('linear-gradient(160deg, #08061a 0%, #100c28 50%, #180f35 100%)', 'linear-gradient(135deg, #160d35 0%, #08061a 100%)'),
+  night:     t('linear-gradient(160deg, #16102a 0%, #201838 100%)', 'linear-gradient(135deg, #281e42 0%, #16102a 100%)'),
+  dawn:      t('linear-gradient(160deg, #201528 0%, #301e3c 50%, #402855 100%)', 'linear-gradient(135deg, #3c265a 0%, #201528 100%)'),
+  morning:   t('linear-gradient(160deg, #1e1838 0%, #2c2450 50%, #3a3068 100%)', 'linear-gradient(135deg, #362e68 0%, #1e1838 100%)'),
+  afternoon: t('linear-gradient(160deg, #201838 0%, #2e2450 50%, #3c3068 100%)', 'linear-gradient(135deg, #382e6a 0%, #201838 100%)'),
+  evening:   t('linear-gradient(160deg, #1c1430 0%, #281c44 50%, #342454 100%)', 'linear-gradient(135deg, #301e52 0%, #1c1430 100%)'),
+  dusk:      t('linear-gradient(160deg, #141028 0%, #1e163a 50%, #28204a 100%)', 'linear-gradient(135deg, #241e48 0%, #141028 100%)'),
 }
 
 // ── 13 : Neige ────────────────────────────────────────────────────────────────
 const SNOW: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #080e18 0%, #101c2c 100%)', 'linear-gradient(135deg, #162434 0%, #080e18 100%)'),
-  dawn:      t('linear-gradient(160deg, #1a2838 0%, #2c3e58 50%, #3c5070 100%)', 'linear-gradient(135deg, #3c5878 0%, #1a2838 100%)'),
-  morning:   t('linear-gradient(160deg, #1a3050 0%, #2a4870 50%, #3a6090 100%)', 'linear-gradient(135deg, #4a7fa5 0%, #1a3050 100%)'),
-  afternoon: t('linear-gradient(160deg, #1a3050 0%, #2a4870 50%, #3a6088 100%)', 'linear-gradient(135deg, #4880a8 0%, #1a3050 100%)'),
-  evening:   t('linear-gradient(160deg, #182838 0%, #284060 50%, #385070 100%)', 'linear-gradient(135deg, #3a6080 0%, #182838 100%)'),
-  dusk:      t('linear-gradient(160deg, #0c1422 0%, #141e30 50%, #1e2a40 100%)', 'linear-gradient(135deg, #203045 0%, #0c1422 100%)'),
+  night:     t('linear-gradient(160deg, #1a2030 0%, #242c40 100%)', 'linear-gradient(135deg, #2a3450 0%, #1a2030 100%)'),
+  dawn:      t('linear-gradient(160deg, #283448 0%, #3a4c64 50%, #4c6078 100%)', 'linear-gradient(135deg, #4a6078 0%, #283448 100%)'),
+  morning:   t('linear-gradient(160deg, #243a58 0%, #345470 50%, #44708a 100%)', 'linear-gradient(135deg, #568898 0%, #243a58 100%)'),
+  afternoon: t('linear-gradient(160deg, #243a58 0%, #345470 50%, #44708a 100%)', 'linear-gradient(135deg, #549096 0%, #243a58 100%)'),
+  evening:   t('linear-gradient(160deg, #223248 0%, #324858 50%, #42606e 100%)', 'linear-gradient(135deg, #40687a 0%, #223248 100%)'),
+  dusk:      t('linear-gradient(160deg, #1a2030 0%, #222838 50%, #2c3248 100%)', 'linear-gradient(135deg, #28344a 0%, #1a2030 100%)'),
 }
 
 // ── 50 : Brume ────────────────────────────────────────────────────────────────
 const MIST: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #08091a 0%, #10121e 100%)', 'linear-gradient(135deg, #141828 0%, #08091a 100%)'),
-  dawn:      t('linear-gradient(160deg, #201c18 0%, #383028 50%, #504540 100%)', 'linear-gradient(135deg, #504540 0%, #201c18 100%)'),
-  morning:   t('linear-gradient(160deg, #202830 0%, #303a42 50%, #404e58 100%)', 'linear-gradient(135deg, #3d5166 0%, #202830 100%)'),
-  afternoon: t('linear-gradient(160deg, #1a2030 0%, #2a3545 50%, #3a4858 100%)', 'linear-gradient(135deg, #3d5166 0%, #1a2030 100%)'),
-  evening:   t('linear-gradient(160deg, #1e1c28 0%, #2c2835 50%, #3c3448 100%)', 'linear-gradient(135deg, #383244 0%, #1e1c28 100%)'),
-  dusk:      t('linear-gradient(160deg, #0e0e1c 0%, #181620 50%, #201e28 100%)', 'linear-gradient(135deg, #1e1c28 0%, #0e0e1c 100%)'),
+  night:     t('linear-gradient(160deg, #1c1e28 0%, #24262e 100%)', 'linear-gradient(135deg, #282a36 0%, #1c1e28 100%)'),
+  dawn:      t('linear-gradient(160deg, #302c28 0%, #484040 50%, #5e5450 100%)', 'linear-gradient(135deg, #5a5050 0%, #302c28 100%)'),
+  morning:   t('linear-gradient(160deg, #2e3440 0%, #3e4858 50%, #4e5c6c 100%)', 'linear-gradient(135deg, #4e607a 0%, #2e3440 100%)'),
+  afternoon: t('linear-gradient(160deg, #2a3040 0%, #3a4455 50%, #4a5868 100%)', 'linear-gradient(135deg, #4c5e78 0%, #2a3040 100%)'),
+  evening:   t('linear-gradient(160deg, #2c2830 0%, #3a333e 50%, #48404e 100%)', 'linear-gradient(135deg, #443c4e 0%, #2c2830 100%)'),
+  dusk:      t('linear-gradient(160deg, #1e1e28 0%, #262430 50%, #2e2c38 100%)', 'linear-gradient(135deg, #2c2a36 0%, #1e1e28 100%)'),
 }
 
-// ── Défaut (pas d'icône ou code inconnu) ──────────────────────────────────────
+// ── Défaut (pas d'icône) ──────────────────────────────────────────────────────
 const DEFAULT_SKY: Record<Period, WeatherTheme> = {
-  night:     t('linear-gradient(160deg, #050a1c 0%, #0c1535 100%)', 'linear-gradient(135deg, #101e45 0%, #050a1c 100%)'),
-  dawn:      t('linear-gradient(160deg, #1a0a06 0%, #6a2a10 50%, #b05020 100%)', 'linear-gradient(135deg, #a04a1e 0%, #1a0a06 100%)'),
-  morning:   t('linear-gradient(160deg, #0c2040 0%, #1a3860 50%, #2a5080 100%)', 'linear-gradient(135deg, #285890 0%, #0c2040 100%)'),
-  afternoon: t('linear-gradient(160deg, #0c1a3a 0%, #1a2e58 50%, #283e70 100%)', 'linear-gradient(135deg, #1e3a6e 0%, #0c1a3a 100%)'),
-  evening:   t('linear-gradient(160deg, #3a1008 0%, #8a2c10 50%, #b05020 100%)', 'linear-gradient(135deg, #a04a20 0%, #3a1008 100%)'),
-  dusk:      t('linear-gradient(160deg, #06081a 0%, #10142a 50%, #1a1e3a 100%)', 'linear-gradient(135deg, #1a2040 0%, #06081a 100%)'),
+  night:     t('linear-gradient(160deg, #18203a 0%, #222e50 100%)', 'linear-gradient(135deg, #283860 0%, #18203a 100%)'),
+  dawn:      t('linear-gradient(160deg, #2e1208 0%, #804020 50%, #c07030 100%)', 'linear-gradient(135deg, #a86028 0%, #2e1208 100%)'),
+  morning:   t('linear-gradient(160deg, #1a3050 0%, #2a5070 50%, #3a6888 100%)', 'linear-gradient(135deg, #387090 0%, #1a3050 100%)'),
+  afternoon: t('linear-gradient(160deg, #183050 0%, #283e68 50%, #364e80 100%)', 'linear-gradient(135deg, #2e5080 0%, #183050 100%)'),
+  evening:   t('linear-gradient(160deg, #4a1a0a 0%, #903210 50%, #be5828 100%)', 'linear-gradient(135deg, #a85028 0%, #4a1a0a 100%)'),
+  dusk:      t('linear-gradient(160deg, #161828 0%, #201e34 50%, #2a2444 100%)', 'linear-gradient(135deg, #26223e 0%, #161828 100%)'),
 }
 
 const CODE_MAP: Record<string, Record<Period, WeatherTheme>> = {

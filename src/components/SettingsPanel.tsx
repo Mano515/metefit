@@ -27,8 +27,6 @@ interface Props {
   onDismissAutoAdjust: () => void
   notifPermission: NotificationPermission
   onRequestNotif: () => void
-  dark: boolean
-  onToggleDark: () => void
   onNavigate: (view: View) => void
 }
 
@@ -37,7 +35,6 @@ export function SettingsPanel({
   profile, onProfileChange,
   autoAdjust, onDismissAutoAdjust,
   notifPermission, onRequestNotif,
-  dark, onToggleDark,
   onNavigate,
 }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -141,25 +138,6 @@ export function SettingsPanel({
             <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
               Paramètres
             </p>
-
-            {/* Dark mode */}
-            <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-4 py-3">
-              <div className="flex items-center gap-2">
-                <span aria-hidden="true" className="text-lg">{dark ? '🌙' : '☀️'}</span>
-                <span id="dark-mode-label" className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                  {dark ? 'Mode sombre' : 'Mode clair'}
-                </span>
-              </div>
-              <button
-                role="switch"
-                aria-checked={dark}
-                aria-labelledby="dark-mode-label"
-                onClick={onToggleDark}
-                className={`relative w-11 h-6 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${dark ? 'bg-blue-500' : 'bg-gray-300'}`}
-              >
-                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${dark ? 'translate-x-5' : 'translate-x-0'}`} />
-              </button>
-            </div>
 
             <ThermalAutoNotice adjust={autoAdjust} onDismiss={onDismissAutoAdjust} />
             <ThermalSelector profile={profile} onChange={onProfileChange} />

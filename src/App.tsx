@@ -5,7 +5,6 @@ import { useThermal } from './hooks/useThermal'
 import { useHistory } from './hooks/useHistory'
 import { useSavedOutfits } from './hooks/useSavedOutfits'
 import { useNotifications } from './hooks/useNotifications'
-import { useDarkMode } from './hooks/useDarkMode'
 import { WeatherCard } from './components/WeatherCard'
 import { DayTimeline } from './components/DayTimeline'
 import { DayChangeAlert } from './components/DayChangeAlert'
@@ -42,7 +41,6 @@ export default function App() {
   const { outfits, saveOutfit, removeOutfit } = useSavedOutfits()
   const { permission, requestPermission, sendMorningNotif } = useNotifications()
   const { favs, recent, addToRecent, toggleFav, isFav } = useCityMemory()
-  const { dark, toggle: toggleDark } = useDarkMode()
   const [splashDone, setSplashDone] = useState(false)
   const [view, setView] = useState<View>('suggestion')
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -128,8 +126,6 @@ export default function App() {
         onDismissAutoAdjust={clearAutoAdjustNotice}
         notifPermission={permission}
         onRequestNotif={requestPermission}
-        dark={dark}
-        onToggleDark={toggleDark}
         onNavigate={(v) => setView(v)}
       />
 
