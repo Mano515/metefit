@@ -1,45 +1,55 @@
 /**
- * Retourne un dégradé CSS basé sur l'icône météo OpenWeatherMap.
- * Les icônes se terminent par 'd' (jour) ou 'n' (nuit).
+ * Dégradés harmonisés avec la carte météo (sky-400 #38bdf8 → blue-600 #2563eb).
+ * Chaque fond prolonge les teintes de la carte vers des tons plus profonds/saturés.
  */
 export function getWeatherGradient(icon?: string): string {
-  if (!icon) return 'linear-gradient(160deg, #1e3a5f 0%, #2d6a9f 50%, #1a2e4a 100%)'
+  if (!icon) {
+    // Pas encore de météo — bleu nuit profond
+    return 'linear-gradient(160deg, #0c1a3a 0%, #1e3a6e 60%, #0a1628 100%)'
+  }
 
   const code = icon.slice(0, 2)
   const isNight = icon.endsWith('n')
 
   if (isNight) {
-    // Nuit : toujours sombre, variation selon les nuages
-    if (code === '01') return 'linear-gradient(160deg, #0a0e2e 0%, #1a1f4e 50%, #0d1235 100%)' // ciel étoilé
-    if (code === '02') return 'linear-gradient(160deg, #111535 0%, #1e2a55 50%, #0f1a3a 100%)'
-    if (code === '03' || code === '04') return 'linear-gradient(160deg, #1a1a2e 0%, #2a2a42 50%, #111120 100%)'
-    if (code === '09' || code === '10') return 'linear-gradient(160deg, #0d1b2a 0%, #1a2f44 50%, #0a1520 100%)'
-    if (code === '11') return 'linear-gradient(160deg, #0a0a1a 0%, #1a1030 50%, #050510 100%)'
-    if (code === '13') return 'linear-gradient(160deg, #1a2535 0%, #2a3a50 50%, #151e2e 100%)'
-    return 'linear-gradient(160deg, #111828 0%, #1e2d40 50%, #0d1520 100%)'
+    if (code === '01') return 'linear-gradient(160deg, #05091f 0%, #0e1740 60%, #020610 100%)' // nuit étoilée
+    if (code === '02') return 'linear-gradient(160deg, #080f28 0%, #111e48 60%, #060c1e 100%)'
+    if (code === '03' || code === '04') return 'linear-gradient(160deg, #0d1020 0%, #1a1e30 60%, #080b18 100%)'
+    if (code === '09' || code === '10') return 'linear-gradient(160deg, #060e1c 0%, #0f1e36 60%, #040a14 100%)'
+    if (code === '11') return 'linear-gradient(160deg, #070514 0%, #140f2a 60%, #040310 100%)'
+    if (code === '13') return 'linear-gradient(160deg, #0c1830 0%, #1a2e50 60%, #091428 100%)'
+    return 'linear-gradient(160deg, #080f28 0%, #111e48 60%, #060c1e 100%)'
   }
 
-  // Jour
   switch (code) {
-    case '01': // Ciel dégagé — chaud et ensoleillé
-      return 'linear-gradient(160deg, #f97316 0%, #fbbf24 40%, #60a5fa 100%)'
-    case '02': // Quelques nuages
-      return 'linear-gradient(160deg, #f59e0b 0%, #7dd3fc 50%, #3b82f6 100%)'
-    case '03': // Nuages épars
-      return 'linear-gradient(160deg, #93c5fd 0%, #60a5fa 50%, #3b82f6 100%)'
-    case '04': // Nuageux / couvert
-      return 'linear-gradient(160deg, #64748b 0%, #94a3b8 50%, #475569 100%)'
-    case '09': // Averses
-      return 'linear-gradient(160deg, #1e3a5f 0%, #2d6a9f 50%, #1a2e4a 100%)'
-    case '10': // Pluie
-      return 'linear-gradient(160deg, #1e40af 0%, #3b82f6 50%, #1e3a8a 100%)'
-    case '11': // Orage
-      return 'linear-gradient(160deg, #1e1b4b 0%, #3730a3 40%, #0f172a 100%)'
-    case '13': // Neige
-      return 'linear-gradient(160deg, #bfdbfe 0%, #e0f2fe 50%, #7dd3fc 100%)'
-    case '50': // Brume / brouillard
-      return 'linear-gradient(160deg, #94a3b8 0%, #cbd5e1 50%, #78909c 100%)'
+    case '01': // Ciel dégagé — chaud, soleil haut, bleu vif en bas pour rejoindre la carte
+      return 'linear-gradient(160deg, #f97316 0%, #fb923c 20%, #38bdf8 65%, #1d4ed8 100%)'
+
+    case '02': // Quelques nuages — légèrement voilé, bleu lumineux
+      return 'linear-gradient(160deg, #7dd3fc 0%, #38bdf8 40%, #2563eb 80%, #1e40af 100%)'
+
+    case '03': // Nuages épars — bleu plus doux
+      return 'linear-gradient(160deg, #93c5fd 0%, #60a5fa 40%, #2563eb 80%, #1e3a8a 100%)'
+
+    case '04': // Couvert — gris-bleu, cohérent mais désaturé
+      return 'linear-gradient(160deg, #64748b 0%, #475569 40%, #334155 80%, #1e293b 100%)'
+
+    case '09': // Averses — bleu sombre profond
+      return 'linear-gradient(160deg, #1e40af 0%, #1e3a8a 50%, #172554 100%)'
+
+    case '10': // Pluie — bleu nuit, cohérent avec la carte bleue
+      return 'linear-gradient(160deg, #1d4ed8 0%, #1e3a8a 50%, #0f172a 100%)'
+
+    case '11': // Orage — violet-bleu très sombre
+      return 'linear-gradient(160deg, #1e1b4b 0%, #312e81 40%, #0f0a2e 100%)'
+
+    case '13': // Neige — bleu très pâle, presque blanc
+      return 'linear-gradient(160deg, #bfdbfe 0%, #dbeafe 50%, #93c5fd 100%)'
+
+    case '50': // Brume — gris-bleu neutre
+      return 'linear-gradient(160deg, #94a3b8 0%, #64748b 50%, #475569 100%)'
+
     default:
-      return 'linear-gradient(160deg, #1e3a5f 0%, #2d6a9f 50%, #1a2e4a 100%)'
+      return 'linear-gradient(160deg, #0c1a3a 0%, #1e3a6e 60%, #0a1628 100%)'
   }
 }

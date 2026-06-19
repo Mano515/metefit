@@ -138,7 +138,7 @@ export default function App() {
         <header className="flex items-center justify-between">
           {isSuggestionView ? (
             <h1 aria-label="Météfit">
-              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+              <img src="/logo_metefit_nom.svg" alt="Météfit" className="h-8 w-auto" />
             </h1>
           ) : (
             <div className="flex items-center gap-2">
