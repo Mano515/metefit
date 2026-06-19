@@ -2,7 +2,23 @@
 
 > *Habille-toi intelligemment selon la météo du jour.*
 
+<p align="center">
+  <img src="public/logo_metefit_nom.svg" alt="Météfit" height="60" />
+</p>
+
 Météfit est une **Progressive Web App** qui suggère une tenue vestimentaire adaptée à la météo de ta ville, en tenant compte de ton profil thermique personnel.
+
+---
+
+## Aperçu
+
+<p align="center">
+  <img src="public/screenshots/metefit-desktop.png" alt="Météfit — vue desktop" width="700" />
+</p>
+
+<p align="center">
+  <img src="public/screenshots/metefit-mobile.png" alt="Météfit — vue mobile" width="280" />
+</p>
 
 ---
 
