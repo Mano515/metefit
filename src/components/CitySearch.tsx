@@ -136,12 +136,12 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
             onFocus={() => setFocused(true)}
             onKeyDown={handleKeyDown}
             autoComplete="off"
-            className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+            className="flex-1 border border-white/30 rounded-lg px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 bg-white/20 backdrop-blur-md text-white placeholder-white/50"
           />
           <button
             type="submit"
             aria-label="Valider la ville"
-            className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-4 rounded-lg text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           >
             OK
           </button>
@@ -156,22 +156,22 @@ export function CitySearch({ currentCity, error, favs, recent, onSelect, onToggl
           <div className={favsAnimClass} style={{ willChange: 'transform, opacity' }}>
             <ul role="list" aria-label="Villes favorites" className="flex flex-col gap-1.5 mt-2">
               {favs.map((city) => (
-                <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+                <li key={`${city.lat},${city.lon}`} className="flex items-stretch bg-white/20 backdrop-blur-md border border-white/25 rounded-xl overflow-hidden">
                   <button
                     type="button"
                     aria-label={`Chercher la météo à ${city.name}${city.region ? `, ${city.region}` : ''}`}
                     onMouseDown={(e) => { e.preventDefault(); handleSelectSaved(city) }}
-                    className="flex-1 flex items-center gap-1.5 pl-3 pr-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
+                    className="flex-1 flex items-center gap-1.5 pl-3 pr-2 py-2 text-sm text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                   >
                     <span aria-hidden="true" className="text-sm">⭐</span>
                     <span className="font-medium">{city.name}</span>
-                    {city.region && <span className="text-gray-400 dark:text-gray-500 text-xs">{city.region}</span>}
+                    {city.region && <span className="text-white/60 text-xs">{city.region}</span>}
                   </button>
                   <button
                     type="button"
                     aria-label={`Retirer ${city.name} des favoris`}
                     onMouseDown={(e) => { e.preventDefault(); onToggleFav(city) }}
-                    className="flex items-center px-3 text-gray-300 dark:text-gray-600 hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 border-l border-gray-100 dark:border-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-400 text-xs"
+                    className="flex items-center px-3 text-white/40 hover:text-red-300 hover:bg-white/10 border-l border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-300 text-xs"
                   >
                     <span aria-hidden="true">✕</span>
                   </button>

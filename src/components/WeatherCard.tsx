@@ -31,15 +31,15 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
           onClick={onPrev}
           disabled={!canPrev}
           aria-label="Jour précédent"
-          className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
-                     hover:text-blue-500 dark:hover:text-blue-400
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-white/60
+                     hover:text-white
                      disabled:opacity-25 disabled:pointer-events-none
-                     transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                     transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         >
           <span aria-hidden="true" className="text-3xl font-bold leading-none -translate-y-px">‹</span>
         </button>
 
-        <p className="text-base font-bold text-gray-800 dark:text-gray-100 capitalize">
+        <p className="text-base font-bold text-white capitalize">
           {dayLabel}
         </p>
 
@@ -47,10 +47,10 @@ export function WeatherCard({ weather, selectedDay, totalDays, onPrev, onNext }:
           onClick={onNext}
           disabled={!canNext}
           aria-label="Jour suivant"
-          className="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 dark:text-gray-500
-                     hover:text-blue-500 dark:hover:text-blue-400
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-white/60
+                     hover:text-white
                      disabled:opacity-25 disabled:pointer-events-none
-                     transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                     transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         >
           <span aria-hidden="true" className="text-3xl font-bold leading-none">›</span>
         </button>

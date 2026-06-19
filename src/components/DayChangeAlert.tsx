@@ -52,10 +52,10 @@ export function DayChangeAlert({ slots }: Props) {
       {alerts.map((alert, i) => (
         <div
           key={i}
-          className="flex gap-2 items-start bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl px-3 py-2.5"
+          className="flex gap-2 items-start bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl px-3 py-2.5"
         >
           <span aria-hidden="true" className="text-base flex-shrink-0">{alert.emoji}</span>
-          <p className="text-xs text-amber-800 dark:text-amber-300 leading-snug">{alert.text}</p>
+          <p className="text-xs text-white/90 leading-snug">{alert.text}</p>
         </div>
       ))}
     </section>

@@ -32,39 +32,37 @@ function conditionLabel(slot: TimeSlot): string {
   return 'variable'
 }
 
-function tempColor(temp: number): string {
-  if (temp <= 0) return 'text-blue-500'
-  if (temp <= 10) return 'text-sky-500'
-  if (temp <= 18) return 'text-green-600 dark:text-green-400'
-  if (temp <= 25) return 'text-amber-500'
-  return 'text-red-500'
-}
 
 export function DayTimeline({ slots }: Props) {
   if (slots.length === 0) return null
 
   return (
-    <section aria-label="Météo de la journée" className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-4 shadow-sm">
-      <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3" aria-hidden="true">Météo de la journée</p>
-      <ol aria-label="Prévisions heure par heure" className="flex gap-2 overflow-x-auto pb-1">
+    <section aria-label="Météo de la journée" className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-2xl p-4 shadow-sm">
+      <p className="text-xs font-medium text-white/60 uppercase tracking-wide mb-3" aria-hidden="true">Météo de la journée</p>
+      <ol
+        aria-label="Prévisions heure par heure"
+        className="flex gap-2 overflow-x-auto pb-1"
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+      >
         {slots.map((slot) => (
           <li
             key={slot.hour}
             aria-label={slot.isPast ? `${slot.label} (passé)` : `${slot.label} : ${slot.temp}°, ${conditionLabel(slot)}`}
             className={`flex-shrink-0 flex flex-col items-center gap-1 min-w-[56px] transition-opacity ${slot.isPast ? 'opacity-30' : 'opacity-100'}`}
           >
-            <span aria-hidden="true" className="text-xs text-gray-400 dark:text-gray-500">{slot.label}</span>
+            <span aria-hidden="true" className="text-xs text-white/60">{slot.label}</span>
             {slot.isPast ? (
               <>
-                <span aria-hidden="true" className="text-xl grayscale">—</span>
-                <span aria-hidden="true" className="text-sm font-semibold text-gray-300 dark:text-gray-600">–</span>
+                <span aria-hidden="true" className="text-xl">—</span>
+                <span aria-hidden="true" className="text-sm font-semibold text-white/40">–</span>
               </>
             ) : (
               <>
                 <span aria-hidden="true" className="text-xl">{conditionEmoji(slot)}</span>
-                <span aria-hidden="true" className={`text-sm font-semibold ${tempColor(slot.temp)}`}>{slot.temp}°</span>
-                {slot.rain && <span aria-hidden="true" className="text-xs text-blue-400">pluie</span>}
-                {slot.snow && <span aria-hidden="true" className="text-xs text-sky-300">neige</span>}
+                <span aria-hidden="true" className="text-sm font-semibold text-white">{slot.temp}°</span>
+                {slot.rain && <span aria-hidden="true" className="text-xs text-blue-200">pluie</span>}
+                {slot.snow && <span aria-hidden="true" className="text-xs text-sky-200">neige</span>}
               </>
             )}
           </li>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2108 500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-550,0)">
+        <g id="Plan-de-travail2" serif:id="Plan de travail2" transform="matrix(4.216,0,0,1,-1768.8,0)">
+            <rect x="550" y="0" width="500" height="500" style="fill:rgb(52,180,246);fill-opacity:0;"/>
+            <g transform="matrix(0.245222,0,0,1.711297,579.309514,-61.122881)">
+                <path d="M39.547,100L128.922,100C128.922,127.708 145.938,153.015 174,172.316C187.163,181.369 202.757,189.1 220.165,195.138L220.165,99.991L310.38,99.991L310.38,110.619C314.86,138.773 336.965,163.815 369.95,181.67C402.063,199.053 444.487,209.625 490.998,209.625L490.998,263.62C421.602,263.62 358.303,247.852 310.38,221.923L310.38,263.62C240.578,263.62 176.944,247.667 128.922,221.467L128.922,263.62L39.547,263.62L39.547,100Z" style="fill:white;"/>
+            </g>
+            <g transform="matrix(0.245222,0,0,1.711297,579.309514,-61.122881)">
+                <ellipse cx="443.996" cy="128.396" rx="47.002" ry="28.396" style="fill:rgb(255,225,96);"/>
+            </g>
+            <g transform="matrix(0.237192,0,0,1,445.753362,115.720732)">
+                <g transform="matrix(309.099088,0,0,309.099088,2399.995993,269.302391)">
+                </g>
+                <text x="1181.218px" y="269.302px" style="font-family:'GasoekOne-Regular', 'Gasoek One';font-size:309.099px;fill:white;">M<tspan x="1470.226px 1674.54px 1810.544px 2011.768px " y="269.302px 269.302px 269.302px 269.302px ">etef</tspan>it</text>
+            </g>
+        </g>
+    </g>
+</svg>
